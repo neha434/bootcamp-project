@@ -17,7 +17,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
+
 public class AdminController {
 
     @Autowired

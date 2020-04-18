@@ -50,7 +50,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         http
                 .authorizeRequests()
                 .antMatchers("/product/","/cart","/order","/forgot-password","/reset-password","/upload/user","/upload/product","/upload/product-variation","/show/user","/show/product","/show/product-variation").anonymous()
-                .antMatchers("/admin/home","/seller/","/customer/").hasAnyRole("ADMIN")
+                .antMatchers("/seller/","/customer/","/activate/{id}","/deactivate{id}","/changeRole/{role}/{id}").hasAnyRole("ADMIN")
                 .antMatchers("product/{id}","/register-account","/activate-account","/logout").hasAnyRole("ADMIN","CUSTOMER","SELLER")
                 .antMatchers("/customer/{id}","/address/{id}","/Add-address").hasAnyRole("CUSTOMER","ADMIN")
                 .antMatchers("/seller/{id}","/seller/address/{id}").hasAnyRole("SELLER","ADMIN")
