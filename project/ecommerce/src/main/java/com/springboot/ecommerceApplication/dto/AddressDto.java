@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 
 public class AddressDto {
+
      @NotEmpty
     private Integer id;
      @NotEmpty

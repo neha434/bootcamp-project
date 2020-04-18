@@ -17,14 +17,8 @@ UserRepo userRepository;
 	void contextLoads() {
 	}
 
-	@Test
-	public void findSeller(){
-		Iterable<Seller> seller =sellerRepo.findAll();
-		seller.forEach(seller1 -> System.out.println("===================="+seller1.getEmail()));
-	}
-	@Test
 	public void findByEmail(){
-		System.out.println(userRepository.findByEmail("Riya.gupta@gmail.com").getFirstName());
+		System.out.println(userRepository.findByEmail("neha.rai8209@gmail.com").getFirstName());
 	}
 
 }

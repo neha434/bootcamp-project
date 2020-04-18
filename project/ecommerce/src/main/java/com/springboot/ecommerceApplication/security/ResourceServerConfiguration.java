@@ -1,6 +1,5 @@
 package com.springboot.ecommerceApplication.security;
 
-//import com.springbootcamp.springsecurity.Security.AppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,12 +50,11 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         http
                 .authorizeRequests()
                 .antMatchers("/product/","/cart","/order","/forgot-password","/reset-password","/upload/user","/upload/product","/upload/product-variation","/show/user","/show/product","/show/product-variation").anonymous()
-                .antMatchers("/admin/home","/customer/").hasAnyRole("ADMIN")
-                .antMatchers("/doLogout","product/{id}","/register-account","/activate-account").hasAnyRole("ADMIN","CUSTOMER","SELLER")
-                .antMatchers("/customer/{id}").hasAnyRole("CUSTOMER","ADMIN")
-                .antMatchers("/seller/","/seller/{id}").hasAnyRole("SELLER","ADMIN")
-                //.antMatchers("product/{id}").hasAnyRole("SELLER","ADMIN")
-
+                .antMatchers("/admin/home","/seller/","/customer/").hasAnyRole("ADMIN")
+                .antMatchers("product/{id}","/register-account","/activate-account","/logout").hasAnyRole("ADMIN","CUSTOMER","SELLER")
+                .antMatchers("/customer/{id}","/address/{id}","/Add-address").hasAnyRole("CUSTOMER","ADMIN")
+                .antMatchers("/seller/{id}","/seller/address/{id}").hasAnyRole("SELLER","ADMIN")
+                .antMatchers("/Seller/{id}","/Customer{id}").hasAnyRole("SELLER", "CUSTOMER")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

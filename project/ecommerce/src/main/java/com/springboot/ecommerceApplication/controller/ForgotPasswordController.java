@@ -1,22 +1,17 @@
 package com.springboot.ecommerceApplication.controller;
 
-import com.springboot.ecommerceApplication.domain.GenericResponse;
-import com.springboot.ecommerceApplication.domain.user.User;
 import com.springboot.ecommerceApplication.dto.PasswordDto;
 import com.springboot.ecommerceApplication.services.UserLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
-import java.util.Locale;
 
 @Controller
-public class LoginController {
+public class ForgotPasswordController {
     @Autowired
     UserLoginService userLoginService;
 
