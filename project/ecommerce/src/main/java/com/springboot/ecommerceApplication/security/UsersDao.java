@@ -1,8 +1,5 @@
 package com.springboot.ecommerceApplication.security;
 
-//import com.springbootcamp.springsecurity.domain.Role;
-//import com.springbootcamp.springsecurity.domain.user.Users;
-//import com.springbootcamp.springsecurity.repository.UserRepository;
 import com.springboot.ecommerceApplication.domain.Role;
 import com.springboot.ecommerceApplication.domain.user.User;
 import com.springboot.ecommerceApplication.repositories.UserRepo;

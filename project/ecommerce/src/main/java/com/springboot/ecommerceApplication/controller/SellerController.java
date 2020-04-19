@@ -6,6 +6,7 @@ import com.springboot.ecommerceApplication.dto.SellerDto;
 import com.springboot.ecommerceApplication.repositories.SellerRepo;
 import com.springboot.ecommerceApplication.services.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
@@ -21,26 +22,23 @@ public class SellerController {
     SellerRepo sellerRepository;
     @Autowired
     SellerService sellerService;
+
+    //view profile
     @GetMapping("/{id}")
     public SellerDto getSeller(@PathVariable Integer id){
         return  sellerService.getSeller(id);
     }
 
-//    @PutMapping("/address/{id}")
-//    public String updateAddress(@PathVariable Integer id, @Valid @RequestBody AddressDto addressDto , WebRequest webRequest){
-//        return  sellerService.updateAddress(id,addressDto);
-//    }
-
-
+  //update profile
     @PutMapping("/{id}")
     public SellerDto updateSeller(@PathVariable Integer id,@Valid @RequestBody SellerCO sellerCO , WebRequest webRequest){
         return  sellerService.updateSeller(id,sellerCO);
     }
 
-    @DeleteMapping("/{id}")
-    public Map<String,Boolean> deleteSeller(@PathVariable Integer id){
-        return sellerService.deleteSeller(id);
-    }
+//    @DeleteMapping("/{id}")
+//    public Map<String,Boolean> deleteSeller(@PathVariable Integer id){
+//        return sellerService.deleteSeller(id);
+//    }
 
 
 }

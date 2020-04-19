@@ -34,9 +34,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     UserDetailsService userDetailsService;
 
-//    @Autowired
-//    DataSource dataSource;
-
     public AuthorizationServerConfiguration() {
         super();
     }
@@ -54,24 +51,16 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.tokenStore(tokenStore()).userDetailsService(userDetailsService)
                 .authenticationManager(authenticationManager)
-//                .accessTokenConverter(accessTokenConverter())
+
         ;
 
     }
 
-//    @Bean
-//    JwtAccessTokenConverter accessTokenConverter(){
-//        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-//        jwtAccessTokenConverter.setSigningKey("1234");
-//        return jwtAccessTokenConverter;
-//    }
 
     @Bean
     public TokenStore tokenStore() {
         return new InMemoryTokenStore();
-        //return new JdbcTokenStore(dataSource); //  to store token in database
-//        return new JwtTokenStore(accessTokenConverter());
-    }
+           }
 
     @Override
     public void configure(final ClientDetailsServiceConfigurer clients) throws Exception {

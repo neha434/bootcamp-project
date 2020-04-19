@@ -25,11 +25,12 @@ public class RegistrationController {
     @Autowired
     CustomerService customerService;
     SellerService sellerService;
-
+//Register a customer
     @PostMapping("customer/")
     public CustomerDto registerCustomer(@Valid @RequestBody CustomerCO customerCO, WebRequest webRequest){
         return customerService.registerCustomer(customerCO);
     }
+    //Register a seller
     @PostMapping("seller/")
     public SellerDto registerSeller(@Valid @RequestBody SellerCO sellerCO, WebRequest webRequest){
         return sellerService.registerSeller(sellerCO);

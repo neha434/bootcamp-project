@@ -2,6 +2,7 @@ package com.springboot.ecommerceApplication.controller;
 
 import com.springboot.ecommerceApplication.domain.user.Customer;
 import com.springboot.ecommerceApplication.dto.CustomerDto;
+import com.springboot.ecommerceApplication.dto.PagingAndSortingDto;
 import com.springboot.ecommerceApplication.dto.SellerDto;
 import com.springboot.ecommerceApplication.services.CustomerService;
 import com.springboot.ecommerceApplication.services.SellerService;
@@ -16,7 +17,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
+
 public class AdminController {
 
     @Autowired
@@ -25,24 +26,20 @@ public class AdminController {
     CustomerService customerService;
     @Autowired
     SellerService sellerService;
-
+   //get list of customer
     @GetMapping("/customer")
-    public List<CustomerDto> getAllCustomer(@RequestParam(defaultValue = "0") Integer pageNo,
-                                            @RequestParam(defaultValue = "10") Integer pageSize,
-                                            @RequestParam(defaultValue = "id") Integer sortBy)
+    public List<CustomerDto> getAllCustomer(PagingAndSortingDto pagingAndSortingDto)
     {
         //List<CustomerDto> list = customerService.getAllCustomer(pageNo, pageSize, sortBy);
         //return new ResponseEntity<List<Customer>>(list, new HttpHeaders(), HttpStatus.OK);
 
-        return  customerService.getAllCustomer(pageNo, pageSize, sortBy);
+        return  customerService.getAllCustomer(pagingAndSortingDto);
     }
-
+ //get list of sellers
     @GetMapping("/seller")
-    public List<SellerDto> getAllSeller(@RequestParam(defaultValue = "0") Integer pageNo,
-                                        @RequestParam(defaultValue = "10") Integer pageSize,
-                                        @RequestParam(defaultValue = "id") Integer sortBy)
+    public List<SellerDto> getAllSeller(PagingAndSortingDto pagingAndSortingDto)
 {
-        return sellerService.getAllSeller(pageNo, pageSize, sortBy);
+        return sellerService.getAllSeller(pagingAndSortingDto);
     }
 
     @PutMapping("/changeRole/{role}/{id}")

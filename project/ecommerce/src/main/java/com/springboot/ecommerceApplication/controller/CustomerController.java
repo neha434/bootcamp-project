@@ -23,35 +23,20 @@ public class CustomerController {
     CustomerRepo customerRepository;
     @Autowired
     CustomerService customerService;
-
+   //view profile
     @GetMapping("/{id}")
     public CustomerDto getCustomer(@PathVariable Integer id) {
         return customerService.getCustomer(id);
     }
-
-    @GetMapping("/address/{id}")
-    public AddressDto getAddress(@PathVariable Integer id) {
-        return customerService.getAddress(id);
-    }
-
-    @DeleteMapping("/address/{id}")
-    public Map<String, Boolean> deleteAddress(@PathVariable Integer id) {
-        return customerService.deleteAddress(id);
-    }
-
-    @PostMapping("/Add-address")
-    public String AddAddress(Integer id, @Valid @RequestBody AddressDto addressDto, WebRequest webRequest){
-        return customerService.AddAddress(id,addressDto);
-    }
-
+  //update profile
     @PutMapping("/{id}")
     public CustomerDto updateCustomer(@PathVariable Integer id, @Valid @RequestBody CustomerCO customerCO, WebRequest webRequest) {
         return customerService.updateCustomer(id, customerCO);
     }
-
-    @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteUser(@PathVariable Integer id) {
-        return customerService.deleteCustomer(id);
-    }
+//
+//    @DeleteMapping("/{id}")
+//    public Map<String, Boolean> deleteUser(@PathVariable Integer id) {
+//        return customerService.deleteCustomer(id);
+//    }
 
 }

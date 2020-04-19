@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-public class AppUser implements UserDetails {
+public class  AppUser implements UserDetails {
 
     private String username;
     private String password;

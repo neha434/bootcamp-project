@@ -95,9 +95,9 @@ public class Bootstrap implements ApplicationRunner {
 
             Customer customer = new Customer();
             customer.setEmail("neha.rai8209@gmail.com");
-            customer.setFirstName("Riya");
+            customer.setFirstName("Neha");
             customer.setMiddleName("");
-            customer.setLastName("Gupta");
+            customer.setLastName("Rai");
             customer.setPassword(passwordEncoder.encode("nehaA123!"));
             customer.setActive(true);
             customer.setDeleted(false);
@@ -121,7 +121,7 @@ public class Bootstrap implements ApplicationRunner {
 
         if(categoryRepository.count() < 1){
             Category category = new Category();
-            category.setName("Laptops");   //This is error category.setName("");
+            category.setName("Laptops");
             categoryRepository.save(category);
         }
         if(productRepository.count() < 1){
@@ -129,7 +129,7 @@ public class Bootstrap implements ApplicationRunner {
             product.setName("Lenovo Ideapad");
             product.setDescription("Portable Design");
 
-            product.setCategory(categoryRepository.findByName("Laptops"));  //How Can You search for category name without storing it
+            product.setCategory(categoryRepository.findByName("Laptops"));
             product.setSeller( sellerRepository.findByEmail("pragati.singhal@gmail.com"));
 
             product.setCancellable(true);
