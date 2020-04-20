@@ -33,10 +33,6 @@ public class CustomerController {
     public CustomerDto updateCustomer(@PathVariable Integer id, @Valid @RequestBody CustomerCO customerCO, WebRequest webRequest) {
         return customerService.updateCustomer(id, customerCO);
     }
-//
-//    @DeleteMapping("/{id}")
-//    public Map<String, Boolean> deleteUser(@PathVariable Integer id) {
-//        return customerService.deleteCustomer(id);
-//    }
+
 
 }

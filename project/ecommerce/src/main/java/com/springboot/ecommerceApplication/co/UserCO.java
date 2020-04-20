@@ -12,7 +12,7 @@ public class UserCO {
     @NotEmpty
     private String lastName;
     @NotEmpty
-    @Pattern(regexp="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*])(?=.{8,15})", message = "Invalid Password")
+    //@Pattern(regexp="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*])(?=.{8,15})", message = "Invalid Password")
     private String password;
     @NotEmpty
     private String confirmPassword;

@@ -30,9 +30,6 @@ public class AdminController {
     @GetMapping("/customer")
     public List<CustomerDto> getAllCustomer(PagingAndSortingDto pagingAndSortingDto)
     {
-        //List<CustomerDto> list = customerService.getAllCustomer(pageNo, pageSize, sortBy);
-        //return new ResponseEntity<List<Customer>>(list, new HttpHeaders(), HttpStatus.OK);
-
         return  customerService.getAllCustomer(pagingAndSortingDto);
     }
  //get list of sellers

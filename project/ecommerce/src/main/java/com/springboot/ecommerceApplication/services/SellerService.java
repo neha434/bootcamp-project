@@ -33,6 +33,7 @@ import java.util.*;
 public class SellerService {
     @Autowired
     MessageSource messageSource;
+    MailService mailService;
     @Autowired
     SellerRepo sellerRepository;
     AddressRepository addressRepository;
@@ -59,6 +60,7 @@ public class SellerService {
         registerSeller.setRoleList(roleList);
 
         sellerRepository.save(registerSeller);
+    mailService.sendAAccountRegisterEmail(registerSeller.getEmail());
 
         SellerDto sellerDto = getSeller(registerSeller.getId());
         return sellerDto;
@@ -120,19 +122,6 @@ public class SellerService {
         SellerDto sellerDto = getSeller(seller.getId());
         return sellerDto;
     }
-
-//    public Map<String, Boolean> deleteSeller(Integer id) {
-//        Map<String, Boolean> map = new HashMap<>();
-//        Optional<Seller> optional = sellerRepository.findById(id);
-//
-//        if (!optional.isPresent()) {
-//            map.put("Deleted", false);
-//        } else {
-//            sellerRepository.deleteById(id);
-//            map.put("Deleted", true);
-//        }
-//        return map;
-//    }
 
     public ResponseEntity<String> updateAddress(Integer id, AddressDto addressDto) {
         ResponseEntity<String> responseEntity;

@@ -13,7 +13,7 @@ public class UserDto {
     private String email;
     @NotEmpty
    // @JsonIgnore
-    @Pattern(regexp="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*])(?=.{8,15})", message = "Invalid Password")
+    //@Pattern(regexp="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*])(?=.{8,15})", message = "Invalid Password")
     private String password;
     @NotEmpty
     @JsonIgnore

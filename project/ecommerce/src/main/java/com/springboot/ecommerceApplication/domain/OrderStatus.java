@@ -1,13 +1,11 @@
 package com.springboot.ecommerceApplication.domain;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import static com.springboot.ecommerceApplication.domain.OrderStatus.To_Status.DELIVERED;
 
 @Entity
 public class OrderStatus {
