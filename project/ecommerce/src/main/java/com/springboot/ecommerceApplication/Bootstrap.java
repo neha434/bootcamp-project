@@ -79,7 +79,7 @@ public class Bootstrap implements ApplicationRunner {
             appUser.setRoleList(roleList);
 
             Seller seller = new Seller();
-            seller.setEmail("pragati.singhal@gmail.com");
+            seller.setEmail("seller.user@gmail.com");
             seller.setFirstName("Pragati");
             seller.setLastName("Singhal");
             seller.setPassword(passwordEncoder.encode("nehaA123!"));
@@ -87,7 +87,7 @@ public class Bootstrap implements ApplicationRunner {
             seller.setDeleted(false);
             seller.setCompanyContact("Company Contact");
             seller.setCompanyName("Company Name");
-            seller.setGst("GST");
+            seller.setGst("22AAAAA00001Z5");
 
             List<Role> sellerRoleList = new ArrayList<>();
             sellerRoleList.add(roleSeller);
@@ -130,7 +130,7 @@ public class Bootstrap implements ApplicationRunner {
             product.setDescription("Portable Design");
 
             product.setCategory(categoryRepository.findByName("Laptops"));
-            product.setSeller( sellerRepository.findByEmail("pragati.singhal@gmail.com"));
+            product.setSeller( sellerRepository.findByEmail("seller.user@gmail.com"));
 
             product.setCancellable(true);
             product.setReturnable(true);
@@ -142,7 +142,7 @@ public class Bootstrap implements ApplicationRunner {
                     "Meta Data 1");
             productVariation1.setProduct(product);
             productVariations.add(productVariation1);
-            ProductVariation productVariation2 = new ProductVariation(5, 18990,"Image Name 2",
+            ProductVariation productVariation2 = new ProductVariation(2, 18990,"Image Name 2",
                     "Meta Data 2");
             productVariation2.setProduct(product);
             productVariations.add(productVariation2);
@@ -168,7 +168,7 @@ public class Bootstrap implements ApplicationRunner {
         if (cartRepository.count() < 1){
             Cart cart = new Cart();
             cart.setProductVariation(productVariationRepository.findById(1).get());
-            cart.setCustomer(customerRepository.findById(3).get());
+         // cart.setCustomer(customerRepository.findById(3).get());
             cart.setWishList(true);
             cart.setQuantity(2);
             cartRepository.save(cart);

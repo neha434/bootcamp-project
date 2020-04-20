@@ -17,6 +17,13 @@ public class Customer extends User{
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
     private List<ProductReview> productReviewsList;
 
+    public Customer(String email, String firstName, String middleName, String lastName, String encode, String contact, boolean b, boolean b1, boolean b2, boolean b3, int i) {
+    }
+
+    public Customer() {
+
+    }
+
     public List<ProductReview> getProductReviewsList() {
         return productReviewsList;
     }

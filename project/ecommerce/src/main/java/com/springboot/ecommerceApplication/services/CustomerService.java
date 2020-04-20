@@ -2,8 +2,10 @@ package com.springboot.ecommerceApplication.services;
 
 import com.springboot.ecommerceApplication.co.CustomerCO;
 import com.springboot.ecommerceApplication.domain.Role;
+import com.springboot.ecommerceApplication.domain.VerificationToken;
 import com.springboot.ecommerceApplication.domain.user.Address;
 import com.springboot.ecommerceApplication.domain.user.Customer;
+import com.springboot.ecommerceApplication.domain.user.User;
 import com.springboot.ecommerceApplication.dto.AddressDto;
 import com.springboot.ecommerceApplication.dto.CustomerDto;
 import com.springboot.ecommerceApplication.dto.PagingAndSortingDto;
@@ -12,6 +14,7 @@ import com.springboot.ecommerceApplication.exception.CustomerAlreadyExistsExcept
 import com.springboot.ecommerceApplication.repositories.AddressRepository;
 import com.springboot.ecommerceApplication.repositories.CustomerRepo;
 import com.springboot.ecommerceApplication.repositories.RoleRepo;
+import com.springboot.ecommerceApplication.repositories.VerificationTokenRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -32,7 +35,11 @@ import java.util.*;
 @Service
 public class CustomerService {
     @Autowired
+    VerificationTokenRepo verificationTokenRepository;
+    @Autowired
     MessageSource messageSource;
+    @Autowired
+    MailService mailService;
     @Autowired
     CustomerRepo customerRepository;
     @Autowired
@@ -42,31 +49,52 @@ public class CustomerService {
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     //PasswordEncoder confirmPasswordEncoder = new BCryptPasswordEncoder();
-
-    public CustomerDto registerCustomer(CustomerCO customerCO){
+//    public CustomerDto registerCustomer(CustomerCO customerCO){
+//        Customer customer = customerRepository.findByEmail(customerCO.getEmail());
+//        if(customer != null){
+//            throw new CustomerAlreadyExistsException("Account Already Exist With This Email Id");
+//        }
+//        Customer registerCustomer = new Customer();
+//
+//        registerCustomer.setEmail(customerCO.getEmail());
+//        registerCustomer.setFirstName(customerCO.getFirstName());
+//        registerCustomer.setMiddleName(customerCO.getMiddleName());
+//        registerCustomer.setLastName(customerCO.getLastName());
+//        registerCustomer.setPassword(passwordEncoder.encode(customerCO.getPassword()));
+//// registerCustomer.setPassword((confirmPasswordEncoder.encode(customerCO.getConfirmPassword())));
+//        registerCustomer.setContact(customerCO.getContact());
+//        List<Role> roleList = new ArrayList<>();
+//
+//        roleList.add(roleRepository.findByAuthority("ROLE_CUSTOMER"));
+//        registerCustomer.setRoleList(roleList);
+//
+//        customerRepository.save(registerCustomer);
+//
+//        CustomerDto customerDto = getCustomer(registerCustomer.getId());
+//        return customerDto;
+//    }
+    public ResponseEntity<String> registerCustomer(CustomerCO customerCO){
         Customer customer = customerRepository.findByEmail(customerCO.getEmail());
+        ResponseEntity<String> responseEntity;
         if(customer != null){
             throw new CustomerAlreadyExistsException("Account Already Exist With This Email Id");
         }
-        Customer registerCustomer = new Customer();
-
-        registerCustomer.setEmail(customerCO.getEmail());
-        registerCustomer.setFirstName(customerCO.getFirstName());
-        registerCustomer.setMiddleName(customerCO.getMiddleName());
-        registerCustomer.setLastName(customerCO.getLastName());
-        registerCustomer.setPassword(passwordEncoder.encode(customerCO.getPassword()));
-       // registerCustomer.setPassword((confirmPasswordEncoder.encode(customerCO.getConfirmPassword())));
-        registerCustomer.setContact(customerCO.getContact());
+        Customer registerUser = new Customer(customerCO.getEmail(),customerCO.getFirstName(),customerCO.getMiddleName(),
+                customerCO.getLastName(), passwordEncoder.encode(customerCO.getPassword()),customerCO.getContact(),
+                true, true,true,false,0);
         List<Role> roleList = new ArrayList<>();
-
         roleList.add(roleRepository.findByAuthority("ROLE_CUSTOMER"));
-        registerCustomer.setRoleList(roleList);
+        registerUser.setRoleList(roleList);
+        customerRepository.save(registerUser);
+        String token = UUID.randomUUID().toString();
+        createVerificationToken(registerUser, token);
+        mailService.sendActivationLinkEmail(registerUser.getEmail(),token);
 
-        customerRepository.save(registerCustomer);
-
-        CustomerDto customerDto = getCustomer(registerCustomer.getId());
-        return customerDto;
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                ("message-account-created", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
     }
+
     public CustomerDto getCustomer(Integer id){
         Optional<Customer> optional = customerRepository.findById(id);
         if(!optional.isPresent()){
@@ -199,6 +227,11 @@ public class CustomerService {
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                 ("message-address-updated", null, LocaleContextHolder.getLocale()));
         return responseEntity;
+    }
+
+    public void createVerificationToken(Customer registerUser, String token){
+        VerificationToken newToken = new VerificationToken(token,registerUser);
+        verificationTokenRepository.save(newToken);
     }
 }
 

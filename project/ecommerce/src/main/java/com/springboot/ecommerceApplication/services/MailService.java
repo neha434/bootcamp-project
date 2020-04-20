@@ -20,14 +20,23 @@ public class MailService {
 
     }
 
-    public void sendActivateAccountLinkEmail(String email, String token) {
+    public void sendActivationLinkEmail(String email, String token) {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
-        mail.setSubject("Forgot Password Token");
-        mail.setText("Please use this link to set new password" + "\r\n" +
-                "http://localhost:8080/login/reset-password/?token=" + token);
+        mail.setSubject("Activate Account Token");
+        mail.setText("Please use this link to activate your Account" + "\r\n" +
+                "http://localhost:8080/register/activate-account?token=" + token);
         mailSender.send(mail);
 
+    }
+
+    public void sendAAccountRegisterEmail(String email) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(email);
+        mail.setSubject("Account Created");
+        mail.setText("Your account has been created");
+        mailSender.send(mail);
 
     }
 }
+

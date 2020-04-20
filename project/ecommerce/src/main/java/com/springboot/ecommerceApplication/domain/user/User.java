@@ -20,7 +20,7 @@ public class User  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Email
+   // @Email
     private String email;
     private String firstName;
     private String middleName;
@@ -30,14 +30,16 @@ public class User  {
 //    @Column(name = "enabled")
 //    private boolean enabled;
 
-     public User() {
-        }
-        @Pattern(regexp="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*])(?=.{8,15})", message = "Invalid Password")
+    public User(){
+
+    }
+
+    //@Pattern(regexp="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*])(?=.{8,15})", message = "Invalid Password")
     private String password;
     private Boolean isDeleted;
     private Boolean isActive;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)//
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"))

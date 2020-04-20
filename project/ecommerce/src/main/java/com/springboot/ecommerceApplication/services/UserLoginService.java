@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+//forgot password
 @Service
 public class UserLoginService {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -41,14 +41,14 @@ public class UserLoginService {
 //token genrator
     public ResponseEntity<String> forgotPasswordToken(String email){
         ResponseEntity<String> responseEntity;
-        if(!isValidEmail(email)) {
-            responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage
-                    ("message-invalid-email", null, LocaleContextHolder.getLocale()));
-            return responseEntity;
-        }
+//        if(!isValidEmail(email)) {
+//            responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage
+//                    ("message-invalid-email", null, LocaleContextHolder.getLocale()));
+//            return responseEntity;
+//        }
         User  user = userRepository.findByEmail(email);
         if (userRepository.findByEmail(email) == null){
-            throw new AccountDoesNotExists("email address does not exist in database");
+            throw new AccountDoesNotExists("Email address does not exist in database");
         }
 
 //        else if(!user.isEnabled()){
@@ -83,7 +83,7 @@ public class UserLoginService {
                     ("message-invalid-forgot-password-token", null, LocaleContextHolder.getLocale()));
             return responseEntity;
         }
-        passwordMatches(forgotPasswordDto.getPassword(),forgotPasswordDto.getConfirmPassword());
+        //passwordMatches(forgotPasswordDto.getPassword(),forgotPasswordDto.getConfirmPassword());
 
         User user = forgotPasswordToken.getUser();
         Calendar calendar = Calendar.getInstance();
@@ -93,7 +93,8 @@ public class UserLoginService {
                     ("message-forgot-password-token-expired", null, LocaleContextHolder.getLocale()));
             return responseEntity;
         }
-        user.setPassword(passwordEncoder.encode(forgotPasswordDto.getPassword()));
+       user.setPassword(passwordEncoder.encode(forgotPasswordDto.getPassword()));
+        user.setPassword(forgotPasswordDto.getPassword());
         userRepository.save(user);
         forgotPasswordTokenRepository.delete(forgotPasswordToken);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage

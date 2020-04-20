@@ -29,30 +29,9 @@ public class RegisterService {
     @Autowired
     MessageSource messageSource;
 
+//activation of account
 
-
-    public ResponseEntity<String> registerAccount(String email) {
-            ResponseEntity<String> responseEntity;
-            User  user = userRepository.findByEmail(email);
-            if (userRepository.findByEmail(email) == null){
-                throw new AccountDoesNotExists("email address does not exists");
-            }
-//     else if(!user.isEnabled()){
-//            responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage
-//                    ("message-account-not-active", null, LocaleContextHolder.getLocale()));
-//            return responseEntity;
-//        }
-
-                String token = UUID.randomUUID().toString();
-                createVerificationToken(user, token); //This method will store token in table
-                mailService.sendForgotPasswordLinkEmail(user.getEmail(),token);
-                responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage
-                        ("message-account-activation-link", null, LocaleContextHolder.getLocale()));
-                return responseEntity;
-            }
-
-
-        public ResponseEntity<String> activateAccount(String token, UserDto userDto) {
+    public ResponseEntity<String> activateAccount(String token, UserDto userDto) {
             VerificationToken verificationToken = getVerificationToken(token);
             ResponseEntity<String> responseEntity;
             if (verificationToken == null){
@@ -62,7 +41,8 @@ public class RegisterService {
             }
             User user = verificationToken.getUser();
             Calendar calendar = Calendar.getInstance();
-            if (verificationToken.getExpiryDate().getTime() -calendar.getTime().getTime() <=0){
+            //token is exired
+          if (verificationToken.getExpiryDate().getTime() -calendar.getTime().getTime() <=0){
                 verificationTokenRepository.delete(verificationToken);
                 responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage
                         ("message-verification-token-expired", null, LocaleContextHolder.getLocale()));
@@ -72,20 +52,12 @@ public class RegisterService {
             responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                     ("message-account-verified", null, LocaleContextHolder.getLocale()));
             return responseEntity;
-//            user.setEnabled(true);
-//            enableRegisteredUser(user);
-//            return null;
+
      }
 
         public VerificationToken getVerificationToken(String token){
         return verificationTokenRepository.findByToken(token);
        }
-        public void createVerificationToken(User user, String token){
-        VerificationToken newToken = new VerificationToken(token,user);
-        verificationTokenRepository.save(newToken);
-      }
-        public void enableRegisteredUser(User user) {
-        userRepository.save(user);
-       }
+
 
 }

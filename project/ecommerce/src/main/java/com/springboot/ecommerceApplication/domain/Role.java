@@ -18,8 +18,8 @@ public class Role {
 
     @ManyToMany(mappedBy = "roleList",fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
+    //@Column(nullable = true)
     private List<User> UsersList;
-//    @Fetch(value = FetchMode.SUBSELECT)
 
     public List<User> getUsersList() {
         return UsersList;
