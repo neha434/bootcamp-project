@@ -23,6 +23,14 @@ public class Seller extends User {
     @OneToMany(mappedBy = "seller",cascade = CascadeType.ALL)
     private List<Product> productList;
 
+    public Seller(String email, String firstName, String middleName, String lastName, String encode, String gst, String companyName, String companyContact, boolean b, boolean b1, boolean b2, boolean b3, int i) {
+
+    }
+
+    public Seller() {
+
+    }
+
     public List<Product> getProductsList() {
         return productList;
     }
@@ -53,5 +61,15 @@ public class Seller extends User {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    @Override
+    public String toString() {
+        return "Seller{" +
+                "gst='" + gst + '\'' +
+                ", companyContact='" + companyContact + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", productList=" + productList +
+                '}';
     }
 }

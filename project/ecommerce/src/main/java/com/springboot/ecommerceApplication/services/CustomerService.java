@@ -80,8 +80,7 @@ public class CustomerService {
             throw new CustomerAlreadyExistsException("Account Already Exist With This Email Id");
         }
         Customer registerUser = new Customer(customerCO.getEmail(),customerCO.getFirstName(),customerCO.getMiddleName(),
-                customerCO.getLastName(), passwordEncoder.encode(customerCO.getPassword()),customerCO.getContact(),
-                true, true,true,false,0);
+                customerCO.getLastName(), passwordEncoder.encode(customerCO.getPassword()),customerCO.getContact());
         List<Role> roleList = new ArrayList<>();
         roleList.add(roleRepository.findByAuthority("ROLE_CUSTOMER"));
         registerUser.setRoleList(roleList);
@@ -94,7 +93,7 @@ public class CustomerService {
                 ("message-account-created", null, LocaleContextHolder.getLocale()));
         return responseEntity;
     }
-
+//Api to get my detail
     public CustomerDto getCustomer(Integer id){
         Optional<Customer> optional = customerRepository.findById(id);
         if(!optional.isPresent()){
@@ -103,13 +102,15 @@ public class CustomerService {
         Customer customer = optional.get();
         CustomerDto customerDto = new CustomerDto();
         customerDto.setId(customer.getId());
-        customerDto.setEmail(customer.getEmail());
+       customerDto.setEmail(customer.getEmail());
         customerDto.setFirstName(customer.getFirstName());
         if(customer.getMiddleName() != null){
             customerDto.setMiddleName(customer.getMiddleName());
         }
+
         customerDto.setLastName(customer.getLastName());
         customerDto.setContact(customer.getContact());
+        customerDto.setActive(customer.getActive());
         return  customerDto;
     }
 
@@ -126,7 +127,7 @@ public class CustomerService {
                 paging=PageRequest.of(pagingAndSortingDto.getMax(), pagingAndSortingDto.getOffset(),
                         Sort.by(pagingAndSortingDto.getSortField()).ascending());
         }
-        Page<Customer> pagedResult = customerRepository.findAll(paging);
+        List<Customer> pagedResult = customerRepository.findAll(paging);
 
         Iterable<Customer> customersList= customerRepository.findAll();
         List<CustomerDto> customerDtoList = new ArrayList<>();
@@ -139,7 +140,7 @@ public class CustomerService {
     public CustomerDto updateCustomer(Integer id,CustomerCO customerCO){
 
 
-        if (!customerRepository.findById(id).isPresent()){
+        if (!customerRepository.findById(id).isPresent()){  //ispresent?
             throw new AccountDoesNotExists("Invalid Account Credentials");
         }
 
@@ -165,7 +166,6 @@ public class CustomerService {
 //    }
 
     public AddressDto getAddress(Integer id) {
-
         Optional<Address> optional = addressRepository.findById(id);
         if(!optional.isPresent()){
             throw new AccountDoesNotExists("Invalid Account Credentials");

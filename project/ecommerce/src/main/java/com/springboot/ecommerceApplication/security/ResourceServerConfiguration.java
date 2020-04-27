@@ -49,7 +49,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(final HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/register/customer","/register/seller","/seller/{id}","/upload/user","/upload/product","/upload/product-variation","/show/user","/show/product","/show/product-variation","/api/v1/forgotPassword").anonymous()
+                .antMatchers("/register/customer","/register/seller","/seller/{id}","/activate/{id}","/upload/user","/upload/product","/upload/product-variation","/show/user","/show/product","/show/product-variation","/api/v1/forgotPassword","/login-user").anonymous()
                 .antMatchers("/seller/","/customer/","/activate/{id}","/deactivate{id}","/changeRole/{role}/{id}").hasAnyRole("ADMIN")
                 .antMatchers("product/{id}","/order/{id}","/register-account","/activate-account","/logout","/product/","/cart","/order","/reset-password","/login/forgotPassword").hasAnyRole("ADMIN","CUSTOMER","SELLER")
                 .antMatchers("/customer/{id}","/address/{id}","/address/Add").hasAnyRole("CUSTOMER","ADMIN")

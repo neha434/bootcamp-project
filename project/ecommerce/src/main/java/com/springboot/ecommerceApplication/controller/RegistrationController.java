@@ -46,5 +46,4 @@ public class RegistrationController {
         return sellerService.registerSeller(sellerCO);
     }
 
-
-}
+   }

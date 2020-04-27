@@ -101,7 +101,7 @@ public class SellerService {
                         Sort.by(pagingAndSortingDto.getSortField()).ascending());
         }
 
-        Page<Seller> pagedResult = sellerRepository.findAll(paging);
+        List<Seller> pagedResult = sellerRepository.findAll(paging);
 
         Iterable<Seller> sellers = sellerRepository.findAll();
         List<SellerDto> sellerDtoList = new ArrayList<>();

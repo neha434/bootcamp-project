@@ -39,7 +39,7 @@ public class AddressController {
     }
 //add address
     @PostMapping("/Add")
-    public String AddAddress(Integer id, @Valid @RequestBody AddressDto addressDto, WebRequest webRequest){
+    public String addAddress(Integer id, @Valid @RequestBody AddressDto addressDto, WebRequest webRequest){
         return customerService.AddAddress(id,addressDto);
     }
 

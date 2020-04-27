@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "USERS")
+//@Table(name = "USERS")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User  {
     @Id
@@ -26,9 +26,18 @@ public class User  {
     private String middleName;
     private String lastName;
     private  String image;
+    private Integer count= 0;
 //
 //    @Column(name = "enabled")
 //    private boolean enabled;
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 
     public User(){
 
@@ -129,7 +138,7 @@ public class User  {
 
 
     public boolean isActive() {
-        return false;
+        return isActive ;
     }
 
 //  public void setEnabled(boolean enabled){
@@ -142,6 +151,24 @@ public class User  {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", image='" + image + '\'' +
+                ", count=" + count +
+                ", password='" + password + '\'' +
+                ", isDeleted=" + isDeleted +
+                ", isActive=" + isActive +
+                ", roleList=" + roleList +
+                ", addressesList=" + addressesList +
+                '}';
     }
 }
 

@@ -22,7 +22,7 @@ public class ProductService {
 
     public ProductDto getProduct(int id) {
 
-        List<Product> optional = productRepository.findByName("name");
+       List<Product> optional = productRepository.findByName("name");
         Product product = new Product();
         ProductDto productDto = new ProductDto();
         productDto.setId(product.getId());

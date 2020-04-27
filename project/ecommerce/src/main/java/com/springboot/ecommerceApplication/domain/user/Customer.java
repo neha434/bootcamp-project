@@ -17,7 +17,7 @@ public class Customer extends User{
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
     private List<ProductReview> productReviewsList;
 
-    public Customer(String email, String firstName, String middleName, String lastName, String encode, String contact, boolean b, boolean b1, boolean b2, boolean b3, int i) {
+    public Customer(String email, String firstName, String middleName, String lastName, String encode, String contact) {
     }
 
     public Customer() {
@@ -61,5 +61,15 @@ public class Customer extends User{
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "contact='" + contact + '\'' +
+                ", productReviewsList=" + productReviewsList +
+                ", ordersList=" + ordersList +
+                ", cart=" + cart +
+                '}';
     }
 }
