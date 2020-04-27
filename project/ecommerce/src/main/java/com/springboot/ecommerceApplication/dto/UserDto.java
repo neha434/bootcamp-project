@@ -16,16 +16,26 @@ public class UserDto {
     //@Pattern(regexp="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*])(?=.{8,15})", message = "Invalid Password")
     private String password;
     @NotEmpty
-    @JsonIgnore
-    private String ConfirmPassword;
+    //@JsonIgnore
+    private String confirmPassword;
     @NotEmpty
     private String firstName;
     private String middleName;
     @NotEmpty
     private String lastName;
+    @NotEmpty
+    private Boolean isActive;
 
     public UserDto(){
 
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
     public UserDto(@NotEmpty Integer id, @NotEmpty String email, @NotEmpty String firstName, String middleName, @NotEmpty String lastName) {
@@ -61,11 +71,11 @@ public class UserDto {
     }
 
     public String getConfirmPassword() {
-        return ConfirmPassword;
+        return confirmPassword;
     }
 
     public void setConfirmPassword(String confirmPassword) {
-        ConfirmPassword = confirmPassword;
+        confirmPassword = confirmPassword;
     }
 
     public String getFirstName() {
@@ -97,7 +107,7 @@ public class UserDto {
         return "UserDto{" +
                 "email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", ConfirmPassword='" + ConfirmPassword + '\'' +
+                ", ConfirmPassword='" + confirmPassword + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +

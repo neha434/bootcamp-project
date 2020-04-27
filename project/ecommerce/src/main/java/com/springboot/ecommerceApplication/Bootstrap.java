@@ -7,9 +7,11 @@ import com.springboot.ecommerceApplication.domain.product.Category;
 import com.springboot.ecommerceApplication.domain.product.Product;
 import com.springboot.ecommerceApplication.domain.product.ProductReview;
 import com.springboot.ecommerceApplication.domain.product.ProductVariation;
+import com.springboot.ecommerceApplication.domain.user.Address;
 import com.springboot.ecommerceApplication.domain.user.Customer;
 import com.springboot.ecommerceApplication.domain.user.Seller;
 import com.springboot.ecommerceApplication.domain.user.User;
+import com.springboot.ecommerceApplication.dto.AddressDto;
 import com.springboot.ecommerceApplication.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -24,7 +26,8 @@ import java.util.List;
 
 @Component
 public class Bootstrap implements ApplicationRunner {
-
+@Autowired
+AddressRepository addressRepository;
     @Autowired
     RoleRepo roleRepository;
 
@@ -119,6 +122,19 @@ public class Bootstrap implements ApplicationRunner {
             System.out.println("Total users saved::"+ userRepository.count());
         }
 
+        if(addressRepository.count()<1){
+         //   Customer customer = new Customer();
+            User customer = userRepository.findById(3).get();
+            Address address = new Address();
+            address.setCountry("India");
+            address.setState("U.P");
+            address.setCity("XYZ");
+            address.setAddressLine("abcdef");
+            address.setZipCode("1234");
+            address.setLabel("home");
+            address.setUser(customer);
+            addressRepository.save(address);
+        }
         if(categoryRepository.count() < 1){
             Category category = new Category();
             category.setName("Laptops");
@@ -167,7 +183,7 @@ public class Bootstrap implements ApplicationRunner {
         }
         if (cartRepository.count() < 1){
             Cart cart = new Cart();
-            cart.setProductVariation(productVariationRepository.findById(1).get());
+          //  cart.setProductVariation(productVariationRepository.findById(1).get());
          // cart.setCustomer(customerRepository.findById(3).get());
             cart.setWishList(true);
             cart.setQuantity(2);

@@ -15,7 +15,7 @@ public class Address {
     private String zipCode;
     private String label;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID")
     private User User;
 

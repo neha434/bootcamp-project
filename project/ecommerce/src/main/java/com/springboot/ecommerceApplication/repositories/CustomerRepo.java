@@ -6,13 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.awt.*;
+import java.util.List;
 
 
 public interface CustomerRepo extends CrudRepository<Customer,Integer> {
     Customer findByEmail(String email);
-    Page<Customer> findAll(Pageable pageable);
-
+    List<Customer> findAll(Pageable pageable);
 
 
 }
