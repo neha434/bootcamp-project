@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -47,6 +48,15 @@ public class User  {
     private String password;
     private Boolean isDeleted;
     private Boolean isActive;
+   private Date deactivatedTime;
+
+    public Date getDeactivatedTime() {
+        return deactivatedTime;
+    }
+
+    public void setDeactivatedTime(Date deactivatedTime) {
+        this.deactivatedTime = deactivatedTime;
+    }
 
     @ManyToMany(fetch = FetchType.EAGER)//
     @Fetch(value = FetchMode.SUBSELECT)

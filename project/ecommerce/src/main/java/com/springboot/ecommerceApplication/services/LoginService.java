@@ -1,6 +1,7 @@
 package com.springboot.ecommerceApplication.services;
 
 import com.springboot.ecommerceApplication.domain.user.User;
+import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
 import com.springboot.ecommerceApplication.exception.InvalidDetails;
 import com.springboot.ecommerceApplication.exception.UserAccountLocked;
 import com.springboot.ecommerceApplication.repositories.UserRepo;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
+
 @Service
 public class LoginService {
     @Autowired
@@ -28,6 +31,7 @@ public class LoginService {
                 new UsernamePasswordAuthenticationToken(email, password);
         Authentication authentication = null;
         User user = userRepo.findByEmail(email);
+        validation(email);
 
         try {
 
@@ -56,8 +60,21 @@ public class LoginService {
             //throw new AuthenticationCredentialsNotFoundException("Bad credential entered");
         } else {
             user.setActive(false);
+            user.setDeactivatedTime(new Date());
             userRepo.save(user);
             //throw new InvalidDetails("Your Account has been locked");
+        }
+    }
+
+    public void validation(String email){
+        User user = userRepo.findByEmail(email);
+        if(user==null)
+        {
+            throw new AccountDoesNotExists("The given email is not registered");
+        }
+        else
+        if (!user.isActive()) {
+            throw new AuthenticationCredentialsNotFoundException("Account is not active");
         }
     }
 }
