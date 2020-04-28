@@ -161,7 +161,8 @@ public class CustomerService {
 //        else {
 //            customerRepository.deleteById(id);
 //            map.put("Deleted",true);
-//        }
+//        }    private static final Logger logger = LoggerFactory.getLogger(LoginSchedular.class);
+
 //        return map;
 //    }
 
