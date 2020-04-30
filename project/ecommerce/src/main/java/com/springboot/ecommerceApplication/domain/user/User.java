@@ -46,6 +46,7 @@ public class User  {
 
     //@Pattern(regexp="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*])(?=.{8,15})", message = "Invalid Password")
     private String password;
+   // private String confirmPassword;
     private Boolean isDeleted;
     private Boolean isActive;
    private Date deactivatedTime;
@@ -57,6 +58,14 @@ public class User  {
     public void setDeactivatedTime(Date deactivatedTime) {
         this.deactivatedTime = deactivatedTime;
     }
+
+//    public String getConfirmPassword() {
+//        return confirmPassword;
+//    }
+//
+//    public void setConfirmPassword(String confirmPassword) {
+//        this.confirmPassword = confirmPassword;
+//    }
 
     @ManyToMany(fetch = FetchType.EAGER)//
     @Fetch(value = FetchMode.SUBSELECT)
