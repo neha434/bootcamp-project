@@ -50,10 +50,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         http
                 .authorizeRequests()
                 .antMatchers("/register/customer","/register/seller","/seller/{id}","/activate/{id}","/upload/user","/upload/product","/upload/product-variation","/show/user","/show/product","/show/product-variation","/api/v1/forgotPassword","/login-user").anonymous()
-                .antMatchers("/seller/","/customer/","/activate/{id}","/deactivate{id}","/changeRole/{role}/{id}").hasAnyRole("ADMIN")
+                .antMatchers("/customer/patch{id}","/seller/","/customer/","/activate/{id}","/deactivate/{id}","/changeRole/{role}/{id}").hasAnyRole("ADMIN")
                 .antMatchers("product/{id}","/order/{id}","/register-account","/activate-account","/logout","/product/","/cart","/order","/reset-password","/login/forgotPassword").hasAnyRole("ADMIN","CUSTOMER","SELLER")
                 .antMatchers("/customer/{id}","/address/{id}","/address/Add").hasAnyRole("CUSTOMER","ADMIN")
-                .antMatchers("/seller/address/{id}").hasAnyRole("SELLER","ADMIN")
+                .antMatchers("seller/update/{id}","/seller/address/{id}").hasAnyRole("SELLER","ADMIN")
                 .antMatchers("/address/Seller/{id}","/address/Customer{id}").hasAnyRole("SELLER", "CUSTOMER")
                 .anyRequest().authenticated()
                 .and()

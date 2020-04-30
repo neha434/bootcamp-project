@@ -1,11 +1,14 @@
 package com.springboot.ecommerceApplication.services;
 
 
+import com.springboot.ecommerceApplication.co.CustomerCO;
 import com.springboot.ecommerceApplication.co.SellerCO;
 import com.springboot.ecommerceApplication.domain.Role;
 import com.springboot.ecommerceApplication.domain.user.Address;
+import com.springboot.ecommerceApplication.domain.user.Customer;
 import com.springboot.ecommerceApplication.domain.user.Seller;
 import com.springboot.ecommerceApplication.dto.AddressDto;
+import com.springboot.ecommerceApplication.dto.CustomerDto;
 import com.springboot.ecommerceApplication.dto.PagingAndSortingDto;
 import com.springboot.ecommerceApplication.dto.SellerDto;
 import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
@@ -87,21 +90,23 @@ public class SellerService {
         return sellerDto;
     }
 
-    public List<SellerDto> getAllSeller(PagingAndSortingDto pagingAndSortingDto) {
-        Pageable paging;
-        if (pagingAndSortingDto == null){
-            paging = PageRequest.of(0, 10, Sort.by("id").ascending());
-        }
-        else {
-            if (pagingAndSortingDto.getOrder() == "descending")
-                paging=PageRequest.of(pagingAndSortingDto.getMax(), pagingAndSortingDto.getOffset(),
-                        Sort.by(pagingAndSortingDto.getSortField()).descending());
-            else
-                paging=PageRequest.of(pagingAndSortingDto.getMax(), pagingAndSortingDto.getOffset(),
-                        Sort.by(pagingAndSortingDto.getSortField()).ascending());
-        }
+    public List<SellerDto> getAllSeller() {
 
-        List<Seller> pagedResult = sellerRepository.findAll(paging);
+
+//        Pageable paging;
+//        if (pagingAndSortingDto == null){
+//            paging = PageRequest.of(0, 10, Sort.by("id").ascending());
+//        }
+//        else {
+//            if (pagingAndSortingDto.getOrder() == "descending")
+//                paging=PageRequest.of(pagingAndSortingDto.getMax(), pagingAndSortingDto.getOffset(),
+//                        Sort.by(pagingAndSortingDto.getSortField()).descending());
+//            else
+//                paging=PageRequest.of(pagingAndSortingDto.getMax(), pagingAndSortingDto.getOffset(),
+//                        Sort.by(pagingAndSortingDto.getSortField()).ascending());
+//        }
+
+       // List<Seller> pagedResult = sellerRepository.findAll(pageable);
 
         Iterable<Seller> sellers = sellerRepository.findAll();
         List<SellerDto> sellerDtoList = new ArrayList<>();
@@ -141,4 +146,32 @@ public class SellerService {
     }
 
 
-    }
+//    public SellerDto updateUser(Integer id, SellerCO sellerCO) {
+//        if (!sellerRepository.findById(id).isPresent()) {  //ispresent?
+//            throw new AccountDoesNotExists("Invalid Account Credentials");
+//        }
+//        Seller seller = sellerRepository.findById(id).get();
+//        BeanUtils.copyProperties(sellerCO, seller);
+//        sellerRepository.save(seller);
+//        SellerDto sellerDto = getSeller(seller.getId());
+//        return sellerDto;
+//    }
+      public ResponseEntity<String> updateUser(Integer id, SellerCO sellerCO) {
+        {
+            ResponseEntity<String> responseEntity;
+            Optional<Seller> optional = sellerRepository.findById(id);
+            if (!optional.isPresent()) {
+                responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageSource.getMessage
+                        ("message-invalid-details", null, LocaleContextHolder.getLocale()));
+                return responseEntity;
+            }
+            Seller seller = sellerRepository.findById(id).get();
+            BeanUtils.copyProperties(sellerCO, seller);
+            sellerRepository.save(seller);
+            responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                    ("message-seller-updated", null, LocaleContextHolder.getLocale()));
+            return responseEntity;
+        }
+
+
+}}

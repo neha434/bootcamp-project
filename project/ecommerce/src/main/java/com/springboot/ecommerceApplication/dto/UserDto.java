@@ -14,10 +14,10 @@ public class UserDto {
     @NotEmpty
    // @JsonIgnore
     //@Pattern(regexp="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*])(?=.{8,15})", message = "Invalid Password")
-    private String password;
+   // private String password;
     @NotEmpty
     //@JsonIgnore
-    private String confirmPassword;
+    //private String confirmPassword;
     @NotEmpty
     private String firstName;
     private String middleName;
@@ -62,21 +62,21 @@ public class UserDto {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        confirmPassword = confirmPassword;
-    }
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
+//
+//    public String getConfirmPassword() {
+//        return confirmPassword;
+//    }
+//
+//    public void setConfirmPassword(String confirmPassword) {
+//       this.confirmPassword = confirmPassword;
+//    }
 
     public String getFirstName() {
         return firstName;
@@ -106,8 +106,8 @@ public class UserDto {
     public String toString() {
         return "UserDto{" +
                 "email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", ConfirmPassword='" + confirmPassword + '\'' +
+             //   ", password='" + password + '\'' +
+              //  ", ConfirmPassword='" + confirmPassword + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +

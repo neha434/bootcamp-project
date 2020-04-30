@@ -14,6 +14,7 @@ public class OrderStatus {
     private int ORDER_PRODUCT_ID;
     private To_Status status;
     private From_Status status1;
+
     public enum To_Status {
         ORDERED,
         READY,
@@ -23,7 +24,8 @@ public class OrderStatus {
         RETURN_APPROVED,
         RETURN_REJECTED;
 
-                 }
+    }
+
     public enum From_Status {
         ORDERED,
         READY,
@@ -35,17 +37,21 @@ public class OrderStatus {
     }
 
     //An order can be cancelled as long as it is not delivered.
-                 public boolean isCanceable() {
-                 if (getStatus() ==To_Status.DELIVERED) {
-                 return true;
-                }
-                return false; }
-              //An order can be returned or requested for refund once it is delivered
-        public boolean isRefundable(){
-             if(getStatus()==To_Status.DELIVERED){
-               return true;
-            }
-              return false; }
+    public boolean isCanceable() {
+//        if (getStatus() == To_Status.DELIVERED) {
+//            return true;
+//        }
+        return getStatus() == To_Status.DELIVERED;
+    }
+
+    //An order can be returned or requested for refund once it is delivered
+    public boolean isRefundable() {
+//        if (getStatus() == To_Status.DELIVERED) {
+//            return true;
+//        }
+//        return false;
+        return getStatus() == To_Status.DELIVERED;
+    }
 
     public int getORDER_PRODUCT_ID() {
         return ORDER_PRODUCT_ID;

@@ -27,19 +27,20 @@ public class LoginSchedular {
 
     @Scheduled(fixedRateString = "${scheduler.timeInterval.activateUser}")
     public void unlockAccount() {
-        List<User> list=  userRepo.findByIsActive(false);
-      //  List<User> list = new ArrayList();
-        Date currentTime = new Date();
-        Long value;
-        for (User user : list) {
-            value = currentTime.getTime()- user.getDeactivatedTime().getTime();
-           // logger.info("this is a logger{}",);
-          //System.out.println("###########################"+value);
-            if (value >= 86400000 ) {
-                user.setActive(true);
-                userRepo.save(user);
-            }
-        }
+//        userRepo.ActivateUsers();
+//        List<User> list=  userRepo.findByIsActive(false);
+//      //  List<User> list = new ArrayList();
+//        Date currentTime = new Date();
+//        Long value;
+//        for (User user : list) {
+//            value = currentTime.getTime()- user.getDeactivatedTime().getTime();
+//           // logger.info("this is a logger{}",);
+//          //System.out.println("###########################"+value);
+//            if (value >= 86400000 ) {
+//                user.setActive(true);
+//                userRepo.save(user);
+//            }
+//        }
     }
 
 }
