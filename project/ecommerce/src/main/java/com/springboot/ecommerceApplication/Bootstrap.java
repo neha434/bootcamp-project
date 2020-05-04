@@ -82,7 +82,7 @@ AddressRepository addressRepository;
             appUser.setRoleList(roleList);
 
             Seller seller = new Seller();
-            seller.setEmail("seller.user@gmail.com");
+            seller.setEmail("eller.user@gmail.com");
             seller.setFirstName("Pragati");
             seller.setLastName("Singhal");
             seller.setPassword(passwordEncoder.encode("nehaA123!"));
@@ -146,7 +146,7 @@ AddressRepository addressRepository;
             product.setDescription("Portable Design");
 
             product.setCategory(categoryRepository.findByName("Laptops"));
-            product.setSeller( sellerRepository.findByEmail("seller.user@gmail.com"));
+            product.setSeller( sellerRepository.findByEmail("eller.user@gmail.com"));
 
             product.setCancellable(true);
             product.setReturnable(true);
@@ -162,7 +162,10 @@ AddressRepository addressRepository;
                     "Meta Data 2");
             productVariation2.setProduct(product);
             productVariations.add(productVariation2);
+            productVariation1.setActive(true);
+            productVariation2.setActive(true);
             product.setProductVariationList(productVariations);
+
             productRepository.save(product);
 
             List<ProductReview> productReviewsList = new ArrayList<>();

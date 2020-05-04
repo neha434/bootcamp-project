@@ -21,29 +21,28 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping("/register")
+//@RequestMapping("/register")
 public class RegistrationController {
     @Autowired
-    CustomerService customerService;
-    SellerService sellerService;
     RegisterService registerService;
 //Register a customer
-    @PostMapping("/customer")
+    @PostMapping("/customerRegister")
     public ResponseEntity<String> registerCustomer(@Valid @RequestBody CustomerCO customerCO, WebRequest webRequest){
-        return customerService.registerCustomer(customerCO);
+        return registerService.registerCustomer(customerCO);
     }
 
-//    //Activate account
-//    @PutMapping("/activate-account")
-//    public ResponseEntity<String> activateAccount(@RequestParam("token") String token, @RequestBody UserDto userDto
-//            ,WebRequest webRequest){
-//        return registerService.activateAccount(token,userDto);
-//    }
-
-    //Register a seller
-    @PostMapping("/seller")
-    public SellerDto registerSeller(@Valid @RequestBody SellerCO sellerCO, WebRequest webRequest){
-        return sellerService.registerSeller(sellerCO);
+    //to activate customer account
+    @PutMapping("/activate-user-account")
+    public ResponseEntity<String> activateAccount(@RequestParam("token") String token
+            ,WebRequest webRequest){
+        return registerService.activateAccount(token);
     }
+
+//register a seller
+    @PostMapping("/sellerRegister")
+    public ResponseEntity<String> registerSeller(@Valid @RequestBody SellerCO sellerCO, WebRequest webRequest){
+        return registerService.registerSeller(sellerCO);
+    }
+
 
    }

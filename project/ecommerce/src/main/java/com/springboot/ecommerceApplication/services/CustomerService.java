@@ -5,10 +5,8 @@ import com.springboot.ecommerceApplication.domain.Role;
 import com.springboot.ecommerceApplication.domain.VerificationToken;
 import com.springboot.ecommerceApplication.domain.user.Address;
 import com.springboot.ecommerceApplication.domain.user.Customer;
-import com.springboot.ecommerceApplication.domain.user.User;
 import com.springboot.ecommerceApplication.dto.AddressDto;
 import com.springboot.ecommerceApplication.dto.CustomerDto;
-import com.springboot.ecommerceApplication.dto.PagingAndSortingDto;
 import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
 import com.springboot.ecommerceApplication.exception.CustomerAlreadyExistsException;
 import com.springboot.ecommerceApplication.repositories.AddressRepository;
@@ -19,16 +17,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 
@@ -49,51 +42,6 @@ public class CustomerService {
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    //PasswordEncoder confirmPasswordEncoder = new BCryptPasswordEncoder();
-//    public CustomerDto registerCustomer(CustomerCO customerCO){
-//        Customer customer = customerRepository.findByEmail(customerCO.getEmail());
-//        if(customer != null){
-//            throw new CustomerAlreadyExistsException("Account Already Exist With This Email Id");
-//        }
-//        Customer registerCustomer = new Customer();
-//
-//        registerCustomer.setEmail(customerCO.getEmail());
-//        registerCustomer.setFirstName(customerCO.getFirstName());
-//        registerCustomer.setMiddleName(customerCO.getMiddleName());
-//        registerCustomer.setLastName(customerCO.getLastName());
-//        registerCustomer.setPassword(passwordEncoder.encode(customerCO.getPassword()));
-//// registerCustomer.setPassword((confirmPasswordEncoder.encode(customerCO.getConfirmPassword())));
-//        registerCustomer.setContact(customerCO.getContact());
-//        List<Role> roleList = new ArrayList<>();
-//
-//        roleList.add(roleRepository.findByAuthority("ROLE_CUSTOMER"));
-//        registerCustomer.setRoleList(roleList);
-//
-//        customerRepository.save(registerCustomer);
-//
-//        CustomerDto customerDto = getCustomer(registerCustomer.getId());
-//        return customerDto;
-//    }
-    public ResponseEntity<String> registerCustomer(CustomerCO customerCO) {
-        Customer customer = customerRepository.findByEmail(customerCO.getEmail());
-        ResponseEntity<String> responseEntity;
-        if (customer != null) {
-            throw new CustomerAlreadyExistsException("Account Already Exist With This Email Id");
-        }
-        Customer registerUser = new Customer(customerCO.getEmail(), customerCO.getFirstName(), customerCO.getMiddleName(),
-                customerCO.getLastName(), passwordEncoder.encode(customerCO.getPassword()), customerCO.getContact());
-        List<Role> roleList = new ArrayList<>();
-        roleList.add(roleRepository.findByAuthority("ROLE_CUSTOMER"));
-        registerUser.setRoleList(roleList);
-        customerRepository.save(registerUser);
-        String token = UUID.randomUUID().toString();
-        createVerificationToken(registerUser, token);
-        mailService.sendActivationLinkEmail(registerUser.getEmail(), token);
-
-        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
-                ("message-account-created", null, LocaleContextHolder.getLocale()));
-        return responseEntity;
-    }
 
     //Api to get my detail
     public CustomerDto getCustomer(Integer id) {
@@ -137,7 +85,7 @@ public class CustomerService {
                 customers.getMiddleName(), customers.getLastName(), customers.getContact())));
         return customerDtoList;
     }
-
+// to update customer profile
     public CustomerDto updateCustomer(Integer id, CustomerDto customerDto, boolean isPatch) {
         if (!customerRepository.findById(id).isPresent()) {
             throw new AccountDoesNotExists("Invalid Account Credentials");
@@ -158,40 +106,6 @@ public class CustomerService {
         return customerDto1;
     }
 
-    public ResponseEntity<String> updateUser(Integer id, CustomerCO customerCO) {
-        {
-            ResponseEntity<String> responseEntity;
-            Optional<Customer> optional = customerRepository.findById(id);
-            if (!optional.isPresent()) {
-                responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageSource.getMessage
-                        ("message-invalid-details", null, LocaleContextHolder.getLocale()));
-                return responseEntity;
-            }
-            Customer customer = customerRepository.findById(id).get();
-            BeanUtils.copyProperties(customerCO, customer);
-            customerRepository.save(customer);
-            responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
-                    ("message-customer-updated", null, LocaleContextHolder.getLocale()));
-            return responseEntity;
-        }
-
-    }
-
-
-//    public Map<String,Boolean> deleteCustomer(Integer id){
-//        Map<String,Boolean> map = new HashMap<>();
-//        Optional<Customer> optional = customerRepository.findById(id);
-//
-//        if(!optional.isPresent()){
-//            map.put("Deleted",false);
-//        }
-//        else {
-//            customerRepository.deleteById(id);
-//            map.put("Deleted",true);
-//        }    private static final Logger logger = LoggerFactory.getLogger(LoginSchedular.class);
-
-//        return map;
-//    }
 
     public AddressDto getAddress(Integer id) {
         Optional<Address> optional = addressRepository.findById(id);
@@ -256,11 +170,13 @@ public class CustomerService {
         return responseEntity;
     }
 
-    public void createVerificationToken(Customer registerUser, String token) {
-        VerificationToken newToken = new VerificationToken(token, registerUser);
-        verificationTokenRepository.save(newToken);
-    }
+
 
 }
 
 
+
+//public Integer getCurrentlyLoggedInUserId(WebRequest webRequest){
+//Authentication auth=  (Authentication) webRequest.getUserPricipal();
+//return userRepository.findByEmail(auth.getName()).getId();
+//}

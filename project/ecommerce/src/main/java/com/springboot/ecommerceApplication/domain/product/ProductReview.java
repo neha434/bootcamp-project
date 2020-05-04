@@ -9,11 +9,21 @@ import javax.persistence.*;
 public class ProductReview  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;               //Updated
+    private Integer id;//Updated
 
     private String review;
 
     private Double rating;
+
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     @ManyToOne
     @JoinColumn(name = "product_id",referencedColumnName ="id")

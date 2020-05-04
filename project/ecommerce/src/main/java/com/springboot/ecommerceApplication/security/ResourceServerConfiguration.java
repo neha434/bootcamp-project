@@ -49,8 +49,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(final HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/register/customer","/register/seller","/seller/{id}","/activate/{id}","/upload/user","/upload/product","/upload/product-variation","/show/user","/show/product","/show/product-variation","/api/v1/forgotPassword","/login-user").anonymous()
-                .antMatchers("/customer/patch{id}","/seller/","/customer/","/activate/{id}","/deactivate/{id}","/changeRole/{role}/{id}").hasAnyRole("ADMIN")
+                .antMatchers("/customerRegister","/activate-user-account","/sellerRegister","/seller/{id}","/activate/{id}","/upload/user","/upload/product","/upload/product-variation","/show/user","/show/product","/show/product-variation","/api/v1/forgotPassword","/login-user").anonymous()
+                .antMatchers("/product/","/seller/","/customer/","/activate/{id}","/deactivate/{id}","/changeRole/{role}/{id}","/updateAdmin/{id}","/activateProduct/{id}").hasAnyRole("ADMIN")
                 .antMatchers("product/{id}","/order/{id}","/register-account","/activate-account","/logout","/product/","/cart","/order","/reset-password","/login/forgotPassword").hasAnyRole("ADMIN","CUSTOMER","SELLER")
                 .antMatchers("/customer/{id}","/address/{id}","/address/Add").hasAnyRole("CUSTOMER","ADMIN")
                 .antMatchers("seller/update/{id}","/seller/address/{id}").hasAnyRole("SELLER","ADMIN")

@@ -23,7 +23,8 @@ private String image;
     private Integer price;
     @Size(max = 100)
     private String primaryImageName;
-    private String metadata;;
+    private String metadata;
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "productVariation",cascade = CascadeType.ALL)
     private List<Cart> cartsList;
@@ -63,6 +64,14 @@ private String image;
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
 
     public Product getProduct() {
         return product;
@@ -118,5 +127,11 @@ private String image;
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+
+    public boolean isActive() {
+
+        return isActive;
     }
 }

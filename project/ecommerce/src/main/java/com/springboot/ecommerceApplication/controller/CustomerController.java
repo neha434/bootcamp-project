@@ -29,8 +29,9 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
    //view profile
-    @GetMapping("/{id}")
-    public CustomerDto getCustomer(@PathVariable Integer id) {
+    @GetMapping("/id")
+    public CustomerDto getCustomer(Integer id)
+    {
         return customerService.getCustomer(id);
     }
   //update profile
@@ -39,7 +40,7 @@ public class CustomerController {
         return customerService.updateCustomer(id, customerDto, false);
     }
     @PatchMapping("/{id}")
-    public CustomerDto updateCustomerUsingPatch(@PathVariable Integer id, @Valid @RequestBody CustomerDto customerDto, WebRequest webRequest) {
+    public CustomerDto updateCustomerUsingPatch(@PathVariable Integer id, @RequestBody CustomerDto customerDto, WebRequest webRequest) {
         return customerService.updateCustomer(id, customerDto, true);
     }
 //    @PatchMapping("/patch/{id}")
