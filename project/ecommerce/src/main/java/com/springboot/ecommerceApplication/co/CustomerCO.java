@@ -14,4 +14,10 @@ public class CustomerCO extends UserCO{
     public void setContact(String contact) {
         this.contact = contact;
     }
+
+    public CustomerCO(@NotEmpty String email, @NotEmpty String firstName, String middleName, @NotEmpty String lastName, @NotEmpty String password, @NotEmpty String confirmPassword, @NotEmpty String contact) {
+        super(email, firstName, middleName, lastName, password, confirmPassword);
+        this.contact = contact;
+    }
+
 }

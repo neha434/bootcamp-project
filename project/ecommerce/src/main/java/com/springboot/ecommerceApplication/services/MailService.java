@@ -1,5 +1,6 @@
 package com.springboot.ecommerceApplication.services;
 
+import com.springboot.ecommerceApplication.domain.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,22 +20,65 @@ public class MailService {
         mailSender.send(mail);
 
     }
-
+//account activation token has been sent to customer
     public void sendActivationLinkEmail(String email, String token) {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
-        mail.setSubject("Activate Account Token");
+        mail.setSubject("Activate  Customer Account Token");
         mail.setText("Please use this link to activate your Account" + "\r\n" +
-                "http://localhost:8080/register/activate-account?token=" + token);
+                "http://localhost:8080/activate-user-account?token=" + token);
         mailSender.send(mail);
 
     }
 
-    public void sendAAccountRegisterEmail(String email) {
+//    public void sendAAccountRegisterEmail(String email) {
+//        SimpleMailMessage mail = new SimpleMailMessage();
+//        mail.setTo(email);
+//        mail.setSubject("Account Created");
+//        mail.setText("Your account has been created");
+//        mailSender.send(mail);
+//
+//    }
+//by admin
+    public void sendAccountActivationEmail(String email) {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
-        mail.setSubject("Account Created");
-        mail.setText("Your account has been created");
+        mail.setSubject("Account Activation");
+        mail.setText("Your account has been activated");
+        mailSender.send(mail);
+    }
+//by admin
+    public void sendAccountDeactivationEmail(String email) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(email);
+        mail.setSubject("Account Deactivated");
+        mail.setText("Your account has been deactivated");
+        mailSender.send(mail);
+    }
+//by admin
+    public void sendProductDeactivationEmail(String email, String productName) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(email);
+        mail.setSubject("Product Deactivated");
+        mail.setText(productName+"has been deactivated");
+        mailSender.send(mail);
+    }
+//by admin
+    public void sendProductActivationEmail(String email, String productName) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(email);
+        mail.setSubject("Product Activated");
+        mail.setText(productName+"has been activated");
+        mailSender.send(mail);
+
+    }
+//to send activation token for seller
+    public void sendActivateAccountLinkEmailSeller(String email, String token) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(email);
+        mail.setSubject("Activate  Seller Account Token");
+        mail.setText("Please use this link to activate your Account" + "\r\n" +
+                "http://localhost:8080/activate-user-account?token=" + token);
         mailSender.send(mail);
 
     }

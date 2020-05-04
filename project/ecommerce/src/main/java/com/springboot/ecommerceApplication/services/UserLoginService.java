@@ -2,6 +2,7 @@ package com.springboot.ecommerceApplication.services;
 
 import com.springboot.ecommerceApplication.domain.ForgotPasswordToken;
 //import com.springboot.ecommerceApplication.domain.VerificationToken;
+import com.springboot.ecommerceApplication.domain.VerificationToken;
 import com.springboot.ecommerceApplication.domain.user.User;
 import com.springboot.ecommerceApplication.dto.PasswordDto;
 import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
@@ -83,7 +84,7 @@ public class UserLoginService {
                     ("message-invalid-forgot-password-token", null, LocaleContextHolder.getLocale()));
             return responseEntity;
         }
-        //passwordMatches(forgotPasswordDto.getPassword(),forgotPasswordDto.getConfirmPassword());
+        passwordMatches(forgotPasswordDto.getPassword(),forgotPasswordDto.getConfirmPassword());
 
         User user = forgotPasswordToken.getUser();
         Calendar calendar = Calendar.getInstance();
@@ -94,7 +95,7 @@ public class UserLoginService {
             return responseEntity;
         }
        user.setPassword(passwordEncoder.encode(forgotPasswordDto.getPassword()));
-        user.setPassword(forgotPasswordDto.getPassword());
+        //user.setPassword(forgotPasswordDto.getPassword());
         userRepository.save(user);
         forgotPasswordTokenRepository.delete(forgotPasswordToken);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage

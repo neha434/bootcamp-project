@@ -189,6 +189,15 @@ public class User  {
                 ", addressesList=" + addressesList +
                 '}';
     }
+
+    public User( String email, String firstName, String middleName, String lastName,  String password) {
+
+        this.email = email;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.password = password;
+    }
 }
 
 

@@ -44,30 +44,30 @@ public class SellerService {
     RoleRepo roleRepository;
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public SellerDto registerSeller(SellerCO sellerCO) {
-        Seller seller = sellerRepository.findByEmail(sellerCO.getEmail());
-        if (seller != null) {
-            throw new CustomerAlreadyExistsException("Account Already Exist With This Email Id");
-        }
-        Seller registerSeller = new Seller();
-
-        registerSeller.setEmail(sellerCO.getEmail());
-        registerSeller.setFirstName(sellerCO.getFirstName());
-        registerSeller.setMiddleName(sellerCO.getMiddleName());
-        registerSeller.setLastName(sellerCO.getLastName());
-        registerSeller.setPassword(passwordEncoder.encode(sellerCO.getPassword()));
-        registerSeller.setCompanyContact(sellerCO.getCompanyContact());
-        List<Role> roleList = new ArrayList<>();
-
-        roleList.add(roleRepository.findByAuthority("ROLE_SELLER"));
-        registerSeller.setRoleList(roleList);
-
-        sellerRepository.save(registerSeller);
-    mailService.sendAAccountRegisterEmail(registerSeller.getEmail());
-
-        SellerDto sellerDto = getSeller(registerSeller.getId());
-        return sellerDto;
-    }
+//    public SellerDto registerSeller(SellerCO sellerCO) {
+//        Seller seller = sellerRepository.findByEmail(sellerCO.getEmail());
+//        if (seller != null) {
+//            throw new CustomerAlreadyExistsException("Account Already Exist With This Email Id");
+//        }
+//        Seller registerSeller = new Seller();
+//
+//        registerSeller.setEmail(sellerCO.getEmail());
+//        registerSeller.setFirstName(sellerCO.getFirstName());
+//        registerSeller.setMiddleName(sellerCO.getMiddleName());
+//        registerSeller.setLastName(sellerCO.getLastName());
+//        registerSeller.setPassword(passwordEncoder.encode(sellerCO.getPassword()));
+//        registerSeller.setCompanyContact(sellerCO.getCompanyContact());
+//        List<Role> roleList = new ArrayList<>();
+//
+//        roleList.add(roleRepository.findByAuthority("ROLE_SELLER"));
+//        registerSeller.setRoleList(roleList);
+//
+//        sellerRepository.save(registerSeller);
+//    mailService.sendAAccountRegisterEmail(registerSeller.getEmail());
+//
+//        SellerDto sellerDto = getSeller(registerSeller.getId());
+//        return sellerDto;
+//    }
 
 
     public SellerDto getSeller(Integer id) {

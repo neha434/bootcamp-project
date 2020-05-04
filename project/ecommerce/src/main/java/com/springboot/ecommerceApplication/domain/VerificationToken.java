@@ -1,5 +1,6 @@
 package com.springboot.ecommerceApplication.domain;
 
+import com.springboot.ecommerceApplication.domain.user.Customer;
 import com.springboot.ecommerceApplication.domain.user.User;
 
 import javax.persistence.*;
@@ -30,8 +31,11 @@ public class VerificationToken {
         public VerificationToken(String token, User user) {
             this.token = token;
             this.user = user;
+            this.expiryDate=this.calculateExpiryDate(EXPIRATION);
         }
-        private Date calculateExpiryDate(int expiryTimeInMinutes) {
+
+
+    private Date calculateExpiryDate(int expiryTimeInMinutes) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Timestamp(cal.getTime().getTime()));
            cal.add(Calendar.MINUTE, expiryTimeInMinutes);

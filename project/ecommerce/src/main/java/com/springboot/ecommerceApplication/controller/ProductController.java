@@ -25,10 +25,6 @@ public class ProductController {
         return productService.getProduct(id);
 
     }
-    @GetMapping("/")
-    public List<ProductDto> getProductList(){
-        return productService.getProductList();
-    }
 
     @PostMapping("/")
     public ProductDto addProduct(@RequestBody ProductCO productCO, WebRequest webRequest){

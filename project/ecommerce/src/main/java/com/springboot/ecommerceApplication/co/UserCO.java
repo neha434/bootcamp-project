@@ -65,4 +65,14 @@ public class UserCO {
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
+
+    public UserCO(@NotEmpty String email, @NotEmpty String firstName, String middleName, @NotEmpty String lastName, @NotEmpty String password, @NotEmpty String confirmPassword) {
+        this.email = email;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+    }
+
 }
