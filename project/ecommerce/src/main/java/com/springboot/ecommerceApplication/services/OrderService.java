@@ -4,12 +4,15 @@ import com.springboot.ecommerceApplication.co.CustomerCO;
 import com.springboot.ecommerceApplication.co.OrderCO;
 import com.springboot.ecommerceApplication.co.ProductCO;
 import com.springboot.ecommerceApplication.domain.order.Order;
+import com.springboot.ecommerceApplication.domain.order.OrderProduct;
 import com.springboot.ecommerceApplication.domain.product.Product;
+import com.springboot.ecommerceApplication.domain.product.ProductVariation;
 import com.springboot.ecommerceApplication.dto.OrderDto;
 import com.springboot.ecommerceApplication.dto.ProductDto;
 import com.springboot.ecommerceApplication.exception.NotFoundException;
 import com.springboot.ecommerceApplication.repositories.CartRepo;
 import com.springboot.ecommerceApplication.repositories.OrderRepo;
+import com.springboot.ecommerceApplication.repositories.ProductVariationRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,17 +25,19 @@ public class OrderService {
 OrderRepo orderRepository;
 @Autowired
     CartRepo cartRepository;
+@Autowired
+    ProductVariationRepo productVariationRepo;
 
-public List<OrderDto> getAllOrder(){
-        Iterable<Order> orderList= orderRepository.findAll();
-        List<OrderDto> orderDtoList = new ArrayList<>();
-        orderList.forEach(order-> orderDtoList.add(new OrderDto(order.getId(),order.getAmountPaid(),
-                order.getDate_created(),order.getPaymentMethod(), order.getCustomerAddressAddressLine(),
-                order.getCustomerAddressCity(), order.getCustomerAddressState(), order.getCustomerAddressCountry(),
-                order.getCustomerAddressLabel(), order.getCustomerAddressZipCode())));
-
-        return orderDtoList;
-    }
+//public List<OrderDto> getAllOrder(){
+//        Iterable<Order> orderList= orderRepository.findAll();
+//        List<OrderDto> orderDtoList = new ArrayList<>();
+//        orderList.forEach(order-> orderDtoList.add(new OrderDto(order.getId(),order.getAmountPaid(),
+//                order.getDate_created(),order.getPaymentMethod(), order.getCustomerAddressAddressLine(),
+//                order.getCustomerAddressCity(), order.getCustomerAddressState(), order.getCustomerAddressCountry(),
+//                order.getCustomerAddressLabel(), order.getCustomerAddressZipCode())));
+//
+//        return orderDtoList;
+//    }
 
     public OrderDto updateOrder(Integer id, OrderCO orderCO ){
     Order order = orderRepository.findById(id).get();
@@ -53,7 +58,12 @@ public List<OrderDto> getAllOrder(){
         }
         return map;
     }
-    public OrderDto addOrder(OrderDto orderDto){
+    public OrderDto addOrder( OrderDto orderDto){
+        ProductVariation savedProduct = productVariationRepo.findById(orderDto.getProductVariationId()).get();
+       String productName = savedProduct.getProduct().getName();
+        Integer quantity =  savedProduct.getQuantityAvailable() - orderDto.getQuantity();
+        savedProduct.setQuantityAvailable(quantity);
+        productVariationRepo.save(savedProduct);
      if(!cartRepository.findById(orderDto.getId()).isPresent()){
          throw new NotFoundException("No such Item Present");
      }
@@ -61,6 +71,8 @@ public List<OrderDto> getAllOrder(){
              orderDto.getCustomerAddressAddressLine(), orderDto.getCustomerAddressCity(),orderDto.getCustomerAddressState(),orderDto.getCustomerAddressCountry(),
              orderDto.getCustomerAddressLabel(), orderDto.getCustomerAddressZipCode());
      orderRepository.save(newOrder);
+       // OrderProduct  product = new OrderProduct(orderDto.getQuantity(), savedProduct.getPrice(),savedProduct,newOrder);
+
      return orderDto;
     }
     public OrderDto getOrder(int id) {

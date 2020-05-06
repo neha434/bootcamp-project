@@ -24,10 +24,10 @@ public class OrderController {
         return orderService.getOrder(id);
     }
 
-    @GetMapping("/")
-    public List<OrderDto> getAllOrder(){
-        return orderService.getAllOrder();
-    }
+//    @GetMapping("/")
+//    public List<OrderDto> getAllOrder(){
+//        return orderService.getAllOrder();
+//    }
 
     @PostMapping("/")
      public OrderDto addOrder(@RequestBody OrderDto orderDto, WebRequest webRequest) {

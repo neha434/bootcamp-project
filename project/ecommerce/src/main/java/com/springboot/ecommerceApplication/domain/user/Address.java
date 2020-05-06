@@ -1,9 +1,14 @@
 package com.springboot.ecommerceApplication.domain.user;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "ADDRESS")
+@SQLDelete(sql = "UPDATE ADDRESS SET isDeleted=true WHERE id=?")
+@Where(clause = "isDeleted = false")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +19,7 @@ public class Address {
     private String addressLine;
     private String zipCode;
     private String label;
+    private  boolean isDeleted;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID")
@@ -30,6 +36,14 @@ public class Address {
 
     public Address() {
 
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public User getUser() {

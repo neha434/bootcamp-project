@@ -24,7 +24,7 @@ public class Seller extends User {
 //    private List<Product> productList;
 
 
-    public Seller(String email, String firstName, String middleName, String lastName, String password, String gst, String companyContact, String companyName) {
+    public Seller(String email, String firstName, String middleName, String lastName, String password,  String gst, String companyContact, String companyName) {
         super( email, firstName,middleName,lastName,password);
         this.gst = gst;
         this.companyContact = companyContact;

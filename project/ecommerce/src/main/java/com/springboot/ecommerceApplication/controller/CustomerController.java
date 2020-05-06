@@ -16,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,25 +30,37 @@ public class CustomerController {
     CustomerRepo customerRepository;
     @Autowired
     CustomerService customerService;
-   //view profile
-    @GetMapping("/id")
-    public CustomerDto getCustomer(Integer id)
-    {
-        return customerService.getCustomer(id);
-    }
-  //update profile
-    @PutMapping("/{id}")
-    public CustomerDto updateCustomerUsingPut(@PathVariable Integer id, @Valid @RequestBody CustomerDto customerDto,  WebRequest webRequest) {
-        return customerService.updateCustomer(id, customerDto, false);
-    }
-    @PatchMapping("/{id}")
-    public CustomerDto updateCustomerUsingPatch(@PathVariable Integer id, @RequestBody CustomerDto customerDto, WebRequest webRequest) {
-        return customerService.updateCustomer(id, customerDto, true);
-    }
-//    @PatchMapping("/patch/{id}")
-//   public ResponseEntity<String> updateUser( @PathVariable Integer id, @RequestBody CustomerCO customerCO, WebRequest webRequest ) {
-//        return customerService.updateCustomer(id, customerCO);
+
+//    //delete a user
+//    @DeleteMapping("/delete/{id}")
+//    public void deleteUser(@PathVariable Integer id) {
+//        customerService.delete(id);
 //    }
 
+    //to view a profile
+   @GetMapping("/viewProfile")
+    public CustomerDto getCustomerProfile(HttpServletRequest httpServletRequest)
+    {
+      Principal principal=httpServletRequest.getUserPrincipal();
+       String username=principal.getName();
+        return customerService.getCustomer(username);
+    }
 
-}
+//  update profile
+    @PutMapping("/update")
+    public ResponseEntity<String> updateCustomerUsingPut( @Valid @RequestBody CustomerDto customerDto,HttpServletRequest httpServletRequest) {
+
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+       return customerService.updateCustomer(username, customerDto, false);
+    }
+  @PatchMapping("/update")
+    public ResponseEntity<String> updateCustomerUsingPatch( @RequestBody CustomerDto customerDto, HttpServletRequest httpServletRequest) {
+
+      Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return customerService.updateCustomer(username, customerDto, true);
+    }
+
+
+  }

@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,24 +27,32 @@ public class AddressController {
         return  sellerService.updateAddress(id,addressDto);
     }
     @PutMapping("/Customer{id}")
-    public ResponseEntity<String> updateCustomerAddress(@PathVariable Integer id, @Valid @RequestBody AddressDto addressDto , WebRequest webRequest){
-        return  customerService.updateCustomerAddress(id,addressDto);
+    public ResponseEntity<String> updateCustomerAddress(@PathVariable Integer id, @Valid @RequestBody AddressDto addressDto , HttpServletRequest httpServletRequest){
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return  customerService.updateCustomerAddress(username,id,addressDto);
+    }
+//view address
+    @GetMapping("/view")
+    public List<AddressDto> getAddress(HttpServletRequest httpServletRequest) {
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return customerService.getAddress(username);
     }
 
-    @GetMapping("/{id}")
-    public AddressDto getAddress(@PathVariable Integer id) {
-        return customerService.getAddress(id);
-    }
-//delete address
-    @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteAddress(@PathVariable Integer id) {
-        return customerService.deleteAddress(id);
+    //delete address
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteAddress(@PathVariable Integer id, HttpServletRequest httpServletRequest) {
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return customerService.deleteAddress(username, id);
     }
 //add address
     @PostMapping("/Add")
-    public String addAddress(Integer id, @Valid @RequestBody AddressDto addressDto, WebRequest webRequest){
-        return customerService.AddAddress(id,addressDto);
+    public String addAddress( @Valid @RequestBody AddressDto addressDto, HttpServletRequest httpServletRequest){
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return customerService.AddAddress(username,addressDto);
     }
-
 
 }
