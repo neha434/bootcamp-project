@@ -18,6 +18,13 @@ public class OrderProduct {
     @JoinColumn(name = "ORDER_ID")
     private Order orders;
 
+    public OrderProduct(Integer quantity, Integer price, ProductVariation savedProduct, Order newOrder) {
+        this.quantity= quantity;
+        this.price=price;
+        this.productVariation=savedProduct;
+        this.orders=newOrder;
+    }
+
     public Order getOrders() {
         return orders;
     }

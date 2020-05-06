@@ -1,7 +1,9 @@
 package com.springboot.ecommerceApplication;
 
+import com.springboot.ecommerceApplication.controller.SellerController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +20,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 @SpringBootApplication
+
+
 @EnableScheduling
 @EnableJpaRepositories
 public class EcommerceApplication {

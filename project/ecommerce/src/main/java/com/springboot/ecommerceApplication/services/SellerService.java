@@ -29,6 +29,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 
@@ -42,41 +44,17 @@ public class SellerService {
     AddressRepository addressRepository;
     @Autowired
     RoleRepo roleRepository;
+    @Autowired
+    SellerRepo sellerRepo;
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-//    public SellerDto registerSeller(SellerCO sellerCO) {
-//        Seller seller = sellerRepository.findByEmail(sellerCO.getEmail());
-//        if (seller != null) {
-//            throw new CustomerAlreadyExistsException("Account Already Exist With This Email Id");
-//        }
-//        Seller registerSeller = new Seller();
-//
-//        registerSeller.setEmail(sellerCO.getEmail());
-//        registerSeller.setFirstName(sellerCO.getFirstName());
-//        registerSeller.setMiddleName(sellerCO.getMiddleName());
-//        registerSeller.setLastName(sellerCO.getLastName());
-//        registerSeller.setPassword(passwordEncoder.encode(sellerCO.getPassword()));
-//        registerSeller.setCompanyContact(sellerCO.getCompanyContact());
-//        List<Role> roleList = new ArrayList<>();
-//
-//        roleList.add(roleRepository.findByAuthority("ROLE_SELLER"));
-//        registerSeller.setRoleList(roleList);
-//
-//        sellerRepository.save(registerSeller);
-//    mailService.sendAAccountRegisterEmail(registerSeller.getEmail());
-//
-//        SellerDto sellerDto = getSeller(registerSeller.getId());
-//        return sellerDto;
-//    }
-
-
-    public SellerDto getSeller(Integer id) {
-
-        Optional<Seller> optional = sellerRepository.findById(id);
-        if (!optional.isPresent()) {
+    //  to view profile
+    public SellerDto getSeller(String username) {
+        Seller seller = sellerRepository.findByEmail(username);
+        if (seller == null) {
             throw new AccountDoesNotExists("Invalid Account Credentials");
         }
-        Seller seller = optional.get();
+        // Seller seller = optional.get();
         SellerDto sellerDto = new SellerDto();
         sellerDto.setId(seller.getId());
         sellerDto.setEmail(seller.getEmail());
@@ -89,6 +67,7 @@ public class SellerService {
 
         return sellerDto;
     }
+
 
     public List<SellerDto> getAllSeller() {
 
@@ -106,7 +85,7 @@ public class SellerService {
 //                        Sort.by(pagingAndSortingDto.getSortField()).ascending());
 //        }
 
-       // List<Seller> pagedResult = sellerRepository.findAll(pageable);
+        // List<Seller> pagedResult = sellerRepository.findAll(pageable);
 
         Iterable<Seller> sellers = sellerRepository.findAll();
         List<SellerDto> sellerDtoList = new ArrayList<>();
@@ -117,26 +96,16 @@ public class SellerService {
     }
 
 
-    public SellerDto updateSeller(Integer id, SellerCO sellerCO) {
-        if (!sellerRepository.findById(id).isPresent()) {
-            throw new AccountDoesNotExists("Invalid Account Credentials");
-        }
-        Seller seller = sellerRepository.findById(id).get();
-        BeanUtils.copyProperties(sellerCO, seller);
-        sellerRepository.save(seller);
-        SellerDto sellerDto = getSeller(seller.getId());
-        return sellerDto;
-    }
 
     public ResponseEntity<String> updateAddress(Integer id, AddressDto addressDto) {
         ResponseEntity<String> responseEntity;
         Optional<Address> optional = addressRepository.findById(id);
-       if(!optional.isPresent()){
-           responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageSource.getMessage
-                   ("message-invalid-details", null, LocaleContextHolder.getLocale()));
-           return responseEntity;
-       }
-       Address address = addressRepository.findById(id).get();
+        if (!optional.isPresent()) {
+            responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageSource.getMessage
+                    ("message-invalid-details", null, LocaleContextHolder.getLocale()));
+            return responseEntity;
+        }
+        Address address = addressRepository.findById(id).get();
         BeanUtils.copyProperties(addressDto, address);
         addressRepository.save(address);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
@@ -145,33 +114,34 @@ public class SellerService {
 
     }
 
+    //to update profile
 
-//    public SellerDto updateUser(Integer id, SellerCO sellerCO) {
-//        if (!sellerRepository.findById(id).isPresent()) {  //ispresent?
-//            throw new AccountDoesNotExists("Invalid Account Credentials");
-//        }
-//        Seller seller = sellerRepository.findById(id).get();
-//        BeanUtils.copyProperties(sellerCO, seller);
-//        sellerRepository.save(seller);
-//        SellerDto sellerDto = getSeller(seller.getId());
-//        return sellerDto;
-//    }
-      public ResponseEntity<String> updateUser(Integer id, SellerCO sellerCO) {
-        {
-            ResponseEntity<String> responseEntity;
-            Optional<Seller> optional = sellerRepository.findById(id);
-            if (!optional.isPresent()) {
-                responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageSource.getMessage
-                        ("message-invalid-details", null, LocaleContextHolder.getLocale()));
-                return responseEntity;
-            }
-            Seller seller = sellerRepository.findById(id).get();
-            BeanUtils.copyProperties(sellerCO, seller);
-            sellerRepository.save(seller);
-            responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
-                    ("message-seller-updated", null, LocaleContextHolder.getLocale()));
-            return responseEntity;
+    public ResponseEntity<String> updateCustomer(String username, SellerDto sellerDto, boolean isPatch) {
+        if (sellerRepository.findByEmail(username)==null) {
+            throw new AccountDoesNotExists("Invalid Account Credentials");
         }
+        ResponseEntity<String> responseEntity;
+        Seller seller = sellerRepository.findByEmail(username);
+        if ((isPatch && sellerDto.getEmail() != null) || (!isPatch))
+            seller.setEmail((sellerDto.getEmail()));
+        if ((isPatch && sellerDto.getFirstName() != null) || (!isPatch))
+            seller.setFirstName((sellerDto.getFirstName()));
+        if ((isPatch && sellerDto.getMiddleName() != null) || (!isPatch))
+            seller.setMiddleName((sellerDto.getMiddleName()));
+        if ((isPatch && sellerDto.getLastName() != null) || (!isPatch))
+            seller.setLastName((sellerDto.getLastName()));
+        if ((isPatch && sellerDto.getCompanyContact() != null) || (!isPatch))
+            seller.setCompanyContact((sellerDto.getCompanyContact()));
+        if ((isPatch && sellerDto.getCompanyName() != null) || (!isPatch))
+            seller.setCompanyName((sellerDto.getCompanyName()));
+        if ((isPatch && sellerDto.getGst() != null) || (!isPatch))
+            seller.setGst((sellerDto.getGst()));
+        sellerRepository.save(seller);
+        // CustomerDto customerDto1 = getCustomer(customer.getId());
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                ("message-seller-updated", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
+    }
 
 
-}}
+}

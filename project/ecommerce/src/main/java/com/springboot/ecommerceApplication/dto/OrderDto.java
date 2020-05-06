@@ -18,9 +18,26 @@ public class OrderDto {
     private String customerAddressAddressLine;
     private Integer customerAddressZipCode;
     private String customerAddressLabel;
+    private Integer quantity;
+    private Integer productVariationId;
 
+    public Integer getProductVariationId() {
+        return productVariationId;
+    }
 
-    public OrderDto(Integer id, Integer amountPaid, Date date_created, String paymentMethod, String customerAddressCity, String customerAddressState, String customerAddressCountry, String customerAddressAddressLine, Integer customerAddressZipCode, String customerAddressLabel) {
+    public void setProductVariationId(Integer productVariationId) {
+        this.productVariationId = productVariationId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public OrderDto(Integer id, Integer amountPaid, Date date_created, String paymentMethod, String customerAddressCity, String customerAddressState, String customerAddressCountry, String customerAddressAddressLine, Integer customerAddressZipCode, String customerAddressLabel, Integer productVariationId) {
         this.id = id;
         this.amountPaid = amountPaid;
         this.date_created = date_created;
@@ -31,9 +48,10 @@ public class OrderDto {
         this.customerAddressAddressLine = customerAddressAddressLine;
         this.customerAddressZipCode = customerAddressZipCode;
         this.customerAddressLabel = customerAddressLabel;
+        this.productVariationId= productVariationId;
     }
 
-    public OrderDto(Integer id, Integer amountPaid, Date date_created, String paymentMethod, String customerAddressAddressLine, String customerAddressCity, String customerAddressState, String customerAddressCountry, String customerAddressLabel, Integer customerAddressZipCode) {
+    public OrderDto(Integer id, Integer amountPaid, Date date_created, String paymentMethod, String customerAddressAddressLine, String customerAddressCity, String customerAddressState, String customerAddressCountry, String customerAddressLabel, Integer customerAddressZipCode,Integer productVariationId) {
     }
 
     public OrderDto() {

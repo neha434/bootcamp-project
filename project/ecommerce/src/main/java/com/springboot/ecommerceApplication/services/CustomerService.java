@@ -1,18 +1,13 @@
 package com.springboot.ecommerceApplication.services;
 
-import com.springboot.ecommerceApplication.co.CustomerCO;
-import com.springboot.ecommerceApplication.domain.Role;
-import com.springboot.ecommerceApplication.domain.VerificationToken;
 import com.springboot.ecommerceApplication.domain.user.Address;
 import com.springboot.ecommerceApplication.domain.user.Customer;
+import com.springboot.ecommerceApplication.domain.user.User;
 import com.springboot.ecommerceApplication.dto.AddressDto;
 import com.springboot.ecommerceApplication.dto.CustomerDto;
 import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
-import com.springboot.ecommerceApplication.exception.CustomerAlreadyExistsException;
-import com.springboot.ecommerceApplication.repositories.AddressRepository;
-import com.springboot.ecommerceApplication.repositories.CustomerRepo;
-import com.springboot.ecommerceApplication.repositories.RoleRepo;
-import com.springboot.ecommerceApplication.repositories.VerificationTokenRepo;
+import com.springboot.ecommerceApplication.repositories.*;
+import org.hibernate.Filter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -22,7 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.hibernate.Session;
 
+
+import javax.persistence.EntityManager;
 import java.util.*;
 
 @Service
@@ -39,17 +37,22 @@ public class CustomerService {
     AddressRepository addressRepository;
     @Autowired
     RoleRepo roleRepository;
+    @Autowired
+    UserRepo userRepo;
+    @Autowired
+    EntityManager entityManager;
+
+
+
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-
     //Api to get my detail
-    public CustomerDto getCustomer(Integer id) {
-        Optional<Customer> optional = customerRepository.findById(id);
-        if (!optional.isPresent()) {
+    public CustomerDto getCustomer(String username) {
+        Customer customer = customerRepository.findByEmail(username);
+        if (customer == null) {
             throw new AccountDoesNotExists("Invalid Account Credentials");
         }
-        Customer customer = optional.get();
         CustomerDto customerDto = new CustomerDto();
         customerDto.setId(customer.getId());
         customerDto.setEmail(customer.getEmail());
@@ -57,12 +60,12 @@ public class CustomerService {
         if (customer.getMiddleName() != null) {
             customerDto.setMiddleName(customer.getMiddleName());
         }
-
         customerDto.setLastName(customer.getLastName());
         customerDto.setContact(customer.getContact());
         customerDto.setActive(customer.getActive());
         return customerDto;
     }
+    //list of customers
 
     public List<CustomerDto> getAllCustomer() {
 //        Pageable paging;
@@ -82,15 +85,17 @@ public class CustomerService {
         List<CustomerDto> customerDtoList = new ArrayList<>();
         customersList.forEach(customers -> customerDtoList.add(new CustomerDto(customers.getId(), customers.getEmail(),
                 customers.getFirstName(),
-                customers.getMiddleName(), customers.getLastName(), customers.getContact())));
+                customers.getMiddleName(), customers.getLastName(), customers.getContact(), customers.getActive())));
         return customerDtoList;
     }
-// to update customer profile
-    public CustomerDto updateCustomer(Integer id, CustomerDto customerDto, boolean isPatch) {
-        if (!customerRepository.findById(id).isPresent()) {
+
+    //   to update customer profile
+    public ResponseEntity<String> updateCustomer(String username, CustomerDto customerDto, boolean isPatch) {
+        if (customerRepository.findByEmail(username)==null) {
             throw new AccountDoesNotExists("Invalid Account Credentials");
         }
-        Customer customer = customerRepository.findById(id).get();
+        ResponseEntity<String> responseEntity;
+        Customer customer = customerRepository.findByEmail(username);
         if ((isPatch && customerDto.getEmail() != null) || (!isPatch))
             customer.setEmail((customerDto.getEmail()));
         if ((isPatch && customerDto.getFirstName() != null) || (!isPatch))
@@ -102,44 +107,32 @@ public class CustomerService {
         if ((isPatch && customerDto.getContact() != null) || (!isPatch))
             customer.setContact((customerDto.getContact()));
         customerRepository.save(customer);
-        CustomerDto customerDto1 = getCustomer(customer.getId());
-        return customerDto1;
+        // CustomerDto customerDto1 = getCustomer(customer.getId());
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                ("message-customer-updated", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
     }
 
-
-    public AddressDto getAddress(Integer id) {
-        Optional<Address> optional = addressRepository.findById(id);
-        if (!optional.isPresent()) {
+// view address
+    public List<AddressDto> getAddress(String username) {
+        Customer customer = customerRepository.findByEmail(username);
+      //  Optional<Address> optional = addressRepository.findByEmail(username);
+        if (customer==null) {
             throw new AccountDoesNotExists("Invalid Account Credentials");
         }
-        Address address = optional.get();
-        AddressDto addressDto = new AddressDto();
-        addressDto.setId(address.getId());
-        addressDto.setCity(address.getCity());
-        addressDto.setState(address.getState());
-        addressDto.setCountry(address.getCountry());
-        addressDto.setAddressLine(address.getAddressLine());
-        addressDto.setZipCode(address.getZipCode());
-        addressDto.setLabel(address.getLabel());
-        return addressDto;
+        Iterable<Address> addressIterable = customer.getAddressesList();
+       // Address address = optional.get();
+        List<AddressDto> addressDtoList = new ArrayList<>();
+        addressIterable.forEach(address-> addressDtoList.add(new AddressDto(address.getId(), address.getCity(),
+                address.getState(), address.getCountry(),
+                address.getAddressLine(),address.getZipCode(),address.getLabel())));
+               return addressDtoList;
     }
 
-
-    public Map<String, Boolean> deleteAddress(Integer id) {
-        Map<String, Boolean> map = new HashMap<>();
-        Optional<Address> optional = addressRepository.findById(id);
-        if (!optional.isPresent()) {
-            map.put("Deleted", false);
-        } else {
-            addressRepository.deleteById(id);
-            map.put("Deleted", true);
-        }
-        return map;
-    }
-
-    public String AddAddress(Integer id, AddressDto addressDto) {
-        Optional<Customer> optional = customerRepository.findById(id);
-        if (!optional.isPresent()) {
+//add address
+    public String AddAddress(String username, AddressDto addressDto) {
+        Customer customer = customerRepository.findByEmail(username);
+        if (customer==null) {
             throw new AccountDoesNotExists("Invalid Account Credentials");
         }
         Address address = new Address();
@@ -150,11 +143,12 @@ public class CustomerService {
         address.setZipCode(addressDto.getZipCode());
         address.setLabel(addressDto.getLabel());
         addressRepository.save(address);
-        AddressDto addressDto1 = getAddress(address.getId());
+      //  AddressDto addressDto1 = getAddress(address.getId());
         return "Address added successfully";
     }
 
-    public ResponseEntity<String> updateCustomerAddress(Integer id, AddressDto addressDto) {
+    //update address
+    public ResponseEntity<String> updateCustomerAddress(String username,Integer id, AddressDto addressDto) {
         ResponseEntity<String> responseEntity;
         Optional<Address> optional = addressRepository.findById(id);
         if (!optional.isPresent()) {
@@ -169,14 +163,21 @@ public class CustomerService {
                 ("message-address-updated", null, LocaleContextHolder.getLocale()));
         return responseEntity;
     }
-
+//delete address
+    public ResponseEntity<String> deleteAddress(String username,Integer id) {
+        Optional<Address> addressOptional = addressRepository.findById(id);
+        if (!addressOptional.isPresent()) {
+            return new ResponseEntity<>("No address found with the given id", HttpStatus.NOT_FOUND);
+        }
+        Address savedAddress = addressOptional.get();
+        if (savedAddress.getUser().getEmail().equals(username)) {
+            addressRepository.deleteById(id);
+            return new ResponseEntity<>("Address successfully deleted", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Invalid Operation", HttpStatus.BAD_REQUEST);
+    }
 
 
 }
 
 
-
-//public Integer getCurrentlyLoggedInUserId(WebRequest webRequest){
-//Authentication auth=  (Authentication) webRequest.getUserPricipal();
-//return userRepository.findByEmail(auth.getName()).getId();
-//}

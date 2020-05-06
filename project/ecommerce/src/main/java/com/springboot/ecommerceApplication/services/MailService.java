@@ -11,8 +11,10 @@ public class MailService {
     @Autowired
     JavaMailSender mailSender;
 
+    SimpleMailMessage mail = new SimpleMailMessage();
+
     public void sendForgotPasswordLinkEmail(String email, String token) {
-        SimpleMailMessage mail = new SimpleMailMessage();
+       // SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
         mail.setSubject("Forgot Password Token");
         mail.setText("Please use this link to set new password" + "\r\n" +
@@ -22,7 +24,6 @@ public class MailService {
     }
 //account activation token has been sent to customer
     public void sendActivationLinkEmail(String email, String token) {
-        SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
         mail.setSubject("Activate  Customer Account Token");
         mail.setText("Please use this link to activate your Account" + "\r\n" +
@@ -41,7 +42,6 @@ public class MailService {
 //    }
 //by admin
     public void sendAccountActivationEmail(String email) {
-        SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
         mail.setSubject("Account Activation");
         mail.setText("Your account has been activated");
@@ -49,7 +49,7 @@ public class MailService {
     }
 //by admin
     public void sendAccountDeactivationEmail(String email) {
-        SimpleMailMessage mail = new SimpleMailMessage();
+       // SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
         mail.setSubject("Account Deactivated");
         mail.setText("Your account has been deactivated");
@@ -57,7 +57,7 @@ public class MailService {
     }
 //by admin
     public void sendProductDeactivationEmail(String email, String productName) {
-        SimpleMailMessage mail = new SimpleMailMessage();
+        //SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
         mail.setSubject("Product Deactivated");
         mail.setText(productName+"has been deactivated");
@@ -74,7 +74,7 @@ public class MailService {
     }
 //to send activation token for seller
     public void sendActivateAccountLinkEmailSeller(String email, String token) {
-        SimpleMailMessage mail = new SimpleMailMessage();
+      //  SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
         mail.setSubject("Activate  Seller Account Token");
         mail.setText("Please use this link to activate your Account" + "\r\n" +
@@ -82,5 +82,14 @@ public class MailService {
         mailSender.send(mail);
 
     }
+
+    public void sendProductDetailEmail(String email, String productName) {
+        mail.setTo(email);
+        mail.setSubject("About Product quantity details");
+        mail.setText("Following products are out of stock and hence are deactivated. Kindly update these products"+productName);
+        mailSender.send(mail);
+
+    }
+
 }
 

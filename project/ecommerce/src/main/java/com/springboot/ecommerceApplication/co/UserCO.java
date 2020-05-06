@@ -18,6 +18,27 @@ public class UserCO {
     @NotEmpty
     private String confirmPassword;
 
+    @NotEmpty
+    private boolean isActive;
+    @NotEmpty
+    private  boolean isDeleted;
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -65,6 +86,7 @@ public class UserCO {
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
+
 
     public UserCO(@NotEmpty String email, @NotEmpty String firstName, String middleName, @NotEmpty String lastName, @NotEmpty String password, @NotEmpty String confirmPassword) {
         this.email = email;

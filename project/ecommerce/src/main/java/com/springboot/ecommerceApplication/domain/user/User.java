@@ -1,12 +1,14 @@
 package com.springboot.ecommerceApplication.domain.user;
 
 import com.springboot.ecommerceApplication.domain.Role;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
@@ -16,19 +18,19 @@ import java.util.List;
 @Entity
 //@Table(name = "USERS")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User  {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-   // @Email
+    // @Email
     private String email;
     private String firstName;
     private String middleName;
     private String lastName;
-    private  String image;
-    private Integer count= 0;
-//
+    private String image;
+    private Integer count = 0;
+
 //    @Column(name = "enabled")
 //    private boolean enabled;
 
@@ -40,16 +42,16 @@ public class User  {
         this.count = count;
     }
 
-    public User(){
+    public User() {
 
     }
 
     //@Pattern(regexp="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*])(?=.{8,15})", message = "Invalid Password")
     private String password;
-   // private String confirmPassword;
+    // private String confirmPassword;
     private Boolean isDeleted;
     private Boolean isActive;
-   private Date deactivatedTime;
+    private Date deactivatedTime;
 
     public Date getDeactivatedTime() {
         return deactivatedTime;
@@ -72,9 +74,11 @@ public class User  {
     @JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"))
     private List<Role> roleList;
+
     public List<Role> getRoleList() {
         return roleList;
     }
+
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
     }
@@ -130,6 +134,7 @@ public class User  {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
     public String getPassword() {
         return password;
     }
@@ -157,7 +162,7 @@ public class User  {
 
 
     public boolean isActive() {
-        return isActive ;
+        return isActive;
     }
 
 //  public void setEnabled(boolean enabled){
@@ -190,13 +195,14 @@ public class User  {
                 '}';
     }
 
-    public User( String email, String firstName, String middleName, String lastName,  String password) {
+    public User(String email, String firstName, String middleName, String lastName, String password) {
 
         this.email = email;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
         this.password = password;
+
     }
 }
 
