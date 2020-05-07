@@ -164,6 +164,8 @@ AddressRepository addressRepository;
             productVariations.add(productVariation2);
             productVariation1.setActive(true);
             productVariation2.setActive(true);
+            productVariation1.setQuantityAvailable(1);
+            productVariation2.setQuantityAvailable(1);
             product.setProductVariationList(productVariations);
 
             productRepository.save(product);
@@ -205,6 +207,8 @@ AddressRepository addressRepository;
             order.setCustomerAddressAddressLine("Kaushalya Residency");
             order.setCustomerAddressLabel("Home");
             order.setCustomerAddressZipCode(201310);
+            order.setProductVariationId(1);
+            order.setQuantity(1);
             orderRepository.save(order);
         }
 

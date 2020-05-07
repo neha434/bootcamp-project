@@ -172,9 +172,9 @@ public class CustomerService {
         Address savedAddress = addressOptional.get();
         if (savedAddress.getUser().getEmail().equals(username)) {
             addressRepository.deleteById(id);
-            return new ResponseEntity<>("Address successfully deleted", HttpStatus.OK);
+            return new ResponseEntity<>("Address deleted successfully", HttpStatus.OK);
         }
-        return new ResponseEntity<>("Invalid Operation", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("No operation performed", HttpStatus.BAD_REQUEST);
     }
 
 

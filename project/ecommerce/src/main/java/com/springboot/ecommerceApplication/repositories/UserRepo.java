@@ -18,6 +18,7 @@ public interface UserRepo extends JpaRepository<User,Integer> {
 
     List<User> findByIsActive(boolean value);
 
+
 //    @Query(
 //            value = "Update User set isActive = true WHERE deactivatedTime >(NOW() - INTERVAL 24 HOUR)",
 //            nativeQuery = true)

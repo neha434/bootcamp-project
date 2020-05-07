@@ -53,7 +53,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/product/","/customer/delete/{id}","/seller/","/customer/","/activate/{id}","/deactivate/{id}","/changeRole/{role}/{id}","/updateAdmin/{id}","/activateProduct/{id}").hasAnyRole("ADMIN")
                 .antMatchers("product/{id}","/order/{id}","/register-account","/activate-account","/logout","/product/","/cart","/order","/reset-password","/login/forgotPassword").hasAnyRole("ADMIN","CUSTOMER","SELLER")
                 .antMatchers("/customer/viewProfile","/customer/update","/address/{id}","/address/Add","/order/").hasAnyRole("CUSTOMER","ADMIN")
-                .antMatchers("seller/update/{id}","/seller/address/{id}").hasAnyRole("SELLER","ADMIN")
+                .antMatchers("seller/update/{id}","/seller/address/{id}","/add-product","/get-product-list","/get-product/{id}","/update-product/{id}","/delete/{id}").hasAnyRole("SELLER","ADMIN")
                 .antMatchers("/address/Seller/{id}","/address/Customer{id}","/address/view").hasAnyRole("SELLER", "CUSTOMER")
                 .anyRequest().authenticated()
                 .and()

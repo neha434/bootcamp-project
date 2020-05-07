@@ -20,8 +20,8 @@ public class Seller extends User {
     private String companyContact;
     private String companyName;
 
-//    @OneToMany(mappedBy = "seller",cascade = CascadeType.ALL)
-//    private List<Product> productList;
+    @OneToMany(mappedBy = "seller",cascade = CascadeType.ALL)
+    private List<Product> productList;
 
 
     public Seller(String email, String firstName, String middleName, String lastName, String password,  String gst, String companyContact, String companyName) {
@@ -36,13 +36,13 @@ public class Seller extends User {
     }
 
 
-//    public List<Product> getProductsList() {
-//        return productList;
-//    }
-//
-//    public void setProductsList(List<Product> productsList) {
-//        this.productList = productsList;
-//    }
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<Product> productsList) {
+        this.productList = productsList;
+    }
 
     public String getGst() {
         return gst;

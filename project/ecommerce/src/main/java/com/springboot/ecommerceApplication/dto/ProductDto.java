@@ -11,6 +11,10 @@ public class ProductDto {
     private String description;
     @NotEmpty
     private String brand;
+    private boolean isCancellable;
+    private boolean isReturnable;
+
+
 
     public ProductDto(Integer id, String name, String description, String brand) {
         this.setId(id);
@@ -22,6 +26,25 @@ public class ProductDto {
 
     public ProductDto() {
 
+    }
+
+    public ProductDto(Integer id, String name, String description, boolean cancellable, boolean returnable, String brand, boolean active) {
+    }
+
+    public boolean isCancellable() {
+        return isCancellable;
+    }
+
+    public void setCancellable(boolean cancellable) {
+        isCancellable = cancellable;
+    }
+
+    public boolean isReturnable() {
+        return isReturnable;
+    }
+
+    public void setReturnable(boolean returnable) {
+        isReturnable = returnable;
     }
 
     public Integer getId() {
@@ -54,6 +77,18 @@ public class ProductDto {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", brand='" + brand + '\'' +
+                ", isCancellable=" + isCancellable +
+                ", isReturnable=" + isReturnable +
+                '}';
     }
 }
 

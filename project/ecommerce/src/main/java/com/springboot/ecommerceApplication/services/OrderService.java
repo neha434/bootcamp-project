@@ -69,7 +69,7 @@ OrderRepo orderRepository;
      }
      Order newOrder = new Order(orderDto.getId(),orderDto.getAmountPaid(),orderDto.getDate_created(),orderDto.getPaymentMethod(),
              orderDto.getCustomerAddressAddressLine(), orderDto.getCustomerAddressCity(),orderDto.getCustomerAddressState(),orderDto.getCustomerAddressCountry(),
-             orderDto.getCustomerAddressLabel(), orderDto.getCustomerAddressZipCode());
+             orderDto.getCustomerAddressLabel(), orderDto.getCustomerAddressZipCode(),orderDto.getProductVariationId(),orderDto.getQuantity());
      orderRepository.save(newOrder);
        // OrderProduct  product = new OrderProduct(orderDto.getQuantity(), savedProduct.getPrice(),savedProduct,newOrder);
 

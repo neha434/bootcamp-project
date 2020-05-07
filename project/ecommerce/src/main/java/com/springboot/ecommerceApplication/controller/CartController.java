@@ -15,10 +15,10 @@ import java.util.List;
 public class CartController {
     @Autowired
     CartService cartService;
-    @PostMapping("/")
-    public ProductDto addProductToCart(@RequestBody CartDto cartDto, WebRequest webrequest){
-            return cartService.addProductToCart(cartDto);
-    }
+//    @PostMapping("/")
+//    public ProductDto addProductToCart(@RequestBody CartDto cartDto, WebRequest webrequest){
+//            return cartService.addProductToCart(cartDto);
+//    }
 
     @GetMapping("/")
     public List<CartDto> getCartProduct(){

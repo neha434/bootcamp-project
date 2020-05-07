@@ -22,18 +22,18 @@ public class CartService {
     @Autowired
     ProductService productService;
 
-    public ProductDto addProductToCart(CartDto cartDto){
-        Cart cart = new Cart();
-        cart.setCustomer(customerRepository.findById(cartDto.getCustomerId()).get());
-        cart.setProductVariation(productVariationRepository.findById(cartDto.getProductVariationId()).get());
-        cart.setQuantity(cartDto.getQuantity());
-        cart.setWishList(cartDto.isWishList());
-        cartRepository.save(cart);
-
-        ProductDto productDto = productService.getProduct(productVariationRepository.
-                findById(cartDto.getProductVariationId()).get().getProduct().getId());
-        return productDto;
-    }
+//    public ProductDto addProductToCart(CartDto cartDto){
+//        Cart cart = new Cart();
+//        cart.setCustomer(customerRepository.findById(cartDto.getCustomerId()).get());
+//        cart.setProductVariation(productVariationRepository.findById(cartDto.getProductVariationId()).get());
+//        cart.setQuantity(cartDto.getQuantity());
+//        cart.setWishList(cartDto.isWishList());
+//        cartRepository.save(cart);
+//
+//        ProductDto productDto = productService.getProduct(productVariationRepository.
+//                findById(cartDto.getProductVariationId()).get().getProduct().getId());
+//        return productDto;
+//    }
 
     public List<CartDto> getCartProduct() {
         Iterable<Cart> cartList = cartRepository.findAll();

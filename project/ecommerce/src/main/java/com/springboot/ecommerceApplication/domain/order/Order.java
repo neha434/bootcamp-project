@@ -24,11 +24,29 @@ public class Order {
     private String customerAddressAddressLine;
     private Integer customerAddressZipCode;
     private String customerAddressLabel;
+    private Integer quantity;
+    private Integer productVariationId;
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Integer getProductVariationId() {
+        return productVariationId;
+    }
+
+    public void setProductVariationId(Integer productVariationId) {
+        this.productVariationId = productVariationId;
+    }
 
     @OneToMany(mappedBy = "orders",cascade = CascadeType.ALL)
     private List<OrderProduct> orderProductsList;
 
-    public Order(Integer id, Integer amountPaid, Date date_created, String paymentMethod, String customerAddressAddressLine, String customerAddressCity, String customerAddressState, String customerAddressCountry, String customerAddressLabel, Integer customerAddressZipCode) {
+    public Order(Integer id, Integer amountPaid, Date date_created, String paymentMethod, String customerAddressAddressLine, String customerAddressCity, String customerAddressState, String customerAddressCountry, String customerAddressLabel, Integer customerAddressZipCode, Integer productVariationId, Integer quantity) {
     }
 
     public Order() {

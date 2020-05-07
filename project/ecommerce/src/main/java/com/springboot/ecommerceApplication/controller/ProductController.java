@@ -2,43 +2,69 @@ package com.springboot.ecommerceApplication.controller;
 
 
 import com.springboot.ecommerceApplication.co.ProductCO;
+import com.springboot.ecommerceApplication.dto.AddressDto;
 import com.springboot.ecommerceApplication.dto.ProductDto;
 import com.springboot.ecommerceApplication.repositories.ProductRepo;
 import com.springboot.ecommerceApplication.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/product")
+//@RequestMapping("/product")
 public class ProductController {
     @Autowired
     ProductRepo productRepository;
     @Autowired
     ProductService productService;
 
-    @GetMapping("/{id}")
-    public ProductDto getProduct(@PathVariable Integer id){
-        return productService.getProduct(id);
+    //.........TO GET A PRODUCT BY SELLER.............
+    @GetMapping("/get-product/{id}")
+    public ProductDto getProduct(@PathVariable Integer productId, HttpServletRequest httpServletRequest) {
+        Principal principal = httpServletRequest.getUserPrincipal();
+        String username = principal.getName();
+        return productService.getProduct(productId, username);
 
     }
+    //............TO ADD A PRODUCT BY SELLER......................
+    @PostMapping("/add-product")
+    public ResponseEntity<String> addProductVariation(HttpServletRequest httpServletRequest, @RequestBody ProductDto productDto) {
+        Principal principal = httpServletRequest.getUserPrincipal();
+        String username = principal.getName();
+        return productService.addProduct(username, productDto);
 
-    @PostMapping("/")
-    public ProductDto addProduct(@RequestBody ProductCO productCO, WebRequest webRequest){
-        return productService.addProduct(productCO);
     }
+    //..........TO GET PRODUCT LIST BY SELLER...................
+    @GetMapping("/get-product-list")
+    public List<ProductDto> getProductList(HttpServletRequest httpServletRequest) {
+        Principal principal = httpServletRequest.getUserPrincipal();
+        String username = principal.getName();
+        return productService.getProductListBySeller(username);
 
-    @PutMapping("/{id}")
-    public ProductDto updateProduct(@PathVariable Integer id,
-                                    @RequestBody ProductCO productCO , WebRequest webRequest){
-        return  productService.updateProduct(id,productCO);
     }
-
-    @DeleteMapping("/{id}")
-    public Map<String,Boolean> deleteProduct(@PathVariable Integer id){
-        return productService.deleteProduct(id);
+    //..................TO UPDATE A PRODUCT BY SELLER............................
+    @PutMapping("/update-product/{id}")
+    public ResponseEntity<String> updateCustomerAddress(@PathVariable Integer productId, @Valid @RequestBody ProductDto productDto, HttpServletRequest httpServletRequest) {
+        Principal principal = httpServletRequest.getUserPrincipal();
+        String username = principal.getName();
+        return productService.updateProductBySeller(username, productId, productDto);
+    }
+    //.....................TO DELETE A PRODUCT BY SELLER.............
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteAddress(@PathVariable Integer productId, HttpServletRequest httpServletRequest) {
+        Principal principal = httpServletRequest.getUserPrincipal();
+        String username = principal.getName();
+        return productService.deleteProductBySeller(productId, username);
     }
 }
+
+
+

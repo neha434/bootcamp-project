@@ -4,6 +4,8 @@ import com.springboot.ecommerceApplication.domain.Role;
 import com.springboot.ecommerceApplication.domain.user.Seller;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,6 +14,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "PRODUCT")
+@SQLDelete(sql = "UPDATE PRODUCT SET isDeleted=true WHERE id=?")
+@Where(clause = "deleted = false")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Product {
 
@@ -34,10 +38,25 @@ public class Product {
 //    @NotNull
     private String brand;
     private boolean isActive;
+    private boolean isDeleted;
+
 
     @ManyToOne
     @JoinColumn(name = "CATEGORY_ID")
     private Category productCategory;
+
+    public Product(String name, String brand, String description, boolean b, boolean cancellable, boolean returnable) {
+        this.name=name;
+        this.brand=brand;
+        this.description=description;
+        this.isActive=b;
+        this.isCancellable=cancellable;
+        this.isReturnable=returnable;
+    }
+
+    public Product() {
+
+    }
 
     public Category getProductCategory() {
         return productCategory;
@@ -61,9 +80,17 @@ public class Product {
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<ProductReview> productReviewList;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_user_id")
     private Seller seller;
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 
     public Integer getId() {
         return id;
@@ -132,6 +159,11 @@ public class Product {
     public void setCategory(Category watches) {
     }
 
+    public Product(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+
     public String getImage() {
         return image;
     }
@@ -146,5 +178,24 @@ public class Product {
 
     public void setProductReviewsList(List<ProductReview> productReviewsList) {
         this.productReviewList = productReviewsList;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", image='" + image + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", isCancellable=" + isCancellable +
+                ", isReturnable=" + isReturnable +
+                ", brand='" + brand + '\'' +
+                ", isActive=" + isActive +
+                ", isDeleted=" + isDeleted +
+                ", productCategory=" + productCategory +
+                ", productVariationList=" + productVariationList +
+                ", productReviewList=" + productReviewList +
+                ", seller=" + seller +
+                '}';
     }
 }
