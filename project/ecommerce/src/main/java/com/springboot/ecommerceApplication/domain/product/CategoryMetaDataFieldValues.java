@@ -1,21 +1,21 @@
 package com.springboot.ecommerceApplication.domain.product;
 
 import javax.persistence.*;
-
 @Entity
+@Table(name = "CATEGORY_METADATA_FIELD_VALUES")
 public class CategoryMetaDataFieldValues {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String values;
+    private String value;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-    @ManyToOne
-    @JoinColumn(name = "category_metadata_field_id")
-    private CategoryMetaDataField categoryMetaDataField;
+//    @ManyToOne
+//    @JoinColumn(name = "category_id")
+//    private Category category;
+//    @ManyToOne
+//    @JoinColumn(name = "category_metadata_field_id")
+//    private CategoryMetaDataField categoryMetaDataField;
 
     public Integer getId() {
         return id;
@@ -25,27 +25,28 @@ public class CategoryMetaDataFieldValues {
         this.id = id;
     }
 
-    public Category getCategory() {
-        return category;
+//    public Category getCategory() {
+//        return category;
+//    }
+//
+//    public void setCategory(Category category) {
+//        this.category = category;
+//    }
+//
+//    public CategoryMetaDataField getCategoryMetaDataField() {
+//        return categoryMetaDataField;
+//    }
+//
+//    public void setCategoryMetaDataField(CategoryMetaDataField categoryMetaDataField) {
+//        this.categoryMetaDataField = categoryMetaDataField;
+//    }
+
+
+    public String getValue() {
+        return value;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public CategoryMetaDataField getCategoryMetaDataField() {
-        return categoryMetaDataField;
-    }
-
-    public void setCategoryMetaDataField(CategoryMetaDataField categoryMetaDataField) {
-        this.categoryMetaDataField = categoryMetaDataField;
-    }
-
-    public String getValues() {
-        return values;
-    }
-
-    public void setValues(String values) {
-        this.values = values;
+    public void setValue(String value) {
+        this.value = value;
     }
 }

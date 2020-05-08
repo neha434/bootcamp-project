@@ -45,6 +45,11 @@ private String image;
         this.quantityAvailable=quantity;
         this.product=product;
     }
+
+    public ProductVariation(Integer price, Integer quantityAvailable) {
+        this.price=price;
+        this.quantityAvailable=quantityAvailable;
+    }
 //    public ProductVariation(int i, int i1, String s, String s1) {  // You need to set values while using parameterised constructor
 //    }
 

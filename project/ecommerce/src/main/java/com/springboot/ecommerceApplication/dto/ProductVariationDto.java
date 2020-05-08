@@ -1,12 +1,17 @@
 package com.springboot.ecommerceApplication.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class ProductVariationDto {
+
     private Integer id;
-   @NotEmpty
+   @NotNull
+   @Min(0)
     private Integer  quantityAvailable;
-   @NotEmpty
+   @NotNull
+   @Min(1)
    private Integer price;
 
     public Integer getPrice() {
@@ -44,6 +49,9 @@ public class ProductVariationDto {
         this.price = price;
     }
 
+    public ProductVariationDto(){
+
+    }
     @Override
     public String toString() {
         return "ProductVariationDto{" +

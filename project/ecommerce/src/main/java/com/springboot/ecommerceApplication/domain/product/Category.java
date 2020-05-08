@@ -19,6 +19,14 @@ public class Category {
     @OneToMany(mappedBy = "productCategory",cascade = CascadeType.ALL)
     private List<Product> productList;
 
+    public Category(String name) {
+        this.name=name;
+    }
+
+    public Category() {
+
+    }
+
     public List<Product> getProductList() {
         return productList;
     }

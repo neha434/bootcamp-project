@@ -28,21 +28,15 @@ public class ProductVariationService {
     @Autowired
     MessageSource messageSource;
 
-    //.........to add product variation by SELLER...........working
-    public ResponseEntity<String> addProductVariation(String username, Integer productId, Integer price,
-                                                      Integer quantity) {
+    //.........TO ADD A PRODUCT BY SELLER...........working
+    public ResponseEntity<String> addProductVariation(String username, Integer productId, ProductVariationDto productVariationDto) {
         Seller seller = sellerRepository.findByEmail(username);
         if (!productRepo.findById(productId).isPresent()) {
             throw new InvalidDetails("No such product with the given product Id exist");
         }
-
+//edit
         Product product = productRepo.findById(productId).get();
         ResponseEntity<String> responseEntity;
-        if (price == null)
-            throw new InvalidDetails("Price should be 0 or more ");
-
-        if (quantity == null)
-            throw new InvalidDetails("Quantity should be 0 or more ");
         if(!product.isActive())
         {
              throw new  InvalidDetails("Product is not active");
@@ -51,7 +45,7 @@ public class ProductVariationService {
         {
             throw new InvalidDetails("Product is deleted");
         }
-        ProductVariation productVariation = new ProductVariation(price, quantity, product);
+        ProductVariation productVariation = new ProductVariation(productVariationDto.getPrice(),productVariationDto.getQuantityAvailable());
         productVariation.setActive(true);
         productVariationRepo.save(productVariation);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
@@ -60,7 +54,7 @@ public class ProductVariationService {
         return responseEntity;
     }
 
-    //...........................TO UPDATE PRODUCT VARIATION......................
+    //...........................TO UPDATE PRODUCT VARIATION......................WORKING
     public ResponseEntity<String> updateProductVariationBySeller( String username, Integer productVariationId, ProductVariationDto productVariationDto) {
         Seller seller = sellerRepository.findByEmail(username);
         if(!productVariationRepo.findById(productVariationId).isPresent()){
@@ -72,7 +66,9 @@ public class ProductVariationService {
         //else working
         ResponseEntity<String> responseEntity;
         ProductVariation productVariation = productVariationRepo.findById(productVariationId).get();
+        productVariationDto.setId(productVariationId);
         BeanUtils.copyProperties(productVariationDto, productVariation);
+
         productVariationRepo.save(productVariation);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                 ("message-productVariation-updated",  null, LocaleContextHolder.getLocale()));

@@ -24,7 +24,7 @@ public class ProductSchedular {
        while (itr.hasNext()){
            if(itr.next().getQuantityAvailable()==0)
                itr.next().setActive(false);
-           mailService.sendProductDetailEmail(itr.next().getProduct().getSeller().getEmail(), itr.next().getProduct().getName());
+         //  mailService.sendProductDetailEmail(itr.next().getProduct().getSeller().getEmail(), itr.next().getProduct().getName());
         }
 
     }

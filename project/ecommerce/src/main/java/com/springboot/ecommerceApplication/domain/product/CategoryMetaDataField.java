@@ -5,17 +5,17 @@ import java.util.Set;
 @Entity
 public class CategoryMetaDataField {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    @OneToMany(mappedBy = "categoryMetaDataField", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<CategoryMetaDataFieldValues> categoryMetaDataFieldValues;
-    public Set<CategoryMetaDataFieldValues> getCategoryMetaDataFieldValues() {
-        return categoryMetaDataFieldValues;
-    }
-    public void setCategoryMetadataFieldValues(Set<CategoryMetaDataFieldValues> categoryMetadataFieldValues) {
-        this.categoryMetaDataFieldValues = categoryMetaDataFieldValues;
-    }
+//    @OneToMany(mappedBy = "categoryMetaDataField", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private Set<CategoryMetaDataFieldValues> categoryMetaDataFieldValues;
+//    public Set<CategoryMetaDataFieldValues> getCategoryMetaDataFieldValues() {
+//        return categoryMetaDataFieldValues;
+//    }
+////    public void setCategoryMetadataFieldValues(Set<CategoryMetaDataFieldValues> categoryMetadataFieldValues) {
+//        this.categoryMetaDataFieldValues = categoryMetaDataFieldValues;
+//    }
     public Integer getId() {
         return id;
     }
