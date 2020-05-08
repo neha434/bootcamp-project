@@ -1,9 +1,9 @@
 package com.springboot.ecommerceApplication.dto;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 public class ProductDto {
-    @NotEmpty
     private Integer id;
     @NotEmpty
     private String name;
@@ -13,6 +13,8 @@ public class ProductDto {
     private String brand;
     private boolean isCancellable;
     private boolean isReturnable;
+    private boolean isActive;
+    private boolean isDeleted;
 
 
 
@@ -28,7 +30,35 @@ public class ProductDto {
 
     }
 
+
+    public ProductDto(Integer id, String name, Integer id1, String name1, String description, boolean cancellable, boolean returnable, List<ProductVariationDto> productVariationDtoList) {
+    }
+
     public ProductDto(Integer id, String name, String description, boolean cancellable, boolean returnable, String brand, boolean active) {
+        this.id=id;
+        this.name=name;
+        this.description=description;
+        this.isCancellable=cancellable;
+        this.isReturnable=returnable;
+        this.brand=brand;
+        this.isActive=active;
+
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public boolean isCancellable() {

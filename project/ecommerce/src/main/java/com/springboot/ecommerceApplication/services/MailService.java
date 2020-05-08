@@ -91,5 +91,11 @@ public class MailService {
 
     }
 
+    public void sendPasswordChangedDetail(String username) {
+        mail.setTo(username);
+        mail.setSubject("Password updated");
+        mail.setSubject("Your password has been updated");
+        mailSender.send(mail);
+    }
 }
 

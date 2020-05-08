@@ -5,6 +5,7 @@ import com.springboot.ecommerceApplication.domain.user.Address;
 import com.springboot.ecommerceApplication.domain.user.Customer;
 import com.springboot.ecommerceApplication.dto.AddressDto;
 import com.springboot.ecommerceApplication.dto.CustomerDto;
+import com.springboot.ecommerceApplication.dto.PasswordDto;
 import com.springboot.ecommerceApplication.repositories.CustomerRepo;
 import com.springboot.ecommerceApplication.services.CustomerService;
 
@@ -31,13 +32,8 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-//    //delete a user
-//    @DeleteMapping("/delete/{id}")
-//    public void deleteUser(@PathVariable Integer id) {
-//        customerService.delete(id);
-//    }
 
-    //to view a profile
+    //..............................TO VIEW PROFILE........................
    @GetMapping("/viewProfile")
     public CustomerDto getCustomerProfile(HttpServletRequest httpServletRequest)
     {
@@ -46,7 +42,7 @@ public class CustomerController {
         return customerService.getCustomer(username);
     }
 
-//  update profile
+   //..........................TO UPDATE PROFILE .........................
     @PutMapping("/update")
     public ResponseEntity<String> updateCustomerUsingPut( @Valid @RequestBody CustomerDto customerDto,HttpServletRequest httpServletRequest) {
 
@@ -61,6 +57,17 @@ public class CustomerController {
         String username=principal.getName();
         return customerService.updateCustomer(username, customerDto, true);
     }
+
+    //......................TO UPDATE PASSWORD..........................
+    @PutMapping("/changePassword")
+    public ResponseEntity<String> changeCustomerPassword(@RequestBody PasswordDto passwordDto, HttpServletRequest httpServletRequest)
+    {
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return customerService.updatePassword(username, passwordDto);
+    }
+
+
 
 
   }

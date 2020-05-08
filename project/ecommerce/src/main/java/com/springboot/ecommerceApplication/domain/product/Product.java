@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "PRODUCT")
 @SQLDelete(sql = "UPDATE PRODUCT SET isDeleted=true WHERE id=?")
-@Where(clause = "deleted = false")
+@Where(clause = "isdeleted = false")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Product {
 
@@ -45,13 +45,14 @@ public class Product {
     @JoinColumn(name = "CATEGORY_ID")
     private Category productCategory;
 
-    public Product(String name, String brand, String description, boolean b, boolean cancellable, boolean returnable) {
+    public Product(String name, String brand, String description, boolean b, boolean cancellable, boolean returnable,boolean deleted) {
         this.name=name;
         this.brand=brand;
         this.description=description;
         this.isActive=b;
         this.isCancellable=cancellable;
         this.isReturnable=returnable;
+        this.isDeleted=deleted;
     }
 
     public Product() {
@@ -80,7 +81,7 @@ public class Product {
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<ProductReview> productReviewList;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "seller_user_id")
     private Seller seller;
 

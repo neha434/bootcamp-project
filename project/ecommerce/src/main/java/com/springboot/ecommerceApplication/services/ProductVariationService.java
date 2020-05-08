@@ -2,21 +2,19 @@ package com.springboot.ecommerceApplication.services;
 
 import com.springboot.ecommerceApplication.domain.product.Product;
 import com.springboot.ecommerceApplication.domain.product.ProductVariation;
-import com.springboot.ecommerceApplication.domain.user.Customer;
 import com.springboot.ecommerceApplication.domain.user.Seller;
+import com.springboot.ecommerceApplication.dto.ProductVariationDto;
 import com.springboot.ecommerceApplication.exception.InvalidDetails;
 import com.springboot.ecommerceApplication.repositories.ProductRepo;
 import com.springboot.ecommerceApplication.repositories.ProductVariationRepo;
 import com.springboot.ecommerceApplication.repositories.SellerRepo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.WebRequest;
-
-import java.io.IOException;
 
 @Service
 public class ProductVariationService {
@@ -30,7 +28,7 @@ public class ProductVariationService {
     @Autowired
     MessageSource messageSource;
 
-    //.........to add product variation by SELLER...........
+    //.........to add product variation by SELLER...........working
     public ResponseEntity<String> addProductVariation(String username, Integer productId, Integer price,
                                                       Integer quantity) {
         Seller seller = sellerRepository.findByEmail(username);
@@ -49,7 +47,7 @@ public class ProductVariationService {
         {
              throw new  InvalidDetails("Product is not active");
         }
-        if(!product.isDeleted())
+        if(product.isDeleted())
         {
             throw new InvalidDetails("Product is deleted");
         }
@@ -61,5 +59,25 @@ public class ProductVariationService {
 
         return responseEntity;
     }
+
+    //...........................TO UPDATE PRODUCT VARIATION......................
+    public ResponseEntity<String> updateProductVariationBySeller( String username, Integer productVariationId, ProductVariationDto productVariationDto) {
+        Seller seller = sellerRepository.findByEmail(username);
+        if(!productVariationRepo.findById(productVariationId).isPresent()){
+            throw new InvalidDetails("No product with the given productVariationId exists ");
+        }
+//        if(productRepository.findById(productId).get().getSeller().getEmail()!=username){
+//            throw new InvalidDetails("Product cannot be updated as Logged-In seller is not a creator of product.");
+//        }  //validation
+        //else working
+        ResponseEntity<String> responseEntity;
+        ProductVariation productVariation = productVariationRepo.findById(productVariationId).get();
+        BeanUtils.copyProperties(productVariationDto, productVariation);
+        productVariationRepo.save(productVariation);
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                ("message-productVariation-updated",  null, LocaleContextHolder.getLocale()));
+        return responseEntity;
+    }
+
 }
 

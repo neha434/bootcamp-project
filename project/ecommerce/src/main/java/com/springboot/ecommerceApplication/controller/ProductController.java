@@ -27,13 +27,14 @@ public class ProductController {
     ProductService productService;
 
     //.........TO GET A PRODUCT BY SELLER.............
-    @GetMapping("/get-product/{id}")
+    @GetMapping("/get-product/{productId}")
     public ProductDto getProduct(@PathVariable Integer productId, HttpServletRequest httpServletRequest) {
         Principal principal = httpServletRequest.getUserPrincipal();
         String username = principal.getName();
         return productService.getProduct(productId, username);
 
     }
+
     //............TO ADD A PRODUCT BY SELLER......................
     @PostMapping("/add-product")
     public ResponseEntity<String> addProductVariation(HttpServletRequest httpServletRequest, @RequestBody ProductDto productDto) {
@@ -42,6 +43,7 @@ public class ProductController {
         return productService.addProduct(username, productDto);
 
     }
+
     //..........TO GET PRODUCT LIST BY SELLER...................
     @GetMapping("/get-product-list")
     public List<ProductDto> getProductList(HttpServletRequest httpServletRequest) {
@@ -50,19 +52,30 @@ public class ProductController {
         return productService.getProductListBySeller(username);
 
     }
+
     //..................TO UPDATE A PRODUCT BY SELLER............................
-    @PutMapping("/update-product/{id}")
-    public ResponseEntity<String> updateCustomerAddress(@PathVariable Integer productId, @Valid @RequestBody ProductDto productDto, HttpServletRequest httpServletRequest) {
+    @PutMapping("/update-product/{productId}")
+    public ResponseEntity<String> updateProduct(@PathVariable Integer productId, @Valid @RequestBody ProductDto productDto, HttpServletRequest httpServletRequest) {
         Principal principal = httpServletRequest.getUserPrincipal();
         String username = principal.getName();
         return productService.updateProductBySeller(username, productId, productDto);
     }
+
     //.....................TO DELETE A PRODUCT BY SELLER.............
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{productId}")
     public ResponseEntity<String> deleteAddress(@PathVariable Integer productId, HttpServletRequest httpServletRequest) {
         Principal principal = httpServletRequest.getUserPrincipal();
         String username = principal.getName();
         return productService.deleteProductBySeller(productId, username);
+    }
+
+    //................................TO VIEW A PRODUCT BY CUSTOMER......................
+    @GetMapping("view-myProduct/{id}")
+    public ProductDto viewProduct(@PathVariable Integer productId, HttpServletRequest httpServletRequest) {
+        Principal principal = httpServletRequest.getUserPrincipal();
+        String username = principal.getName();
+        return productService.getProductByCustomer(username, productId);
+
     }
 }
 

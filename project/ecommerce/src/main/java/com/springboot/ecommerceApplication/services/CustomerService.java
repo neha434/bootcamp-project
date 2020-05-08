@@ -5,6 +5,7 @@ import com.springboot.ecommerceApplication.domain.user.Customer;
 import com.springboot.ecommerceApplication.domain.user.User;
 import com.springboot.ecommerceApplication.dto.AddressDto;
 import com.springboot.ecommerceApplication.dto.CustomerDto;
+import com.springboot.ecommerceApplication.dto.PasswordDto;
 import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
 import com.springboot.ecommerceApplication.repositories.*;
 import org.hibernate.Filter;
@@ -47,7 +48,7 @@ public class CustomerService {
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    //Api to get my detail
+    //................TO VIEW PROFILE..................
     public CustomerDto getCustomer(String username) {
         Customer customer = customerRepository.findByEmail(username);
         if (customer == null) {
@@ -65,8 +66,7 @@ public class CustomerService {
         customerDto.setActive(customer.getActive());
         return customerDto;
     }
-    //list of customers
-
+   //..............TO VIEW LIST OF CUSTOMERS.........................
     public List<CustomerDto> getAllCustomer() {
 //        Pageable paging;
 //        if (pagingAndSortingDto == null) {
@@ -89,7 +89,8 @@ public class CustomerService {
         return customerDtoList;
     }
 
-    //   to update customer profile
+
+    //...........TO UPDATE PROFILE............................
     public ResponseEntity<String> updateCustomer(String username, CustomerDto customerDto, boolean isPatch) {
         if (customerRepository.findByEmail(username)==null) {
             throw new AccountDoesNotExists("Invalid Account Credentials");
@@ -149,6 +150,8 @@ public class CustomerService {
 
     //update address
     public ResponseEntity<String> updateCustomerAddress(String username,Integer id, AddressDto addressDto) {
+        Customer customer = customerRepository.findByEmail(username);
+
         ResponseEntity<String> responseEntity;
         Optional<Address> optional = addressRepository.findById(id);
         if (!optional.isPresent()) {
@@ -165,6 +168,8 @@ public class CustomerService {
     }
 //delete address
     public ResponseEntity<String> deleteAddress(String username,Integer id) {
+        Customer customer = customerRepository.findByEmail(username);
+
         Optional<Address> addressOptional = addressRepository.findById(id);
         if (!addressOptional.isPresent()) {
             return new ResponseEntity<>("No address found with the given id", HttpStatus.NOT_FOUND);
@@ -175,6 +180,27 @@ public class CustomerService {
             return new ResponseEntity<>("Address deleted successfully", HttpStatus.OK);
         }
         return new ResponseEntity<>("No operation performed", HttpStatus.BAD_REQUEST);
+    }
+
+    //..........TO UPDATE PASSWORD...................
+    public ResponseEntity<String> updatePassword(String username,PasswordDto passwordDto){
+        Customer customer = customerRepository.findByEmail(username);
+        ResponseEntity<String> responseEntity;
+        String newPassword = passwordDto.getPassword();
+        String confirmPassword= passwordDto.getConfirmPassword();
+        if(newPassword.equals(confirmPassword)){
+            customer.setPassword(passwordEncoder.encode(newPassword));
+            customerRepository.save(customer);
+            responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                    ("message-password-updated", null, LocaleContextHolder.getLocale()));
+            mailService.sendPasswordChangedDetail(username);
+            return responseEntity;
+        }
+        else
+            responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                    ("message-password-not-matched", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
+
     }
 
 

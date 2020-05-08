@@ -7,10 +7,7 @@ import com.springboot.ecommerceApplication.domain.Role;
 import com.springboot.ecommerceApplication.domain.user.Address;
 import com.springboot.ecommerceApplication.domain.user.Customer;
 import com.springboot.ecommerceApplication.domain.user.Seller;
-import com.springboot.ecommerceApplication.dto.AddressDto;
-import com.springboot.ecommerceApplication.dto.CustomerDto;
-import com.springboot.ecommerceApplication.dto.PagingAndSortingDto;
-import com.springboot.ecommerceApplication.dto.SellerDto;
+import com.springboot.ecommerceApplication.dto.*;
 import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
 import com.springboot.ecommerceApplication.exception.CustomerAlreadyExistsException;
 import com.springboot.ecommerceApplication.repositories.AddressRepository;
@@ -44,11 +41,9 @@ public class SellerService {
     AddressRepository addressRepository;
     @Autowired
     RoleRepo roleRepository;
-    @Autowired
-    SellerRepo sellerRepo;
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    //  to view profile
+    //.........TO VIEW PROFILE.....................
     public SellerDto getSeller(String username) {
         Seller seller = sellerRepository.findByEmail(username);
         if (seller == null) {
@@ -68,11 +63,9 @@ public class SellerService {
         return sellerDto;
     }
 
-
+   //.............TO GET LIST OF SELLERS...................
     public List<SellerDto> getAllSeller() {
-
-
-//        Pageable paging;
+        // Pageable paging;
 //        if (pagingAndSortingDto == null){
 //            paging = PageRequest.of(0, 10, Sort.by("id").ascending());
 //        }
@@ -95,9 +88,9 @@ public class SellerService {
         return sellerDtoList;
     }
 
-
-
-    public ResponseEntity<String> updateAddress(Integer id, AddressDto addressDto) {
+   //..............UPDATE SELLER ADDRESS.......................
+    public ResponseEntity<String> updateSellerAddress(String username,Integer id, AddressDto addressDto) {
+        Seller seller = sellerRepository.findByEmail(username);
         ResponseEntity<String> responseEntity;
         Optional<Address> optional = addressRepository.findById(id);
         if (!optional.isPresent()) {
@@ -114,10 +107,10 @@ public class SellerService {
 
     }
 
-    //to update profile
+    //........TO UPDATE PROFILE......................
 
     public ResponseEntity<String> updateCustomer(String username, SellerDto sellerDto, boolean isPatch) {
-        if (sellerRepository.findByEmail(username)==null) {
+        if (sellerRepository.findByEmail(username) == null) {
             throw new AccountDoesNotExists("Invalid Account Credentials");
         }
         ResponseEntity<String> responseEntity;
@@ -142,6 +135,28 @@ public class SellerService {
                 ("message-seller-updated", null, LocaleContextHolder.getLocale()));
         return responseEntity;
     }
+
+    //..........TO UPDATE PASSWORD...................
+    public ResponseEntity<String> updatePassword(String username, PasswordDto passwordDto){
+        Seller seller = sellerRepository.findByEmail(username);
+        ResponseEntity<String> responseEntity;
+        String newPassword = passwordDto.getPassword();
+        String confirmPassword= passwordDto.getConfirmPassword();
+        if(newPassword.equals(confirmPassword)){
+            seller.setPassword(passwordEncoder.encode(newPassword));
+            sellerRepository.save(seller);
+            responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                    ("message-password-updated", null, LocaleContextHolder.getLocale()));
+            mailService.sendPasswordChangedDetail(username);
+            return responseEntity;
+        }
+        else
+            responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                    ("message-password-not-matched", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
+
+    }
+
 
 
 }

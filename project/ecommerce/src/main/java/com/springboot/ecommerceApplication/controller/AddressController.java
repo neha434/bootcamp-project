@@ -23,9 +23,12 @@ public class AddressController {
 
 //update address
     @PutMapping("/Seller/{id}")
-    public ResponseEntity<String> updateSellerAddress(@PathVariable Integer id, @Valid @RequestBody AddressDto addressDto , WebRequest webRequest){
-        return  sellerService.updateAddress(id,addressDto);
+    public ResponseEntity<String> updateSellerAddress(@PathVariable Integer id, @Valid @RequestBody AddressDto addressDto , HttpServletRequest httpServletRequest){
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return  sellerService.updateSellerAddress(username,id,addressDto);
     }
+
     @PutMapping("/Customer{id}")
     public ResponseEntity<String> updateCustomerAddress(@PathVariable Integer id, @Valid @RequestBody AddressDto addressDto , HttpServletRequest httpServletRequest){
         Principal principal=httpServletRequest.getUserPrincipal();

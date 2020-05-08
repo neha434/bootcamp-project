@@ -17,7 +17,24 @@ public class LoginSchedular {
     public void unlockAccount() {
 //        userRepo.ActivateUsers();
 //        List<User> list=  userRepo.findByIsActive(false);
-//      //  List<User> list = new ArrayList();
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//  List<User> list = new ArrayList();
 //        Date currentTime = new Date();
 //        Long value;
 //        for (User user : list) {

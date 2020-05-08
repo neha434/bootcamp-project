@@ -3,7 +3,6 @@ package com.springboot.ecommerceApplication.dto;
 import javax.validation.constraints.NotEmpty;
 
 public class ProductVariationDto {
-    @NotEmpty
     private Integer id;
    @NotEmpty
     private Integer  quantityAvailable;
@@ -43,5 +42,14 @@ public class ProductVariationDto {
         this.id = id;
         this.quantityAvailable = quantityAvailable;
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductVariationDto{" +
+                "id=" + id +
+                ", quantityAvailable=" + quantityAvailable +
+                ", price=" + price +
+                '}';
     }
 }
