@@ -16,6 +16,14 @@ public class Category {
     @Size(max = 50)
     private String  name;
 
+    private String parent;
+//    @OneToMany(mappedBy = "parentCategory",cascade = CascadeType.ALL)
+//    private List<Category>
+//
+//    @ManyToOne()
+//    @JoinColumn(name = "parent_id")
+//    private Category parentCategory;
+
     @OneToMany(mappedBy = "productCategory",cascade = CascadeType.ALL)
     private List<Product> productList;
 

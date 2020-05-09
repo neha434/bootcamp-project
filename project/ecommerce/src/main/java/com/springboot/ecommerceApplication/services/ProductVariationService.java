@@ -34,7 +34,7 @@ public class ProductVariationService {
         if (!productRepo.findById(productId).isPresent()) {
             throw new InvalidDetails("No such product with the given product Id exist");
         }
-//edit
+
         Product product = productRepo.findById(productId).get();
         ResponseEntity<String> responseEntity;
         if(!product.isActive())

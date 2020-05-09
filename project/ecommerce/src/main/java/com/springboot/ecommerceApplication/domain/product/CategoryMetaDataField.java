@@ -8,14 +8,23 @@ public class CategoryMetaDataField {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-//    @OneToMany(mappedBy = "categoryMetaDataField", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private Set<CategoryMetaDataFieldValues> categoryMetaDataFieldValues;
-//    public Set<CategoryMetaDataFieldValues> getCategoryMetaDataFieldValues() {
-//        return categoryMetaDataFieldValues;
-//    }
-////    public void setCategoryMetadataFieldValues(Set<CategoryMetaDataFieldValues> categoryMetadataFieldValues) {
-//        this.categoryMetaDataFieldValues = categoryMetaDataFieldValues;
-//    }
+    @OneToMany(mappedBy = "categoryMetaDataField", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<CategoryMetaDataFieldValues> categoryMetaDataFieldValues;
+
+    public CategoryMetaDataField(String name) {
+        this.name=name;
+    }
+
+    public CategoryMetaDataField(){
+
+    }
+
+    public Set<CategoryMetaDataFieldValues> getCategoryMetaDataFieldValues() {
+        return categoryMetaDataFieldValues;
+    }
+  public void setCategoryMetadataFieldValues(Set<CategoryMetaDataFieldValues> categoryMetadataFieldValues) {
+        this.categoryMetaDataFieldValues = categoryMetaDataFieldValues;
+    }
     public Integer getId() {
         return id;
     }
