@@ -1,35 +1,30 @@
 package com.springboot.ecommerceApplication.services;
 
 
-import com.springboot.ecommerceApplication.co.CustomerCO;
-import com.springboot.ecommerceApplication.co.SellerCO;
-import com.springboot.ecommerceApplication.domain.Role;
 import com.springboot.ecommerceApplication.domain.user.Address;
-import com.springboot.ecommerceApplication.domain.user.Customer;
 import com.springboot.ecommerceApplication.domain.user.Seller;
-import com.springboot.ecommerceApplication.dto.*;
+import com.springboot.ecommerceApplication.domain.user.User;
+import com.springboot.ecommerceApplication.dto.AddressDto;
+import com.springboot.ecommerceApplication.dto.PasswordDto;
+import com.springboot.ecommerceApplication.dto.SellerDto;
 import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
-import com.springboot.ecommerceApplication.exception.CustomerAlreadyExistsException;
 import com.springboot.ecommerceApplication.repositories.AddressRepository;
 import com.springboot.ecommerceApplication.repositories.RoleRepo;
 import com.springboot.ecommerceApplication.repositories.SellerRepo;
+import com.springboot.ecommerceApplication.repositories.UserRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SellerService {
@@ -41,6 +36,10 @@ public class SellerService {
     AddressRepository addressRepository;
     @Autowired
     RoleRepo roleRepository;
+    @Autowired
+    UserRepo userRepo;
+
+
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     //.........TO VIEW PROFILE.....................
@@ -63,8 +62,10 @@ public class SellerService {
         return sellerDto;
     }
 
-   //.............TO GET LIST OF SELLERS...................
-    public List<SellerDto> getAllSeller() {
+    //.............TO GET LIST OF SELLERS...................
+    public List<SellerDto> getAllSeller(String username) {
+        User user = userRepo.findByEmail(username);
+
         // Pageable paging;
 //        if (pagingAndSortingDto == null){
 //            paging = PageRequest.of(0, 10, Sort.by("id").ascending());
@@ -88,8 +89,8 @@ public class SellerService {
         return sellerDtoList;
     }
 
-   //..............UPDATE SELLER ADDRESS.......................
-    public ResponseEntity<String> updateSellerAddress(String username,Integer id, AddressDto addressDto) {
+    //..............UPDATE SELLER ADDRESS.......................
+    public ResponseEntity<String> updateSellerAddress(String username, Integer id, AddressDto addressDto) {
         Seller seller = sellerRepository.findByEmail(username);
         ResponseEntity<String> responseEntity;
         Optional<Address> optional = addressRepository.findById(id);
@@ -130,33 +131,30 @@ public class SellerService {
         if ((isPatch && sellerDto.getGst() != null) || (!isPatch))
             seller.setGst((sellerDto.getGst()));
         sellerRepository.save(seller);
-        // CustomerDto customerDto1 = getCustomer(customer.getId());
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                 ("message-seller-updated", null, LocaleContextHolder.getLocale()));
         return responseEntity;
     }
 
     //..........TO UPDATE PASSWORD...................
-    public ResponseEntity<String> updatePassword(String username, PasswordDto passwordDto){
+    public ResponseEntity<String> updatePassword(String username, PasswordDto passwordDto) {
         Seller seller = sellerRepository.findByEmail(username);
         ResponseEntity<String> responseEntity;
         String newPassword = passwordDto.getPassword();
-        String confirmPassword= passwordDto.getConfirmPassword();
-        if(newPassword.equals(confirmPassword)){
+        String confirmPassword = passwordDto.getConfirmPassword();
+        if (newPassword.equals(confirmPassword)) {
             seller.setPassword(passwordEncoder.encode(newPassword));
             sellerRepository.save(seller);
             responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                     ("message-password-updated", null, LocaleContextHolder.getLocale()));
             mailService.sendPasswordChangedDetail(username);
             return responseEntity;
-        }
-        else
+        } else
             responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                     ("message-password-not-matched", null, LocaleContextHolder.getLocale()));
         return responseEntity;
 
     }
-
 
 
 }

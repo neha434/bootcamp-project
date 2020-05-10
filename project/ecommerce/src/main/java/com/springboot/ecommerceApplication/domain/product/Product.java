@@ -45,7 +45,13 @@ public class Product {
     @JoinColumn(name = "CATEGORY_ID")
     private Category productCategory;
 
-    public Product(String name, String brand, String description, boolean b, boolean cancellable, boolean returnable,boolean deleted) {
+
+    public Product() {
+
+    }
+
+    public Product(Category category, Seller sellerrId, String name, String brand, String description, boolean b, boolean cancellable, boolean returnable, boolean deleted) {
+        this.seller= sellerrId;
         this.name=name;
         this.brand=brand;
         this.description=description;
@@ -53,9 +59,6 @@ public class Product {
         this.isCancellable=cancellable;
         this.isReturnable=returnable;
         this.isDeleted=deleted;
-    }
-
-    public Product() {
 
     }
 

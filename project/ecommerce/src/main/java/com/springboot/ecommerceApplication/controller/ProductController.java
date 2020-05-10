@@ -35,7 +35,7 @@ public class ProductController {
 
     }
 
-    //............TO ADD A PRODUCT BY SELLER......................
+    //............TO ADD A PRODUCT BY SELLER......................edit
     @PostMapping("/add-product")
     public ResponseEntity<String> addProductVariation(HttpServletRequest httpServletRequest, @RequestBody ProductDto productDto) {
         Principal principal = httpServletRequest.getUserPrincipal();

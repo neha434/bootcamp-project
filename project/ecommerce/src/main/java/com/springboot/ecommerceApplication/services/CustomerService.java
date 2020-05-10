@@ -8,7 +8,6 @@ import com.springboot.ecommerceApplication.dto.CustomerDto;
 import com.springboot.ecommerceApplication.dto.PasswordDto;
 import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
 import com.springboot.ecommerceApplication.repositories.*;
-import org.hibernate.Filter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -18,11 +17,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.hibernate.Session;
-
 
 import javax.persistence.EntityManager;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -42,8 +41,6 @@ public class CustomerService {
     UserRepo userRepo;
     @Autowired
     EntityManager entityManager;
-
-
 
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -66,8 +63,10 @@ public class CustomerService {
         customerDto.setActive(customer.getActive());
         return customerDto;
     }
-   //..............TO VIEW LIST OF CUSTOMERS.........................
-    public List<CustomerDto> getAllCustomer() {
+
+    //..............TO VIEW LIST OF CUSTOMERS.........................
+    public List<CustomerDto> getAllCustomer(String username) {
+        User user = userRepo.findByEmail(username);
 //        Pageable paging;
 //        if (pagingAndSortingDto == null) {
 //            paging = PageRequest.of(0, 10, Sort.by("id").ascending());
@@ -92,7 +91,7 @@ public class CustomerService {
 
     //...........TO UPDATE PROFILE............................
     public ResponseEntity<String> updateCustomer(String username, CustomerDto customerDto, boolean isPatch) {
-        if (customerRepository.findByEmail(username)==null) {
+        if (customerRepository.findByEmail(username) == null) {
             throw new AccountDoesNotExists("Invalid Account Credentials");
         }
         ResponseEntity<String> responseEntity;
@@ -114,26 +113,26 @@ public class CustomerService {
         return responseEntity;
     }
 
-// view address
+    // view address
     public List<AddressDto> getAddress(String username) {
         Customer customer = customerRepository.findByEmail(username);
-      //  Optional<Address> optional = addressRepository.findByEmail(username);
-        if (customer==null) {
+        //  Optional<Address> optional = addressRepository.findByEmail(username);
+        if (customer == null) {
             throw new AccountDoesNotExists("Invalid Account Credentials");
         }
         Iterable<Address> addressIterable = customer.getAddressesList();
-       // Address address = optional.get();
+        // Address address = optional.get();
         List<AddressDto> addressDtoList = new ArrayList<>();
-        addressIterable.forEach(address-> addressDtoList.add(new AddressDto(address.getId(), address.getCity(),
+        addressIterable.forEach(address -> addressDtoList.add(new AddressDto(address.getId(), address.getCity(),
                 address.getState(), address.getCountry(),
-                address.getAddressLine(),address.getZipCode(),address.getLabel())));
-               return addressDtoList;
+                address.getAddressLine(), address.getZipCode(), address.getLabel())));
+        return addressDtoList;
     }
 
-//add address
+    //add address
     public String AddAddress(String username, AddressDto addressDto) {
         Customer customer = customerRepository.findByEmail(username);
-        if (customer==null) {
+        if (customer == null) {
             throw new AccountDoesNotExists("Invalid Account Credentials");
         }
         Address address = new Address();
@@ -144,12 +143,12 @@ public class CustomerService {
         address.setZipCode(addressDto.getZipCode());
         address.setLabel(addressDto.getLabel());
         addressRepository.save(address);
-      //  AddressDto addressDto1 = getAddress(address.getId());
+        //  AddressDto addressDto1 = getAddress(address.getId());
         return "Address added successfully";
     }
 
     //update address
-    public ResponseEntity<String> updateCustomerAddress(String username,Integer id, AddressDto addressDto) {
+    public ResponseEntity<String> updateCustomerAddress(String username, Integer id, AddressDto addressDto) {
         Customer customer = customerRepository.findByEmail(username);
 
         ResponseEntity<String> responseEntity;
@@ -166,8 +165,9 @@ public class CustomerService {
                 ("message-address-updated", null, LocaleContextHolder.getLocale()));
         return responseEntity;
     }
-//delete address
-    public ResponseEntity<String> deleteAddress(String username,Integer id) {
+
+    //delete address
+    public ResponseEntity<String> deleteAddress(String username, Integer id) {
         Customer customer = customerRepository.findByEmail(username);
 
         Optional<Address> addressOptional = addressRepository.findById(id);
@@ -183,20 +183,19 @@ public class CustomerService {
     }
 
     //..........TO UPDATE PASSWORD...................
-    public ResponseEntity<String> updatePassword(String username,PasswordDto passwordDto){
+    public ResponseEntity<String> updatePassword(String username, PasswordDto passwordDto) {
         Customer customer = customerRepository.findByEmail(username);
         ResponseEntity<String> responseEntity;
         String newPassword = passwordDto.getPassword();
-        String confirmPassword= passwordDto.getConfirmPassword();
-        if(newPassword.equals(confirmPassword)){
+        String confirmPassword = passwordDto.getConfirmPassword();
+        if (newPassword.equals(confirmPassword)) {
             customer.setPassword(passwordEncoder.encode(newPassword));
             customerRepository.save(customer);
             responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                     ("message-password-updated", null, LocaleContextHolder.getLocale()));
             mailService.sendPasswordChangedDetail(username);
             return responseEntity;
-        }
-        else
+        } else
             responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                     ("message-password-not-matched", null, LocaleContextHolder.getLocale()));
         return responseEntity;

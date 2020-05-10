@@ -11,7 +11,6 @@ import com.springboot.ecommerceApplication.domain.user.Address;
 import com.springboot.ecommerceApplication.domain.user.Customer;
 import com.springboot.ecommerceApplication.domain.user.Seller;
 import com.springboot.ecommerceApplication.domain.user.User;
-import com.springboot.ecommerceApplication.dto.AddressDto;
 import com.springboot.ecommerceApplication.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

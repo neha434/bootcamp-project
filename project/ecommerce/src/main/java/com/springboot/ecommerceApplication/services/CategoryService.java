@@ -1,8 +1,6 @@
 package com.springboot.ecommerceApplication.services;
 
 import com.springboot.ecommerceApplication.domain.product.Category;
-import com.springboot.ecommerceApplication.domain.product.ProductVariation;
-import com.springboot.ecommerceApplication.domain.user.Seller;
 import com.springboot.ecommerceApplication.domain.user.User;
 import com.springboot.ecommerceApplication.dto.CategoryDto;
 import com.springboot.ecommerceApplication.exception.InvalidDetails;
@@ -36,12 +34,25 @@ public class CategoryService {
             throw new InvalidDetails("This Category Already Exists");
         }
         ResponseEntity<String> responseEntity;
+        if (categoryDto.getParentId() != null) {
+            Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
+            Category category = new Category();
+            category.setName(categoryDto.getName());
+            category.setParentCategory(parent);
+            categoryRepo.save(category);
+        } else {
+            Category category = new Category();
+            category.setName(categoryDto.getName());
+            categoryRepo.save(category);
+        }
+        Integer categoryId = categoryRepo.findByName(categoryDto.getName()).getId();
 
-        Category category = new Category(categoryDto.getName());
-        categoryRepo.save(category);
+        // Category category = new Category(categoryDto.getName());
+        // categoryRepo.save(category);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
-                ("message-category-added", null, LocaleContextHolder.getLocale()));
+                ("message-category-added" + categoryId, null, LocaleContextHolder.getLocale()));
         return responseEntity;
+        //returning category id with message???????????
 
     }
 
@@ -54,35 +65,47 @@ public class CategoryService {
         }
         Category category = categoryRepo.findById(categoryId).get();
         CategoryDto categoryDto = new CategoryDto();
+        if (category.getParentCategory()!= null) {
+            Category parent = category.getParentCategory();
+            String parentName=parent.getName();
+            categoryDto.setParentId(parent.getId());
+            categoryDto.setParentName(parentName);//Electronics
+            categoryDto.setId(category.getId());
+            categoryDto.setName(category.getName());//Mobile
+        }
+        else{
         categoryDto.setName(category.getName());
-        categoryDto.setId(category.getId());
+        categoryDto.setId(category.getId());}
         return categoryDto;
     }
 
-    //.........................TO GET LIST OF CATEGORY BY ADMIN..............................
+    //.........................TO GET LIST OF CATEGORY BY ADMIN..............................//edit
     public List<CategoryDto> getAllCategories(String username) {
         User user = userRepo.findByEmail(username);
         Iterable<Category> categoryList = categoryRepo.findAll();
         List<CategoryDto> categoryDtoList = new ArrayList<>();
-        categoryList.forEach(categories -> categoryDtoList.add(new CategoryDto(categories.getId(), categories.getName())));
+        categoryList.forEach(categories -> categoryDtoList.add(
+                new CategoryDto(
+                        categories.getId(), categories.getName())));
         return categoryDtoList;
     }
 
     //........................TO UPDATE CATEGORY BY ADMIN...................................
     public ResponseEntity<String> updateCategoryByAdmin(String username, Integer categoryId, CategoryDto categoryDto) {
         User user = userRepo.findByEmail(username);
-        if(!categoryRepo.findById(categoryId).isPresent()){
+        if (!categoryRepo.findById(categoryId).isPresent()) {
             throw new InvalidDetails("No category with the given categoryId exists ");
         }
 
         ResponseEntity<String> responseEntity;
         Category category = categoryRepo.findById(categoryId).get();
         categoryDto.setId(categoryId);
+        //to check unique name
         BeanUtils.copyProperties(categoryDto, category);
 
         categoryRepo.save(category);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
-                ("message-category-updated",  null, LocaleContextHolder.getLocale()));
+                ("message-category-updated", null, LocaleContextHolder.getLocale()));
         return responseEntity;
 
     }

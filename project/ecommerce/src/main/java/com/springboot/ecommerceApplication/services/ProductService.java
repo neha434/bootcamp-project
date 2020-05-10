@@ -1,11 +1,15 @@
 package com.springboot.ecommerceApplication.services;
 
+import com.springboot.ecommerceApplication.domain.product.Category;
 import com.springboot.ecommerceApplication.domain.product.Product;
 import com.springboot.ecommerceApplication.domain.product.ProductVariation;
 import com.springboot.ecommerceApplication.domain.user.Seller;
+import com.springboot.ecommerceApplication.domain.user.User;
+import com.springboot.ecommerceApplication.dto.CategoryDto;
 import com.springboot.ecommerceApplication.dto.ProductDto;
 import com.springboot.ecommerceApplication.dto.ProductVariationDto;
 import com.springboot.ecommerceApplication.exception.InvalidDetails;
+import com.springboot.ecommerceApplication.repositories.CategoryRepo;
 import com.springboot.ecommerceApplication.repositories.ProductRepo;
 import com.springboot.ecommerceApplication.repositories.SellerRepo;
 import com.springboot.ecommerceApplication.repositories.UserRepo;
@@ -32,17 +36,23 @@ public class ProductService {
     MailService mailService;
     @Autowired
     UserRepo userRepository;
+    @Autowired
+    CategoryRepo categoryRepository;
 
 
-    //.................TO ADD A PRODUCT BY SELLER.....................//working
+    //.................TO ADD A PRODUCT BY SELLER.....................//working//edit
     public ResponseEntity<String> addProduct(String username, ProductDto productDto) {
         Seller seller = sellerRepository.findByEmail(username);
         if (productRepository.findByName(productDto.getName()) != null) {
             throw new InvalidDetails("Product Already Exists");
         }
-//        //User username= userRepository.findByEmail("neha.rai@tothenew.com");
+        if (!categoryRepository.findById(productDto.getCategoryId()).isPresent()){
+            throw new InvalidDetails("Category Does Not Exists In Database");
+        }
+        Category category = categoryRepository.findById(productDto.getCategoryId()).get();
+        Seller sellerrId= sellerRepository.findById(productDto.getSellerId()).get();
         ResponseEntity<String> responseEntity;
-        Product product = new Product(productDto.getName(), productDto.getBrand(),
+        Product product = new Product(category,sellerrId,productDto.getName(), productDto.getBrand(),
                 productDto.getDescription(), false, productDto.isCancellable(), productDto.isReturnable(),productDto.isDeleted());
         productRepository.save(product);
         // mailService.sendAddedProductDetailsEmail(product,username);
@@ -55,28 +65,34 @@ public class ProductService {
 
 
 
-    //.....................TO VIEW A PRODUCT BY SELLER................................
+    //.....................TO VIEW A PRODUCT BY SELLER................................edit/notworking
     public ProductDto getProduct(Integer productId, String username) {
         Seller seller = sellerRepository.findByEmail(username);
-        //Product product =  seller.getProductList().get(Math.toIntExact(productId));
-        Product product = seller.getProductList().get(productId);
-        if (product == null) {
-            throw new InvalidDetails("No such product available");
-        }
-//        if(productRepository.findById(productId).get().getSeller().getEmail()!=username){
+//          if(productRepository.findById(productId).get().getSeller().getEmail()!=username){
 //            throw new InvalidDetails("Product cannot be viewed as Logged-In seller is not a creator of product.");
 //        }
-        ProductDto productDto = new ProductDto(product.getId(), product.getName(), product.getDescription(),
-                product.isCancellable(), product.isReturnable(), product.getBrand(), product.isActive());
+        if (!productRepository.findById(productId).isPresent()) {
+            throw new InvalidDetails("Details entered are not valid");
+        }
+        Product product = productRepository.findById(productId).get();
+        ProductDto productDto = new ProductDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setDescription(product.getDescription());
+        productDto.setBrand(product.getBrand());
+        productDto.setActive(product.isActive());
+      //  productDto.setSellerId(product.getSeller());
+       // productDto.setCategoryId();
+        productDto.setReturnable(product.isReturnable());
+        productDto.setCancellable(product.isCancellable());
         return productDto;
+        //category id is null
     }
-
-
-
 
 
     //..................TO GET LIST OF PRODUCTS BY SELLER.....................//seller-user-id
     public List<ProductDto> getProductListBySeller(String username) {
+
         Seller seller = sellerRepository.findByEmail(username);
         List<Product> productList = seller.getProductList();
         List<ProductDto> productDtoList = new ArrayList<>();
@@ -84,6 +100,7 @@ public class ProductService {
                 product.getDescription(),
                 product.isCancellable(), product.isReturnable(), product.getBrand(), product.isActive())));
         return productDtoList;
+        //category id is null
     }
 
 
@@ -169,7 +186,8 @@ public class ProductService {
 
 
     //.........TO VIEW PRODUCT LIST BY ADMIN..................
-    public List<ProductDto> getProductList() {
+    public List<ProductDto> getProductList(String username) {
+        User user = userRepository.findByEmail(username);
         Iterable<Product> productList = productRepository.findAll();
         List<ProductDto> productDtoList = new ArrayList<>();
         productList.forEach(products -> productDtoList.add(new ProductDto(products.getId(), products.getName(),
@@ -178,4 +196,20 @@ public class ProductService {
     }
 
 
+    public ProductDto getProductByAdmin(String username, Integer productId) {
+        User user = userRepository.findByEmail(username);
+        Optional<Product> optional = productRepository.findById(productId);
+        if (!optional.isPresent()) {
+            throw new InvalidDetails("This product does not exist");
+        }
+        Product product = productRepository.findById(productId).get();
+        ProductDto productDto = new ProductDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setDescription(product.getDescription());
+        productDto.setBrand(product.getBrand());
+        productDto.setActive(product.isActive());
+        productDto.setDeleted(product.isDeleted());
+        return productDto;
+    }
 }

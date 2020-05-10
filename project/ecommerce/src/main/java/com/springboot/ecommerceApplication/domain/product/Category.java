@@ -16,13 +16,12 @@ public class Category {
     @Size(max = 50)
     private String  name;
 
-    private String parent;
-//    @OneToMany(mappedBy = "parentCategory",cascade = CascadeType.ALL)
-//    private List<Category>
-//
-//    @ManyToOne()
-//    @JoinColumn(name = "parent_id")
-//    private Category parentCategory;
+    @OneToMany(mappedBy = "parentCategory",cascade = CascadeType.ALL)
+    private List<Category> subCategoryList;
+
+    @ManyToOne()
+    @JoinColumn(name = "parent_id")
+    private Category parentCategory;
 
     @OneToMany(mappedBy = "productCategory",cascade = CascadeType.ALL)
     private List<Product> productList;
@@ -33,6 +32,22 @@ public class Category {
 
     public Category() {
 
+    }
+
+    public List<Category> getSubCategoryList() {
+        return subCategoryList;
+    }
+
+    public void setSubCategoryList(List<Category> subCategoryList) {
+        this.subCategoryList = subCategoryList;
+    }
+
+    public Category getParentCategory() {
+        return parentCategory;
+    }
+
+    public void setParentCategory(Category parentCategory) {
+        this.parentCategory = parentCategory;
     }
 
     public List<Product> getProductList() {

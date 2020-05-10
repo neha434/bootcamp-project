@@ -7,14 +7,12 @@ import com.springboot.ecommerceApplication.services.CustomerService;
 import com.springboot.ecommerceApplication.services.ProductService;
 import com.springboot.ecommerceApplication.services.SellerService;
 import com.springboot.ecommerceApplication.services.UserService;
-import net.bytebuddy.implementation.bind.annotation.Default;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -37,8 +35,10 @@ public class AdminController {
 //        return  customerService.getAllCustomer(pagingAndSortingDto);
 //    }
     @GetMapping("/customer/")
-    public List<CustomerDto> getAllCustomer() {
-        return customerService.getAllCustomer();
+    public List<CustomerDto> getAllCustomer(HttpServletRequest httpServletRequest)
+    {    Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return customerService.getAllCustomer(username);
     }
 
     //get list of sellers
@@ -48,50 +48,80 @@ public class AdminController {
 //        return sellerService.getAllSeller(pageable);
 //    }
     @GetMapping("/seller/")
-    public List<SellerDto> getAllSeller() {
-        return sellerService.getAllSeller();
+    public List<SellerDto> getAllSeller(HttpServletRequest httpServletRequest) {
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return sellerService.getAllSeller(username);
     }
 
 
     @PutMapping("/changeRole/{role}/{id}")
-    public String changeRoleOfUser(@PathVariable Integer id, UserRole role) {
-        return userService.changeRoleOfUser(id, role);
+    public String changeRoleOfUser(@PathVariable Integer id, UserRole role, HttpServletRequest httpServletRequest) {
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return userService.changeRoleOfUser(username,id, role);
     }
 
     //to activate a user
     @PutMapping("/activate/{id}")
-    public ResponseEntity activateUser(@PathVariable Integer id, WebRequest webRequest) {
-        return userService.activateDeactivateById(id, true);
+    public ResponseEntity activateUser(@PathVariable Integer id, HttpServletRequest httpServletRequest) {
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return userService.activateDeactivateById(username,id, true);
     }
 
     //to deactivate a user
     @PutMapping("/deactivate/{id}")
-    public ResponseEntity deActivateUser(@PathVariable Integer id, WebRequest webRequest) {
-        return userService.activateDeactivateById(id, false);
+    public ResponseEntity deActivateUser(@PathVariable Integer id, HttpServletRequest httpServletRequest) {
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+
+        return userService.activateDeactivateById(username,id, false);
     }
 
     //to get product list
     @GetMapping("/product/")
-    public List<ProductDto> getProductList() {
-        return productService.getProductList();
+    public List<ProductDto> getProductList(HttpServletRequest httpServletRequest)
+    {  Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+
+        return productService.getProductList(username);
     }
 
     //to update profile
-    @PatchMapping("/updateAdmin/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable Integer id, @RequestBody UserDto userDto, WebRequest webRequest) {
-        return userService.updateUser(id, userDto);
+    @PatchMapping("/updateAdmin")
+    public ResponseEntity<String> updateUser(@RequestBody UserDto userDto, HttpServletRequest httpServletRequest) {
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+
+        return userService.updateUser(username, userDto);
     }
 
     //to activate a product
     @PutMapping("/activateProduct/{id}")
-    public ResponseEntity activateProduct(@PathVariable Integer id, WebRequest webRequest) {
-        return userService.activateDeactivateProductById(id, true);
+    public ResponseEntity activateProduct(@PathVariable Integer id, HttpServletRequest httpServletRequest) {
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+
+        return userService.activateDeactivateProductById(username,id, true);
     }
 
     //to deactivate a product
     @PutMapping("/deactivateProduct/{id}")
-    public ResponseEntity deActivateProduct(@PathVariable Integer id, WebRequest webRequest) {
-        return userService.activateDeactivateProductById(id, false);
+    public ResponseEntity deActivateProduct(@PathVariable Integer id, HttpServletRequest httpServletRequest) {
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+
+        return userService.activateDeactivateProductById(username,id, false);
     }
+
+    @GetMapping("/viewProduct/{productId}")
+    public ProductDto getCategory(@PathVariable Integer productId, HttpServletRequest httpServletRequest)
+    {
+        Principal principal=httpServletRequest.getUserPrincipal();
+        String username=principal.getName();
+        return productService.getProductByAdmin(username,productId);
+    }
+
 
 }

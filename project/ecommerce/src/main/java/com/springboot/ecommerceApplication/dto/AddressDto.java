@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 
 public class AddressDto {
 
-     @NotEmpty
+
     private Integer id;
      @NotEmpty
     private String city;

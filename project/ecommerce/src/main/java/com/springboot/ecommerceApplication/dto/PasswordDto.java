@@ -3,16 +3,18 @@ package com.springboot.ecommerceApplication.dto;
 import javax.validation.constraints.NotEmpty;
 
 public class PasswordDto {
-  // @NotEmpty
+
+    @NotEmpty
     private String password;
- //@NotEmpty
+    @NotEmpty
     private String confirmNewPassword;
 
-    public PasswordDto(){
+
+    public PasswordDto() {
 
     }
 
-    public PasswordDto(String newPassword,String confirmNewPassword) {
+    public PasswordDto(String newPassword, String confirmNewPassword) {
         this.password = newPassword;
         this.confirmNewPassword = confirmNewPassword;
     }

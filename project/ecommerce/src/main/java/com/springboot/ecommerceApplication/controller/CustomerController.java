@@ -60,7 +60,7 @@ public class CustomerController {
 
     //......................TO UPDATE PASSWORD..........................
     @PutMapping("/changePassword")
-    public ResponseEntity<String> changeCustomerPassword(@RequestBody PasswordDto passwordDto, HttpServletRequest httpServletRequest)
+    public ResponseEntity<String> changeCustomerPassword(@Valid @RequestBody PasswordDto passwordDto, HttpServletRequest httpServletRequest)
     {
         Principal principal=httpServletRequest.getUserPrincipal();
         String username=principal.getName();

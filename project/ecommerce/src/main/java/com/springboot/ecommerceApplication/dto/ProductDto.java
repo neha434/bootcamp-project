@@ -15,6 +15,8 @@ public class ProductDto {
     private boolean isReturnable;
     private boolean isActive;
     private boolean isDeleted;
+    private Integer sellerId;
+    private Integer categoryId;
 
 
 
@@ -43,6 +45,22 @@ public class ProductDto {
         this.brand=brand;
         this.isActive=active;
 
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Integer getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Integer sellerId) {
+        this.sellerId = sellerId;
     }
 
     public boolean isActive() {

@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class EcommerceApplicationTests {
+
+
 @Autowired
 UserRepo userRepository;
 	@Autowired
