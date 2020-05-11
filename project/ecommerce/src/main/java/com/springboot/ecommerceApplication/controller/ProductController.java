@@ -69,14 +69,7 @@ public class ProductController {
         return productService.deleteProductBySeller(productId, username);
     }
 
-    //................................TO VIEW A PRODUCT BY CUSTOMER......................
-    @GetMapping("view-myProduct/{id}")
-    public ProductDto viewProduct(@PathVariable Integer productId, HttpServletRequest httpServletRequest) {
-        Principal principal = httpServletRequest.getUserPrincipal();
-        String username = principal.getName();
-        return productService.getProductByCustomer(username, productId);
 
-    }
 }
 
 

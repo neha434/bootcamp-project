@@ -32,7 +32,7 @@ public class ProductVariationService {
     @Autowired
     MessageSource messageSource;
     @Autowired
-    CategoryMetadataFieldRepo categoryMetadataFieldRepo
+    CategoryMetadataFieldRepo categoryMetadataFieldRepo;
 
     //................TO ADD A PRODUCT BY SELLER...........working
     public ResponseEntity<String> addProductVariation(String username, Integer productId, ProductVariationDto productVariationDto) {
@@ -50,13 +50,12 @@ public class ProductVariationService {
         {
             throw new InvalidDetails("Product is deleted");
         }
-        ProductVariation productVariation = new ProductVariation(productVariationDto.getPrice(),productVariationDto.getQuantityAvailable());
+        Product productIde = productRepo.findById(productVariationDto.getProductId()).get();
+        ProductVariation productVariation = new ProductVariation(productVariationDto.getPrice(),productVariationDto.getQuantityAvailable(),productIde);
         productVariation.setActive(true);
-
         productVariationRepo.save(productVariation);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                 ("message-productVariation-added", null, LocaleContextHolder.getLocale()));
-
         return responseEntity;
     }
 
@@ -66,9 +65,9 @@ public class ProductVariationService {
         if(!productVariationRepo.findById(productVariationId).isPresent()){
             throw new InvalidDetails("No product with the given productVariationId exists ");
         }
-//        if(productRepository.findById(productId).get().getSeller().getEmail()!=username){
+//        if(!productVariationRepo.findById(productVariationId).get().getProduct().getSeller().getEmail().equals(username)){
 //            throw new InvalidDetails("Product cannot be updated as Logged-In seller is not a creator of product.");
-//        }  //validation
+//        }  //validation//check
         //else working
         ResponseEntity<String> responseEntity;
         ProductVariation productVariation = productVariationRepo.findById(productVariationId).get();
@@ -88,20 +87,21 @@ public class ProductVariationService {
         if (!productVariationRepo.findById(productVariationId).isPresent()) {
             throw new InvalidDetails("Details entered are not valid");
         }
-//        if(productVariationRepo.findById(productVariationId).get()getEmail()!=username){
+//        if(!productVariationRepo.findById(productVariationId).get().getProduct().getSeller().getEmail().equals(username)){
 //          throw new InvalidDetails("Product cannot be updated as Logged-In seller is not a creator of product.");
 //     }
-        //to get parent product details???????
         ProductVariation productVariation = productVariationRepo.findById(productVariationId).get();
+       // Integer p =productVariation.getProduct().getId();
         ProductVariationDto productVariationDto = new ProductVariationDto();
         productVariationDto.setId(productVariation.getId());
         productVariationDto.setPrice(productVariation.getPrice());
         productVariationDto.setQuantityAvailable(productVariation.getQuantityAvailable());
-
+        //productVariationDto.setProductId(productVariation.getProduct().getId());
+       // productVariationDto.setProductName(productVariation.getProduct().getName());
         return productVariationDto;
     }
 
-    //........................TO GET PRODUCT VARIATION BY SELLER................................
+    //........................TO GET LIST OF  PRODUCT VARIATION BY SELLER................................
     public List<ProductVariationDto> getProductVariationListBySeller(String username, Integer productId) {
         Seller seller = sellerRepository.findByEmail(username);
         if (!productRepo.findById(productId).isPresent()) {

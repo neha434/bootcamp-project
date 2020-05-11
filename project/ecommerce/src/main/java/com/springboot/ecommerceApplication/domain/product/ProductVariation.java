@@ -40,16 +40,16 @@ private String image;
         this.metadata=metadata;
     }
 
-    public ProductVariation(Integer price, Integer quantity, Product product) {
+    public ProductVariation(Integer price, Integer quantity, Product productIde) {
         this.price= price;
         this.quantityAvailable=quantity;
-        this.product=product;
+        this.product=productIde;
     }
 
-    public ProductVariation(Integer price, Integer quantityAvailable) {
-        this.price=price;
-        this.quantityAvailable=quantityAvailable;
-    }
+//    public ProductVariation(Integer price, Integer quantityAvailable) {
+//        this.price=price;
+//        this.quantityAvailable=quantityAvailable;
+//    }
 //    public ProductVariation(int i, int i1, String s, String s1) {  // You need to set values while using parameterised constructor
 //    }
 

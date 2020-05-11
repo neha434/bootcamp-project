@@ -1,9 +1,6 @@
 package com.springboot.ecommerceApplication.controller;
 
-import com.springboot.ecommerceApplication.domain.product.Category;
 import com.springboot.ecommerceApplication.dto.CategoryDto;
-import com.springboot.ecommerceApplication.dto.CustomerDto;
-import com.springboot.ecommerceApplication.dto.ProductVariationDto;
 import com.springboot.ecommerceApplication.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

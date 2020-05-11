@@ -5,7 +5,6 @@ import com.springboot.ecommerceApplication.domain.product.Product;
 import com.springboot.ecommerceApplication.domain.product.ProductVariation;
 import com.springboot.ecommerceApplication.domain.user.Seller;
 import com.springboot.ecommerceApplication.domain.user.User;
-import com.springboot.ecommerceApplication.dto.CategoryDto;
 import com.springboot.ecommerceApplication.dto.ProductDto;
 import com.springboot.ecommerceApplication.dto.ProductVariationDto;
 import com.springboot.ecommerceApplication.exception.InvalidDetails;
@@ -21,7 +20,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -40,7 +41,7 @@ public class ProductService {
     CategoryRepo categoryRepository;
 
 
-    //.................TO ADD A PRODUCT BY SELLER.....................//working//edit
+    //.................TO ADD A PRODUCT BY SELLER.....................//working
     public ResponseEntity<String> addProduct(String username, ProductDto productDto) {
         Seller seller = sellerRepository.findByEmail(username);
         if (productRepository.findByName(productDto.getName()) != null) {
@@ -53,7 +54,7 @@ public class ProductService {
         Seller sellerrId= sellerRepository.findById(productDto.getSellerId()).get();
         ResponseEntity<String> responseEntity;
         Product product = new Product(category,sellerrId,productDto.getName(), productDto.getBrand(),
-                productDto.getDescription(), false, productDto.isCancellable(), productDto.isReturnable(),productDto.isDeleted());
+                productDto.getDescription(), true, productDto.isCancellable(), productDto.isReturnable(),productDto.isDeleted());
         productRepository.save(product);
         // mailService.sendAddedProductDetailsEmail(product,username);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
@@ -61,16 +62,17 @@ public class ProductService {
         return responseEntity;
         //to change product status
         //email to admin
+
     }
 
 
 
-    //.....................TO VIEW A PRODUCT BY SELLER................................edit/notworking
+    //.....................TO VIEW A PRODUCT BY SELLER................................working
     public ProductDto getProduct(Integer productId, String username) {
         Seller seller = sellerRepository.findByEmail(username);
-//          if(productRepository.findById(productId).get().getSeller().getEmail()!=username){
-//            throw new InvalidDetails("Product cannot be viewed as Logged-In seller is not a creator of product.");
-//        }
+          if(!productRepository.findById(productId).get().getSeller().getEmail().equals(username)){
+            throw new InvalidDetails("Product cannot be viewed as Logged-In seller is not a creator of product.");
+        }
         if (!productRepository.findById(productId).isPresent()) {
             throw new InvalidDetails("Details entered are not valid");
         }
@@ -81,16 +83,15 @@ public class ProductService {
         productDto.setDescription(product.getDescription());
         productDto.setBrand(product.getBrand());
         productDto.setActive(product.isActive());
-      //  productDto.setSellerId(product.getSeller());
-       // productDto.setCategoryId();
+        productDto.setSellerId(product.getSeller().getId());
+        productDto.setCategoryId(product.getProductCategory().getId());
         productDto.setReturnable(product.isReturnable());
         productDto.setCancellable(product.isCancellable());
         return productDto;
-        //category id is null
     }
 
 
-    //..................TO GET LIST OF PRODUCTS BY SELLER.....................//seller-user-id
+    //..................TO GET LIST OF PRODUCTS BY SELLER.....................
     public List<ProductDto> getProductListBySeller(String username) {
 
         Seller seller = sellerRepository.findByEmail(username);
@@ -100,7 +101,6 @@ public class ProductService {
                 product.getDescription(),
                 product.isCancellable(), product.isReturnable(), product.getBrand(), product.isActive())));
         return productDtoList;
-        //category id is null
     }
 
 
@@ -111,9 +111,9 @@ public class ProductService {
         if(!productRepository.findById(productId).isPresent()){
             throw new InvalidDetails("No product with the given productId exists ");
         }
-//        if(productRepository.findById(productId).get().getSeller().getEmail()!=username){
-//            throw new InvalidDetails("Product cannot be updated as Logged-In seller is not a creator of product.");
-//        }  //validation
+        if(!productRepository.findById(productId).get().getSeller().getEmail().equals(username)){
+            throw new InvalidDetails("Product cannot be updated as Logged-In seller is not a creator of product.");
+        }  //validation
         //else working
         ResponseEntity<String> responseEntity;
         Product product = productRepository.findById(productId).get();
@@ -131,9 +131,9 @@ public class ProductService {
         if(!productRepository.findById(productId).isPresent()){
             throw new InvalidDetails("Product does not exists");
         }
-//        if(productRepository.findById(productId).get().getSeller().getEmail()!=username){
-//            throw new InvalidDetails("Product cannot be deleted as Logged-In seller is not a creator of product.");
-//        }
+        if(!productRepository.findById(productId).get().getSeller().getEmail().equals(username)){
+            throw new InvalidDetails("Product cannot be deleted as Logged-In seller is not a creator of product.");
+        }
         ResponseEntity<String> responseEntity;
         productRepository.deleteById(productId);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
@@ -141,32 +141,7 @@ public class ProductService {
         return responseEntity;
     }
 
-   //............TO VIEW A PRODUCT BY CUSTOMER....................
-    public ProductDto getProductByCustomer(String username, Integer productId)
-    {
-        if(!productRepository.findById(productId).isPresent()){
-            throw new InvalidDetails("Product does not exists");
-        }
-        Product valid = new  Product();
-        if(!valid.isActive()&&valid.isDeleted())
-        {
-            throw new InvalidDetails("Product is not available anymore");
-        }
-        Product product = productRepository.findById(productId).get();
-        List<ProductVariation> productVariationList = product.getProductVariationList();
-        List<ProductVariationDto> ProductVariationDtoList = new ArrayList<>();
-        productVariationList.forEach(productVariation -> ProductVariationDtoList.add(new
-                ProductVariationDto(productVariation.getId(),productVariation.getPrice(),
-                productVariation.getQuantityAvailable())));
 
-        ProductDto customerProductViewDto = new ProductDto(product.getId(),
-                product.getName(),product.getId(),product.getName(),product.getDescription(),
-                product.isCancellable(),product.isReturnable(),ProductVariationDtoList);
-        return customerProductViewDto;
-
-    }
-
-    //...............TO VIEW PRODUCT LIST BY CUSTOMER.....................
 
 
 

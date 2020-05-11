@@ -36,6 +36,7 @@ public class ProductDto {
     public ProductDto(Integer id, String name, Integer id1, String name1, String description, boolean cancellable, boolean returnable, List<ProductVariationDto> productVariationDtoList) {
     }
 
+
     public ProductDto(Integer id, String name, String description, boolean cancellable, boolean returnable, String brand, boolean active) {
         this.id=id;
         this.name=name;
@@ -44,8 +45,7 @@ public class ProductDto {
         this.isReturnable=returnable;
         this.brand=brand;
         this.isActive=active;
-
-    }
+           }
 
     public Integer getCategoryId() {
         return categoryId;

@@ -13,6 +13,16 @@ public class ProductVariationDto {
    @NotNull
    @Min(1)
    private Integer price;
+   private Integer productId;
+   private String productName;
+
+    public ProductVariationDto(Integer id, Integer price, Integer quantityAvailable, Integer id1, String name) {
+        this.id=id;
+        this.price=price;
+        this.quantityAvailable=quantityAvailable;
+        this.productId=id1;
+        this.productName=name;
+    }
 
     public Integer getPrice() {
         return price;
@@ -28,6 +38,22 @@ public class ProductVariationDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public Integer getQuantityAvailable() {

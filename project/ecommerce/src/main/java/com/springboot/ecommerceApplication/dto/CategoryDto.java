@@ -20,6 +20,17 @@ public class CategoryDto {
 
     }
 
+    public CategoryDto(String name, String name1, Integer id) {
+        this.parentName = name;
+        this.name = name1;
+        this.id= id;
+
+    }
+
+//    public CategoryDto(String name, Integer id) {
+//
+//    }
+
     public Integer getParentId() {
         return parentId;
     }

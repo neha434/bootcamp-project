@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,8 +86,7 @@ public class CategoryService {
         Iterable<Category> categoryList = categoryRepo.findAll();
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         categoryList.forEach(categories -> categoryDtoList.add(
-                new CategoryDto(
-                        categories.getId(), categories.getName())));
+                new CategoryDto(categories.getId(), categories.getName())));
         return categoryDtoList;
     }
 

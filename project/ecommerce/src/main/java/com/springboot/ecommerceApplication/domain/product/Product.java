@@ -59,6 +59,7 @@ public class Product {
         this.isCancellable=cancellable;
         this.isReturnable=returnable;
         this.isDeleted=deleted;
+        this.productCategory = category;
 
     }
 
