@@ -2,11 +2,9 @@ package com.springboot.ecommerceApplication.services;
 
 import com.springboot.ecommerceApplication.domain.product.Category;
 import com.springboot.ecommerceApplication.domain.product.Product;
-import com.springboot.ecommerceApplication.domain.product.ProductVariation;
 import com.springboot.ecommerceApplication.domain.user.Seller;
 import com.springboot.ecommerceApplication.domain.user.User;
 import com.springboot.ecommerceApplication.dto.ProductDto;
-import com.springboot.ecommerceApplication.dto.ProductVariationDto;
 import com.springboot.ecommerceApplication.exception.InvalidDetails;
 import com.springboot.ecommerceApplication.repositories.CategoryRepo;
 import com.springboot.ecommerceApplication.repositories.ProductRepo;
@@ -187,4 +185,5 @@ public class ProductService {
         productDto.setDeleted(product.isDeleted());
         return productDto;
     }
+
 }

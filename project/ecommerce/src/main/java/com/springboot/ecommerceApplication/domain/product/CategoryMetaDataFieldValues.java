@@ -1,7 +1,10 @@
 package com.springboot.ecommerceApplication.domain.product;
 
+import org.hibernate.mapping.Set;
+
 import javax.persistence.*;
-import javax.validation.constraints.Min;
+import java.util.HashSet;
+
 
 @Entity
 @Table(name = "CATEGORY_METADATA_FIELD_VALUES")
@@ -9,7 +12,10 @@ public class CategoryMetaDataFieldValues {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    //private Set value = new Set();
+  //  @Column(unique = true)
     private String value;
+   //private HashSet value = new HashSet();
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -18,14 +24,35 @@ public class CategoryMetaDataFieldValues {
     @JoinColumn(name = "category_metadata_field_id")
     private CategoryMetaDataField categoryMetaDataField;
 
-   public CategoryMetaDataFieldValues() {
+    public CategoryMetaDataFieldValues() {
 
-   }
+    }
+//
+//    public CategoryMetaDataFieldValues(Category category, CategoryMetaDataField categoryMetaDataField, HashSet value) {
+//        this.category = category;
+//        this.categoryMetaDataField = categoryMetaDataField;
+//        this.value=value;
+//
+//    }
+//
+//    public HashSet getValue() {
+//        return value;
+//    }
 
-    public CategoryMetaDataFieldValues(Category categoryId, CategoryMetaDataField metadataId, String value){
-    this.category=categoryId;
-    this.categoryMetaDataField=metadataId;
-    this.value=value;
+//    public CategoryMetaDataFieldValues(Category category, CategoryMetaDataField categoryMetaDataField, Set<String> value) {
+//        this.category = category;
+//        this.categoryMetaDataField = categoryMetaDataField;
+//        this.value = value;
+//
+//    }
+
+//    public void setValue(HashSet value) {
+//        this.value = value;
+//    }
+    public CategoryMetaDataFieldValues(Category categoryId, CategoryMetaDataField metadataId, String value) {
+        this.category = categoryId;
+        this.categoryMetaDataField = metadataId;
+        this.value = value;
 
     }
 
@@ -54,7 +81,14 @@ public class CategoryMetaDataFieldValues {
         this.categoryMetaDataField = categoryMetaDataField;
     }
 
-
+//    public Set<String> getValue() {
+//        return value;
+//    }
+//
+//    public void setValue(Set<String> value) {
+//        this.value = value;
+//    }
+//
     public String getValue() {
         return value;
     }
@@ -63,3 +97,4 @@ public class CategoryMetaDataFieldValues {
         this.value = value;
     }
 }
+

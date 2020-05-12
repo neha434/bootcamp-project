@@ -3,6 +3,7 @@ package com.springboot.ecommerceApplication.services;
 import com.springboot.ecommerceApplication.domain.product.Category;
 import com.springboot.ecommerceApplication.domain.user.User;
 import com.springboot.ecommerceApplication.dto.CategoryDto;
+import com.springboot.ecommerceApplication.dto.SuccessDto;
 import com.springboot.ecommerceApplication.exception.InvalidDetails;
 import com.springboot.ecommerceApplication.repositories.CategoryRepo;
 import com.springboot.ecommerceApplication.repositories.UserRepo;
@@ -14,10 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.*;
 
 @Service
 public class CategoryService {
@@ -29,12 +28,15 @@ public class CategoryService {
     MessageSource messageSource;
 
     //..........TO ADD A CATEGORY BY ADMIN...................
-    public ResponseEntity<String> addCategory(String username, CategoryDto categoryDto) {
+    public ResponseEntity<SuccessDto> addCategory(String username, CategoryDto categoryDto) {
         User user = userRepo.findByEmail(username);
         if (categoryRepo.findByName(categoryDto.getName()) != null) {
             throw new InvalidDetails("This Category Already Exists");
         }
-        ResponseEntity<String> responseEntity;
+        ResponseEntity<SuccessDto> responseEntity;
+//        while (categoryDto.getParentId()!=null){
+//            Category category = new Category();
+
         if (categoryDto.getParentId() != null) {
             Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
             Category category = new Category();
@@ -47,37 +49,56 @@ public class CategoryService {
             categoryRepo.save(category);
         }
         Integer categoryId = categoryRepo.findByName(categoryDto.getName()).getId();
-
+        SuccessDto successDto = new SuccessDto();
+        successDto.setSuccess("Category is successfully added with the above categoryId:");
+        successDto.setId(categoryId);
         // Category category = new Category(categoryDto.getName());
         // categoryRepo.save(category);
-        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
-                ("message-category-added" + categoryId, null, LocaleContextHolder.getLocale()));
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(successDto);
         return responseEntity;
-        //returning category id with message???????????
+
 
     }
 
     //..............................TO VIEW A CATEGORY BY ADMIN........................
-    public CategoryDto getCategoryByAdmin(String username, Integer categoryId) {
+    public CategoryDto getCategoryByAdmin(String username, Integer categoryId, Category category) {
         User user = userRepo.findByEmail(username);
         Optional<Category> optional = categoryRepo.findById(categoryId);
         if (!optional.isPresent()) {
             throw new InvalidDetails("This category does not exist");
         }
-        Category category = categoryRepo.findById(categoryId).get();
         CategoryDto categoryDto = new CategoryDto();
-        if (category.getParentCategory()!= null) {
-            Category parent = category.getParentCategory();
-            String parentName=parent.getName();
-            categoryDto.setParentId(parent.getId());
-            categoryDto.setParentName(parentName);//Electronics
-            categoryDto.setId(category.getId());
-            categoryDto.setName(category.getName());//Mobile
+        category = categoryRepo.findById(categoryId).get();
+        HashMap<Integer, String> categories = new HashMap<>();
+        categories.put(category.getId(), category.getName());
+        while (category.getParentCategory() != null) {
+            category = category.getParentCategory();
+            categories.put(category.getId(), category.getName());
         }
-        else{
-        categoryDto.setName(category.getName());
-        categoryDto.setId(category.getId());}
-        return categoryDto;
+        categoryDto.setCatogaries(categories);
+//        while (category.getSubCategoryList() != null) {
+//            categoryList = category.getSubCategoryList();
+////            categories.put(category.getId(), category.getName());
+////        }
+//            // categoryDto.setSubCategoryList(categories);
+
+            return categoryDto;
+
+
+//        if (category.getParentCategory()!= null) {
+//            Category parent = category.getParentCategory();
+//            String parentName=parent.getName();
+//            categoryDto.setParentId(parent.getId());
+//            categoryDto.setParentName(parentName);//Electronics
+//            categoryDto.setId(category.getId());
+//            categoryDto.setName(category.getName());//Mobile
+//        }
+//        else{
+//        categoryDto.setName(category.getName());
+//        categoryDto.setId(category.getId());}
+
+            // return categoryDto;
+
     }
 
     //.........................TO GET LIST OF CATEGORY BY ADMIN..............................//edit

@@ -1,7 +1,5 @@
 package com.springboot.ecommerceApplication.controller;
 
-import com.springboot.ecommerceApplication.domain.product.ProductVariation;
-import com.springboot.ecommerceApplication.dto.ProductDto;
 import com.springboot.ecommerceApplication.dto.ProductVariationDto;
 import com.springboot.ecommerceApplication.services.ProductVariationService;
 import org.springframework.beans.factory.annotation.Autowired;

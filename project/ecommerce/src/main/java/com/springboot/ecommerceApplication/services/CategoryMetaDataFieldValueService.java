@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
 @Service
 public class CategoryMetaDataFieldValueService {
     @Autowired
@@ -41,8 +43,11 @@ public class CategoryMetaDataFieldValueService {
         }
         ResponseEntity<String> responseEntity;
         Category category=categoryRepo.findById(categoryMetaDataFieldValueDto.getCategoryId()).get();
+//        HashSet newValue = new HashSet();
+//        newValue.add(categoryMetaDataFieldValueDto.getValue());
         CategoryMetaDataField categoryMetaDataField= categoryMetadataFieldRepo.findById(categoryMetaDataFieldValueDto.getMetadataId()).get();
-        CategoryMetaDataFieldValues categoryMetaDataFieldValues = new CategoryMetaDataFieldValues(category, categoryMetaDataField,categoryMetaDataFieldValueDto.getValue());
+        CategoryMetaDataFieldValues categoryMetaDataFieldValues = new CategoryMetaDataFieldValues(category,
+                categoryMetaDataField,categoryMetaDataFieldValueDto.getValue());
 
       categoryMetaDataFieldValueRepo.save(categoryMetaDataFieldValues);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage

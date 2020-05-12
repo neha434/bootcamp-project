@@ -3,6 +3,7 @@ package com.springboot.ecommerceApplication.domain.product;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,8 @@ public class Category {
     private String  name;
 
     @OneToMany(mappedBy = "parentCategory",cascade = CascadeType.ALL)
+    //private Category subCategoryList;
+   // private HashMap<Integer, String> subCategoryList;
     private List<Category> subCategoryList;
 
     @ManyToOne()
@@ -34,6 +37,21 @@ public class Category {
 
     }
 
+//    public Category getSubCategoryList() {
+//        return subCategoryList;
+//    }
+//
+//    public void setSubCategoryList(Category subCategoryList) {
+//        this.subCategoryList = subCategoryList;
+//    }
+
+    //    public HashMap<Integer, String> getSubCategoryList() {
+//        return subCategoryList;
+//    }
+//
+//    public void setSubCategoryList(HashMap<Integer, String> subCategoryList) {
+//        this.subCategoryList = subCategoryList;
+//    }
     public List<Category> getSubCategoryList() {
         return subCategoryList;
     }

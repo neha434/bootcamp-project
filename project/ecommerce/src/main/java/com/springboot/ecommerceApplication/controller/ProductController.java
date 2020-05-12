@@ -1,22 +1,17 @@
 package com.springboot.ecommerceApplication.controller;
 
 
-import com.springboot.ecommerceApplication.co.ProductCO;
-import com.springboot.ecommerceApplication.dto.AddressDto;
 import com.springboot.ecommerceApplication.dto.ProductDto;
 import com.springboot.ecommerceApplication.repositories.ProductRepo;
 import com.springboot.ecommerceApplication.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 //@RequestMapping("/product")
@@ -68,6 +63,8 @@ public class ProductController {
         String username = principal.getName();
         return productService.deleteProductBySeller(productId, username);
     }
+
+
 
 
 }

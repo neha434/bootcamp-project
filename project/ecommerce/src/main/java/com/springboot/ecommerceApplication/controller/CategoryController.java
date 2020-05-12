@@ -1,6 +1,8 @@
 package com.springboot.ecommerceApplication.controller;
 
+import com.springboot.ecommerceApplication.domain.product.Category;
 import com.springboot.ecommerceApplication.dto.CategoryDto;
+import com.springboot.ecommerceApplication.dto.SuccessDto;
 import com.springboot.ecommerceApplication.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -19,7 +22,7 @@ public class CategoryController {
 
     //........TO ADD A CATEGORY BY ADMIN.....................
     @PostMapping("/add")
-    public ResponseEntity<String> addCategory(HttpServletRequest httpServletRequest, @Valid @RequestBody CategoryDto categoryDto){
+    public ResponseEntity<SuccessDto> addCategory(HttpServletRequest httpServletRequest, @Valid @RequestBody CategoryDto categoryDto){
         Principal principal = httpServletRequest.getUserPrincipal();
         String username = principal.getName();
         return categoryService.addCategory(username, categoryDto);
@@ -28,11 +31,11 @@ public class CategoryController {
 
     //..............................TO VIEW A CATEGORY BY ADMIN.......................
     @GetMapping("/{categoryId}")
-    public CategoryDto getCategory(@PathVariable Integer categoryId, HttpServletRequest httpServletRequest)
+    public CategoryDto getCategory(@PathVariable Integer categoryId, HttpServletRequest httpServletRequest,Category category)
     {
         Principal principal=httpServletRequest.getUserPrincipal();
         String username=principal.getName();
-        return categoryService.getCategoryByAdmin(username,categoryId);
+        return categoryService.getCategoryByAdmin(username,categoryId,category);
     }
 
     //.................TO LIST CATEGORY BY ADMIN.......................
