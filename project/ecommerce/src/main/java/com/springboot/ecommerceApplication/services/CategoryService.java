@@ -34,20 +34,40 @@ public class CategoryService {
             throw new InvalidDetails("This Category Already Exists");
         }
         ResponseEntity<SuccessDto> responseEntity;
-//        while (categoryDto.getParentId()!=null){
-//            Category category = new Category();
+        Category category = new Category();
+//        while (categoryDto.getParentId()!=null) {
+////            category.setId(categoryDto.getParentCategory().getId());
+////            category.setParentCategory(categoryDto.getId());
+//       // categoryDto=categoryDto.getParentCategory();
+//        Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
+//       // category.setId(categoryDto.getParentId());
+//        category.setName(categoryDto.getName());
+//        category.setParentCategory(parent);
+//        categoryDto.setParentCategory(categoryDto.getId());
+//        }
+//       // Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
+       // category.setParentCategory(parent);
+        category.setName(categoryDto.getName());
 
-        if (categoryDto.getParentId() != null) {
-            Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
-            Category category = new Category();
-            category.setName(categoryDto.getName());
-            category.setParentCategory(parent);
-            categoryRepo.save(category);
-        } else {
-            Category category = new Category();
-            category.setName(categoryDto.getName());
-            categoryRepo.save(category);
-        }
+
+        categoryRepo.save(category);
+
+
+
+
+
+
+//        if (categoryDto.getParentId() != null) {
+//            Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
+//            Category category = new Category();
+//            category.setName(categoryDto.getName());
+//            category.setParentCategory(parent);
+//            categoryRepo.save(category);
+//        } else {
+//            Category category = new Category();
+//            category.setName(categoryDto.getName());
+//            categoryRepo.save(category);
+//        }
         Integer categoryId = categoryRepo.findByName(categoryDto.getName()).getId();
         SuccessDto successDto = new SuccessDto();
         successDto.setSuccess("Category is successfully added with the above categoryId:");
@@ -75,12 +95,18 @@ public class CategoryService {
             category = category.getParentCategory();
             categories.put(category.getId(), category.getName());
         }
-        categoryDto.setCatogaries(categories);
+     //   categoryDto.setCatogaries(categories);
 //        while (category.getSubCategoryList() != null) {
 //            categoryList = category.getSubCategoryList();
 ////            categories.put(category.getId(), category.getName());
 ////        }
 //            // categoryDto.setSubCategoryList(categories);
+
+        
+        while(category.getParentCategory()!=null){
+            Parent=child.getParent();
+            CategoryDto parentDto = new CategoryDto();
+        }
 
             return categoryDto;
 

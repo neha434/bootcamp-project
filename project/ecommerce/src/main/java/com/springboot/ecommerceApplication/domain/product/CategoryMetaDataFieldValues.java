@@ -1,9 +1,11 @@
 package com.springboot.ecommerceApplication.domain.product;
 
-import org.hibernate.mapping.Set;
+import com.springboot.ecommerceApplication.domain.StringSetConverter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -13,10 +15,12 @@ public class CategoryMetaDataFieldValues {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     //private Set value = new Set();
-  //  @Column(unique = true)
-    private String value;
-   //private HashSet value = new HashSet();
-
+    //  @Column(unique = true)
+    // private String value;
+    @Convert(converter = StringSetConverter.class)
+    private List<String> value;
+    //@ElementCollection
+    //private Set<String> value;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -27,6 +31,22 @@ public class CategoryMetaDataFieldValues {
     public CategoryMetaDataFieldValues() {
 
     }
+
+    public CategoryMetaDataFieldValues(Category category, CategoryMetaDataField categoryMetaDataField, List<String> value) {
+        this.category = category;
+        this.categoryMetaDataField = categoryMetaDataField;
+        this.value = value;
+
+
+    }
+
+//    public CategoryMetaDataFieldValues(Category category, CategoryMetaDataField categoryMetaDataField, Set<String> value) {
+//        this.category = category;
+//      this.categoryMetaDataField = categoryMetaDataField;
+//        this.value=value;
+//    }
+
+
 //
 //    public CategoryMetaDataFieldValues(Category category, CategoryMetaDataField categoryMetaDataField, HashSet value) {
 //        this.category = category;
@@ -49,12 +69,12 @@ public class CategoryMetaDataFieldValues {
 //    public void setValue(HashSet value) {
 //        this.value = value;
 //    }
-    public CategoryMetaDataFieldValues(Category categoryId, CategoryMetaDataField metadataId, String value) {
-        this.category = categoryId;
-        this.categoryMetaDataField = metadataId;
-        this.value = value;
-
-    }
+//    public CategoryMetaDataFieldValues(Category categoryId, CategoryMetaDataField metadataId, String value) {
+//        this.category = categoryId;
+//        this.categoryMetaDataField = metadataId;
+//        this.value = value;
+//
+//    }
 
 
     public Integer getId() {
@@ -89,11 +109,29 @@ public class CategoryMetaDataFieldValues {
 //        this.value = value;
 //    }
 //
-    public String getValue() {
+//    public String getValue() {
+//        return value;
+//    }
+//
+//    public void setValue(String value) {
+//        this.value = value;
+//    }
+
+
+//    public Set<String> getValue() {
+//        return value;
+//    }
+//
+//    public void setValue(Set<String> value) {
+//        this.value = value;
+//    }
+
+
+    public List<String> getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(List<String> value) {
         this.value = value;
     }
 }

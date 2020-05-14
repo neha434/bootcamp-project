@@ -42,9 +42,10 @@ public class CategoryMetaDataFieldValueService {
             throw new InvalidDetails("Category Metadata field with the given metadata Id does not exist");
         }
         ResponseEntity<String> responseEntity;
-        Category category=categoryRepo.findById(categoryMetaDataFieldValueDto.getCategoryId()).get();
-//        HashSet newValue = new HashSet();
-//        newValue.add(categoryMetaDataFieldValueDto.getValue());
+      //  String myValue = categoryMetaDataFieldValueDto.getValue();
+
+
+      Category category=categoryRepo.findById(categoryMetaDataFieldValueDto.getCategoryId()).get();
         CategoryMetaDataField categoryMetaDataField= categoryMetadataFieldRepo.findById(categoryMetaDataFieldValueDto.getMetadataId()).get();
         CategoryMetaDataFieldValues categoryMetaDataFieldValues = new CategoryMetaDataFieldValues(category,
                 categoryMetaDataField,categoryMetaDataFieldValueDto.getValue());

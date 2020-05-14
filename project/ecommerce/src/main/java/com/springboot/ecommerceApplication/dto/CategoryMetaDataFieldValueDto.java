@@ -1,19 +1,18 @@
 package com.springboot.ecommerceApplication.dto;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-import java.util.HashSet;
+import com.springboot.ecommerceApplication.domain.StringSetConverter;
+
+import javax.persistence.Convert;
+import java.util.List;
 import java.util.Set;
 
 public class CategoryMetaDataFieldValueDto {
 
     private Integer id;
 
-    @NotEmpty
-   @Size(min=1)
- //   @Column(unique = true)
-    private String value;
+    //   @Column(unique = true)
+    @Convert(converter = StringSetConverter.class)
+    private List<String> value;
 
 //    //private Set<String> value = new HashSet<String>();
 //    private HashSet value = new HashSet();
@@ -69,11 +68,20 @@ public class CategoryMetaDataFieldValueDto {
         this.id = id;
     }
 
-    public String getValue() {
+//    public Set<String> getValue() {
+//        return value;
+//    }
+//
+//    public void setValue(Set<String> value) {
+//        this.value = value;
+//    }
+
+
+    public List<String> getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(List<String> value) {
         this.value = value;
     }
 }
