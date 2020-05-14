@@ -2,18 +2,12 @@ package com.springboot.ecommerceApplication.services;
 
 import com.springboot.ecommerceApplication.co.CustomerCO;
 import com.springboot.ecommerceApplication.co.SellerCO;
-import com.springboot.ecommerceApplication.domain.ForgotPasswordToken;
 import com.springboot.ecommerceApplication.domain.Role;
 import com.springboot.ecommerceApplication.domain.VerificationToken;
 import com.springboot.ecommerceApplication.domain.user.Address;
 import com.springboot.ecommerceApplication.domain.user.Customer;
 import com.springboot.ecommerceApplication.domain.user.Seller;
 import com.springboot.ecommerceApplication.domain.user.User;
-import com.springboot.ecommerceApplication.dto.AddressDto;
-import com.springboot.ecommerceApplication.dto.CustomerDto;
-import com.springboot.ecommerceApplication.dto.PasswordDto;
-import com.springboot.ecommerceApplication.dto.UserDto;
-import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
 import com.springboot.ecommerceApplication.exception.CustomerAlreadyExistsException;
 import com.springboot.ecommerceApplication.exception.SellerAlreadyExistsException;
 import com.springboot.ecommerceApplication.repositories.*;

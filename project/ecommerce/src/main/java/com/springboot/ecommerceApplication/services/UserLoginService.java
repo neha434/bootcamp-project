@@ -1,31 +1,28 @@
 package com.springboot.ecommerceApplication.services;
 
 import com.springboot.ecommerceApplication.domain.ForgotPasswordToken;
-//import com.springboot.ecommerceApplication.domain.VerificationToken;
-import com.springboot.ecommerceApplication.domain.VerificationToken;
 import com.springboot.ecommerceApplication.domain.user.User;
 import com.springboot.ecommerceApplication.dto.PasswordDto;
 import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
 import com.springboot.ecommerceApplication.exception.InvalidDetails;
 import com.springboot.ecommerceApplication.repositories.ForgotPasswordTokenRepo;
 import com.springboot.ecommerceApplication.repositories.UserRepo;
-//import com.springboot.ecommerceApplication.repositories.VerificationTokenRepo;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+//import com.springboot.ecommerceApplication.domain.VerificationToken;
+//import com.springboot.ecommerceApplication.repositories.VerificationTokenRepo;
 //forgot password
 @Service
 public class UserLoginService {

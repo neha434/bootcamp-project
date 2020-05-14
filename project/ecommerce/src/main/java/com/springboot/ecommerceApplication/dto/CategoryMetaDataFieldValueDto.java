@@ -11,7 +11,7 @@ public class CategoryMetaDataFieldValueDto {
     private Integer id;
 
     //   @Column(unique = true)
-    @Convert(converter = StringSetConverter.class)
+   // @Convert(converter = StringSetConverter.class)
     private List<String> value;
 
 //    //private Set<String> value = new HashSet<String>();

@@ -2,7 +2,6 @@ package com.springboot.ecommerceApplication.services;
 
 import com.springboot.ecommerceApplication.domain.order.Cart;
 import com.springboot.ecommerceApplication.dto.CartDto;
-import com.springboot.ecommerceApplication.dto.ProductDto;
 import com.springboot.ecommerceApplication.repositories.CartRepo;
 import com.springboot.ecommerceApplication.repositories.CustomerRepo;
 import com.springboot.ecommerceApplication.repositories.ProductVariationRepo;

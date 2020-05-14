@@ -1,14 +1,9 @@
 package com.springboot.ecommerceApplication.services;
 
-import com.springboot.ecommerceApplication.co.CustomerCO;
 import com.springboot.ecommerceApplication.co.OrderCO;
-import com.springboot.ecommerceApplication.co.ProductCO;
 import com.springboot.ecommerceApplication.domain.order.Order;
-import com.springboot.ecommerceApplication.domain.order.OrderProduct;
-import com.springboot.ecommerceApplication.domain.product.Product;
 import com.springboot.ecommerceApplication.domain.product.ProductVariation;
 import com.springboot.ecommerceApplication.dto.OrderDto;
-import com.springboot.ecommerceApplication.dto.ProductDto;
 import com.springboot.ecommerceApplication.exception.NotFoundException;
 import com.springboot.ecommerceApplication.repositories.CartRepo;
 import com.springboot.ecommerceApplication.repositories.OrderRepo;
@@ -17,7 +12,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class OrderService {

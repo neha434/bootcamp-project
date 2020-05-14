@@ -15,8 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -34,29 +36,20 @@ public class CategoryService {
             throw new InvalidDetails("This Category Already Exists");
         }
         ResponseEntity<SuccessDto> responseEntity;
-        Category category = new Category();
-//        while (categoryDto.getParentId()!=null) {
-////            category.setId(categoryDto.getParentCategory().getId());
-////            category.setParentCategory(categoryDto.getId());
-//       // categoryDto=categoryDto.getParentCategory();
-//        Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
-//       // category.setId(categoryDto.getParentId());
-//        category.setName(categoryDto.getName());
-//        category.setParentCategory(parent);
-//        categoryDto.setParentCategory(categoryDto.getId());
-//        }
-//       // Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
-       // category.setParentCategory(parent);
+       Category category = new Category();
         category.setName(categoryDto.getName());
+        while (categoryDto.getParentCategory().getId()!=null) {
+            category.setName(categoryDto.getName());
+            Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
+            category.setParentCategory(parent);
+           category.setId(categoryDto.getParentCategory().getId());
+           categoryDto= categoryDto.getParentCategory();
 
+        }
 
         categoryRepo.save(category);
 
-
-
-
-
-
+//
 //        if (categoryDto.getParentId() != null) {
 //            Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
 //            Category category = new Category();
@@ -103,10 +96,10 @@ public class CategoryService {
 //            // categoryDto.setSubCategoryList(categories);
 
         
-        while(category.getParentCategory()!=null){
-            Parent=child.getParent();
-            CategoryDto parentDto = new CategoryDto();
-        }
+//        while(category.getParentCategory()!=null){
+//            Parent=child.getParent();
+//            CategoryDto parentDto = new CategoryDto();
+//        }
 
             return categoryDto;
 
