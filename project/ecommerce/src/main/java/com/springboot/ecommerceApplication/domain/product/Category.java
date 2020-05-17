@@ -1,9 +1,7 @@
 package com.springboot.ecommerceApplication.domain.product;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -15,22 +13,22 @@ public class Category {
     private Integer id;
 
     @Size(max = 50)
-    private String  name;
+    private String name;
 
-    @OneToMany(mappedBy = "parentCategory",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
     //private Category subCategoryList;
-   // private HashMap<Integer, String> subCategoryList;
+    // private HashMap<Integer, String> subCategoryList;
     private List<Category> subCategoryList;
 
     @ManyToOne()
     @JoinColumn(name = "parent_id")
     private Category parentCategory;
 
-    @OneToMany(mappedBy = "productCategory",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productCategory", cascade = CascadeType.ALL)
     private List<Product> productList;
 
     public Category(String name) {
-        this.name=name;
+        this.name = name;
     }
 
     public Category() {

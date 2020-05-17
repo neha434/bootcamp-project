@@ -2,6 +2,7 @@ package com.springboot.ecommerceApplication.domain.product;
 
 import javax.persistence.*;
 import java.util.Set;
+
 @Entity
 public class CategoryMetaDataField {
     @Id
@@ -12,28 +13,33 @@ public class CategoryMetaDataField {
     private Set<CategoryMetaDataFieldValues> categoryMetaDataFieldValues;
 
     public CategoryMetaDataField(String name) {
-        this.name=name;
+        this.name = name;
     }
 
-    public CategoryMetaDataField(){
+    public CategoryMetaDataField() {
 
     }
 
     public Set<CategoryMetaDataFieldValues> getCategoryMetaDataFieldValues() {
         return categoryMetaDataFieldValues;
     }
-  public void setCategoryMetadataFieldValues(Set<CategoryMetaDataFieldValues> categoryMetadataFieldValues) {
+
+    public void setCategoryMetadataFieldValues(Set<CategoryMetaDataFieldValues> categoryMetadataFieldValues) {
         this.categoryMetaDataFieldValues = categoryMetaDataFieldValues;
     }
+
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }

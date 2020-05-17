@@ -35,21 +35,26 @@ public class CategoryService {
         if (categoryRepo.findByName(categoryDto.getName()) != null) {
             throw new InvalidDetails("This Category Already Exists");
         }
+        Integer categoryId = null;
         ResponseEntity<SuccessDto> responseEntity;
-       Category category = new Category();
-        category.setName(categoryDto.getName());
-        while (categoryDto.getParentCategory().getId()!=null) {
+        Category category = new Category();
+//       // category.setName(categoryDto.getName());//not required
+        while (categoryDto != null) {//getId
             category.setName(categoryDto.getName());
             Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
             category.setParentCategory(parent);
-           category.setId(categoryDto.getParentCategory().getId());
-           categoryDto= categoryDto.getParentCategory();
+            // category.setId(categoryDto.getParentCategory().getId());//wrong
+            categoryDto = categoryDto.getParentCategory();
+//
+//        }
+//
+            categoryRepo.save(category);
+             //categoryId = categoryRepo.findByName(categoryDto.getName()).getId();
+             categoryId=categoryRepo.findByName(category.getName()).getId();
 
         }
 
-        categoryRepo.save(category);
 
-//
 //        if (categoryDto.getParentId() != null) {
 //            Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
 //            Category category = new Category();
@@ -61,14 +66,14 @@ public class CategoryService {
 //            category.setName(categoryDto.getName());
 //            categoryRepo.save(category);
 //        }
-        Integer categoryId = categoryRepo.findByName(categoryDto.getName()).getId();
-        SuccessDto successDto = new SuccessDto();
-        successDto.setSuccess("Category is successfully added with the above categoryId:");
-        successDto.setId(categoryId);
-        // Category category = new Category(categoryDto.getName());
-        // categoryRepo.save(category);
-        responseEntity = ResponseEntity.status(HttpStatus.OK).body(successDto);
-        return responseEntity;
+            SuccessDto successDto = new SuccessDto();
+            successDto.setSuccess("Category is successfully added with the above categoryId:");
+            successDto.setId(categoryId);
+            // Category category = new Category(categoryDto.getName());
+            // categoryRepo.save(category);
+            responseEntity = ResponseEntity.status(HttpStatus.OK).body(successDto);
+            return responseEntity;
+
 
 
     }

@@ -43,9 +43,7 @@ public class CategoryMetaDataFieldValueService {
         }
         ResponseEntity<String> responseEntity;
       //  String myValue = categoryMetaDataFieldValueDto.getValue();
-
-
-      Category category=categoryRepo.findById(categoryMetaDataFieldValueDto.getCategoryId()).get();
+        Category category=categoryRepo.findById(categoryMetaDataFieldValueDto.getCategoryId()).get();
         CategoryMetaDataField categoryMetaDataField= categoryMetadataFieldRepo.findById(categoryMetaDataFieldValueDto.getMetadataId()).get();
         CategoryMetaDataFieldValues categoryMetaDataFieldValues = new CategoryMetaDataFieldValues(category,
                 categoryMetaDataField,categoryMetaDataFieldValueDto.getValue());

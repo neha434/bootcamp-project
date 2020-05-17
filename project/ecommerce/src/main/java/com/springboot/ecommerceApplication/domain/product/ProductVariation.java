@@ -15,7 +15,8 @@ public class ProductVariation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-private String image;
+
+    private String image;
 //    @NotNull
     private Integer  quantityAvailable;
 

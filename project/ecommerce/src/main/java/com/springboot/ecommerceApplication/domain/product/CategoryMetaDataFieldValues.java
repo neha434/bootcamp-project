@@ -3,9 +3,7 @@ package com.springboot.ecommerceApplication.domain.product;
 import com.springboot.ecommerceApplication.domain.StringSetConverter;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity
@@ -21,6 +19,7 @@ public class CategoryMetaDataFieldValues {
     private List<String> value;
     //@ElementCollection
     //private Set<String> value;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

@@ -1,14 +1,10 @@
 package com.springboot.ecommerceApplication.domain.product;
 
-import com.springboot.ecommerceApplication.domain.Role;
 import com.springboot.ecommerceApplication.domain.user.Seller;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -22,13 +18,13 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-  private String image;
+    private String image;
 
-//    @NotNull
+    //    @NotNull
     @Size(max = 50)
     private String name;
 
-//    @NotNull
+    //    @NotNull
     private String description;
 
     private boolean isCancellable;
@@ -51,14 +47,14 @@ public class Product {
     }
 
     public Product(Category category, Seller sellerrId, String name, String brand, String description, boolean b, boolean cancellable, boolean returnable, boolean deleted) {
-        this.seller= sellerrId;
-        this.name=name;
-        this.brand=brand;
-        this.description=description;
-        this.isActive=b;
-        this.isCancellable=cancellable;
-        this.isReturnable=returnable;
-        this.isDeleted=deleted;
+        this.seller = sellerrId;
+        this.name = name;
+        this.brand = brand;
+        this.description = description;
+        this.isActive = b;
+        this.isCancellable = cancellable;
+        this.isReturnable = returnable;
+        this.isDeleted = deleted;
         this.productCategory = category;
 
     }
@@ -71,7 +67,7 @@ public class Product {
         this.productCategory = productCategory;
     }
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
     private List<ProductVariation> productVariationList;
 
     public List<ProductVariation> getProductVariationList() {
@@ -82,7 +78,7 @@ public class Product {
         this.productVariationList = productVariationList;
     }
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductReview> productReviewList;
 
     @ManyToOne
