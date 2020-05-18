@@ -14,6 +14,7 @@ import com.springboot.ecommerceApplication.repositories.SellerRepo;
 import com.springboot.ecommerceApplication.repositories.UserRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,7 @@ public class SellerService {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     //.........TO VIEW PROFILE.....................
+    @Cacheable(value = "getSellerCache", key = "#root.methodName")
     public SellerDto getSeller(String username) {
         Seller seller = sellerRepository.findByEmail(username);
         if (seller == null) {
@@ -63,6 +65,7 @@ public class SellerService {
     }
 
     //.............TO GET LIST OF SELLERS...................
+    @Cacheable(value = "sellerCache", key = "#root.methodName")
     public List<SellerDto> getAllSeller(String username) {
         User user = userRepo.findByEmail(username);
 
@@ -86,6 +89,7 @@ public class SellerService {
         sellers.forEach(sellers1 -> sellerDtoList.add(new SellerDto(sellers1.getId(), sellers1.getEmail(),
                 sellers1.getFirstName(), sellers1.getMiddleName(), sellers1.getLastName(), sellers1.getGst(),
                 sellers1.getCompanyContact(), sellers1.getCompanyName())));
+        System.out.println("list of sellers");
         return sellerDtoList;
     }
 

@@ -11,6 +11,7 @@ import com.springboot.ecommerceApplication.repositories.ProductVariationRepo;
 import com.springboot.ecommerceApplication.repositories.SellerRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -82,6 +83,8 @@ public class ProductVariationService {
 
 
     //..........TO GET PRODUCT VARIATION BY SELLER...........................
+    @Cacheable(value = "productVariationCache", key = "#root.methodName")
+
     public ProductVariationDto getProductVariationBySeller(Integer productVariationId, String username) {
         Seller seller = sellerRepository.findByEmail(username);
         if (!productVariationRepo.findById(productVariationId).isPresent()) {
@@ -102,6 +105,8 @@ public class ProductVariationService {
     }
 
     //........................TO GET LIST OF  PRODUCT VARIATION BY SELLER................................
+    @Cacheable(value = "productVariationCacheList", key = "#root.methodName")
+
     public List<ProductVariationDto> getProductVariationListBySeller(String username, Integer productId) {
         Seller seller = sellerRepository.findByEmail(username);
         if (!productRepo.findById(productId).isPresent()) {

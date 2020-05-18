@@ -5,13 +5,14 @@ import com.springboot.ecommerceApplication.domain.order.Order;
 import com.springboot.ecommerceApplication.domain.product.ProductReview;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "CUSTOMER")
 @PrimaryKeyJoinColumn(name = "USER_ID")
 //@Inheritance(strategy = InheritanceType.JOINED)    //cart table inherits customer table
-public class Customer extends User{
+public class Customer extends User implements Serializable {
     private  String contact;
 
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)

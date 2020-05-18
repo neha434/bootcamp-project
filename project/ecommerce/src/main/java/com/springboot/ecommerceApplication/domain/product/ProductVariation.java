@@ -6,11 +6,12 @@ import com.springboot.ecommerceApplication.domain.order.OrderProduct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "PRODUCT_VARIATION")
-public class ProductVariation {
+public class ProductVariation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

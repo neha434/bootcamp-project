@@ -8,8 +8,10 @@ import com.springboot.ecommerceApplication.dto.CustomerDto;
 import com.springboot.ecommerceApplication.dto.PasswordDto;
 import com.springboot.ecommerceApplication.exception.AccountDoesNotExists;
 import com.springboot.ecommerceApplication.repositories.*;
+import org.bouncycastle.crypto.signers.ISOTrailers;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -46,6 +48,7 @@ public class CustomerService {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     //................TO VIEW PROFILE..................
+    @Cacheable(value = "getCustomerCache", key = "#root.methodName")
     public CustomerDto getCustomer(String username) {
         Customer customer = customerRepository.findByEmail(username);
         if (customer == null) {
@@ -65,20 +68,9 @@ public class CustomerService {
     }
 
     //..............TO VIEW LIST OF CUSTOMERS.........................
+   @Cacheable(value = "customerCache", key = "#root.methodName")
     public List<CustomerDto> getAllCustomer(String username) {
         User user = userRepo.findByEmail(username);
-//        Pageable paging;
-//        if (pagingAndSortingDto == null) {
-//            paging = PageRequest.of(0, 10, Sort.by("id").ascending());
-//        } else {
-//            if (pagingAndSortingDto.getOrder() == "descending")
-//                paging = PageRequest.of(pagingAndSortingDto.getMax(), pagingAndSortingDto.getOffset(),
-//                        Sort.by(pagingAndSortingDto.getSortField()).descending());
-//            else
-//                paging = PageRequest.of(pagingAndSortingDto.getMax(), pagingAndSortingDto.getOffset(),
-//                        Sort.by(pagingAndSortingDto.getSortField()).ascending());
-//        }
-//        List<Customer> pagedResult = customerRepository.findAll(paging);
 
         Iterable<Customer> customersList = customerRepository.findAll();
         List<CustomerDto> customerDtoList = new ArrayList<>();

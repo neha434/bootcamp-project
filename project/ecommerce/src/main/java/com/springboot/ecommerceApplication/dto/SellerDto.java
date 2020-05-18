@@ -2,8 +2,9 @@ package com.springboot.ecommerceApplication.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
-public class SellerDto extends UserDto {
+public class SellerDto extends UserDto implements Serializable {
     @NotEmpty
    // @Pattern(regexp = "/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/",message= "Wrong GST")
     private String gst;

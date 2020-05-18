@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
-public class UserDto {
+public class UserDto implements Serializable {
+    private static final long serialVersionUID  = 1l;
     @NotEmpty
     private Integer id;
     @NotEmpty

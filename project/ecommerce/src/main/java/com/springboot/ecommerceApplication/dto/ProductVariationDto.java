@@ -3,8 +3,9 @@ package com.springboot.ecommerceApplication.dto;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-public class ProductVariationDto {
+public class ProductVariationDto implements Serializable {
 
     private Integer id;
    @NotNull

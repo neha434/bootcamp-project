@@ -1,8 +1,9 @@
 package com.springboot.ecommerceApplication.dto;
 
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 
-public class CustomerDto extends UserDto {
+public class CustomerDto extends UserDto implements Serializable {
     @NotEmpty
     private String contact;
     public CustomerDto(){

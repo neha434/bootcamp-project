@@ -12,6 +12,7 @@ import com.springboot.ecommerceApplication.repositories.SellerRepo;
 import com.springboot.ecommerceApplication.repositories.UserRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,7 @@ public class ProductService {
 
 
     //.....................TO VIEW A PRODUCT BY SELLER................................working
+    @Cacheable(value = "getProductCache", key = "#root.methodName")
     public ProductDto getProduct(Integer productId, String username) {
         Seller seller = sellerRepository.findByEmail(username);
           if(!productRepository.findById(productId).get().getSeller().getEmail().equals(username)){
@@ -90,6 +92,7 @@ public class ProductService {
 
 
     //..................TO GET LIST OF PRODUCTS BY SELLER.....................
+    @Cacheable(value = "productCacheSeller", key = "#root.methodName")
     public List<ProductDto> getProductListBySeller(String username) {
 
         Seller seller = sellerRepository.findByEmail(username);
@@ -159,6 +162,7 @@ public class ProductService {
 
 
     //.........TO VIEW PRODUCT LIST BY ADMIN..................
+    @Cacheable(value = "productCache", key = "#root.methodName")
     public List<ProductDto> getProductList(String username) {
         User user = userRepository.findByEmail(username);
         Iterable<Product> productList = productRepository.findAll();
@@ -168,7 +172,7 @@ public class ProductService {
         return productDtoList;
     }
 
-
+    @Cacheable(value = "productCacheAdmin", key = "#root.methodName")
     public ProductDto getProductByAdmin(String username, Integer productId) {
         User user = userRepository.findByEmail(username);
         Optional<Product> optional = productRepository.findById(productId);

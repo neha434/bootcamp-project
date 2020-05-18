@@ -1,9 +1,10 @@
 package com.springboot.ecommerceApplication.dto;
 
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.List;
 
-public class ProductDto {
+public class ProductDto implements Serializable {
     private Integer id;
     @NotEmpty
     private String name;

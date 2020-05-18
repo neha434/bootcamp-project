@@ -6,6 +6,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -13,7 +14,7 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE PRODUCT SET isDeleted=true WHERE id=?")
 @Where(clause = "isdeleted = false")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Product {
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
