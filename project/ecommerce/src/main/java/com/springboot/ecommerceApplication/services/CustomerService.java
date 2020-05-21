@@ -71,13 +71,13 @@ public class CustomerService {
    @Cacheable(value = "customerCache", key = "#root.methodName")
     public List<CustomerDto> getAllCustomer(String username) {
         User user = userRepo.findByEmail(username);
-
         Iterable<Customer> customersList = customerRepository.findAll();
         List<CustomerDto> customerDtoList = new ArrayList<>();
         customersList.forEach(customers -> customerDtoList.add(new CustomerDto(customers.getId(), customers.getEmail(),
                 customers.getFirstName(),
                 customers.getMiddleName(), customers.getLastName(), customers.getContact(), customers.getActive())));
-        return customerDtoList;
+       System.out.println("customer data");
+       return customerDtoList;
     }
 
 

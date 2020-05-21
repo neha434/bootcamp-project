@@ -1,15 +1,18 @@
 package com.springboot.ecommerceApplication.domain;
 
 import com.springboot.ecommerceApplication.repositories.UserRepo;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.logging.Logger;
 
 @Component
 public class LoginSchedular {
     @Autowired
     UserRepo userRepo;
-   // private static final Logger logger = LoggerFactory.getLogger(LoginSchedular.class);
+   //private static final Logger logger = LoggerFactory.getLogger(LoginSchedular.class);
 //    private static final DateTimeFormatter dateTimeFormatter =
 //            DateTimeFormatter.ofPattern("HH:mm:ss");
 

@@ -1,7 +1,9 @@
 package com.springboot.ecommerceApplication.domain.user;
 
+import com.springboot.ecommerceApplication.auditing.AuditInformation;
 import com.springboot.ecommerceApplication.domain.Role;
 import org.hibernate.annotations.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,9 +19,10 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 //@Table(name = "USERS")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User implements Serializable {
+public class User  extends AuditInformation implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

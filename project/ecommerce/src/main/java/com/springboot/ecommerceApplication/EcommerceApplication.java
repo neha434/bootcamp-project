@@ -1,10 +1,14 @@
 package com.springboot.ecommerceApplication;
 
+import com.springboot.ecommerceApplication.auditing.AuditorAwareImpl;
 import com.springboot.ecommerceApplication.controller.SellerController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +30,13 @@ import java.io.IOException;
 @EnableScheduling
 @EnableJpaRepositories
 @EnableCaching
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class EcommerceApplication {
+
+	@Bean
+	public AuditorAware<String> auditorAware(){
+		return new AuditorAwareImpl();
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(EcommerceApplication.class, args);
