@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -17,11 +18,11 @@ public class AuditInformation {
 
     @Column(name= "created_data", updatable = false)
     @CreatedDate
-    private ZonedDateTime creationTime;
+    private Date creationTime;
 
     @Column(name= "modified_data")
     @LastModifiedDate
-    private ZonedDateTime modifiedDate;
+    private Date modifiedDate;
 
     @Column(name= "created_by")
     @CreatedBy
@@ -31,19 +32,19 @@ public class AuditInformation {
     @LastModifiedBy
     private String modifiedBy;
 
-    public ZonedDateTime getCreationTime() {
+    public Date getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(ZonedDateTime creationTime) {
+    public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
     }
 
-    public ZonedDateTime getModifiedDate() {
+    public Date getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(ZonedDateTime modifiedDate) {
+    public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
