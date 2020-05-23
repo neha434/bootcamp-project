@@ -17,11 +17,12 @@ public class TransactionUserService {
         System.out.println("************************Third transaction");
       //  logger.info("###########################abxe", a);
       //  audit_table.setMessages("method 1");
-//        try {
-//            int a = 2 / 0;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+//
+        try {
+            int a = 2 / 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
        // int g= 5/0;
         childMethod();
         System.out.println("***********************Fourth transaction");

@@ -1,36 +1,33 @@
 package com.springboot.ecommerceApplication.auditing;
 
-import com.springboot.ecommerceApplication.repositories.UserRepo;
-import com.springboot.ecommerceApplication.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
 public class AuditorAwareImpl implements AuditorAware<String> {
-   @Autowired
-    UserRepo userRepo;
-
-//    @Override
-//    public Optional<String> getCurrentAuditor() {
-//        return Optional.empty();
-//    }
 
 
-   @Override
+    @Override
     public Optional<String> getCurrentAuditor() {
-    Optional<String> user= Optional.empty();
-     String principal = getCurrentlyLoggedInUser();
-    user = Optional.of(principal);
-    return user;
-    }
-    private String getCurrentlyLoggedInUser(WebRequest webRequest){
-        Authentication auth = (Authentication) webRequest.getUserPrincipal();
-        return String.valueOf(userRepo.findByEmail(auth.getName()));
 
-//
+        Optional<String> currentUser = Optional.empty();
+        String principal = getCurrentLoggedInUser();
+        currentUser = Optional.of(principal);
+        return currentUser;
+    }
+
+    public String getCurrentLoggedInUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        return username;
+    }
 
 
 }
