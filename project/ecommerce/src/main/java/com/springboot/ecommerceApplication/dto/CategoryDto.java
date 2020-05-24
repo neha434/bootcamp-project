@@ -2,6 +2,7 @@ package com.springboot.ecommerceApplication.dto;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.HashMap;
+import java.util.List;
 
 public class CategoryDto {
     private Integer id;
@@ -10,12 +11,8 @@ public class CategoryDto {
     private String name;
 
    private Integer parentId;
-   // private String parentName;
     private CategoryDto parentCategory;
-    //  private CategoryDto parentId;
-//    private CategoryDto parentName;
-    //private HashMap<Integer, String> catogaries;
-   // private HashMap<Integer, String> subCategoryList;
+    List<CategoryDto> childCategory;
 
     public CategoryDto(Integer id, String name) {
         this.id = id;
@@ -24,6 +21,14 @@ public class CategoryDto {
 
     public CategoryDto() {
 
+    }
+
+    public List<CategoryDto> getChildCategory() {
+        return childCategory;
+    }
+
+    public void setChildCategory(List<CategoryDto> childCategory) {
+        this.childCategory = childCategory;
     }
 
     public CategoryDto getParentCategory() {
@@ -40,59 +45,6 @@ public class CategoryDto {
         this.id = id;
 
     }
-
-//    public HashMap<Integer, String> getSubCategoryList() {
-//        return subCategoryList;
-//    }
-//
-//    public void setSubCategoryList(HashMap<Integer, String> subCategoryList) {
-//        this.subCategoryList = subCategoryList;
-//    }
-//
-//    public HashMap<Integer, String> getCatogaries() {
-//        return catogaries;
-//    }
-//
-//    public void setCatogaries(HashMap<Integer, String> catogaries) {
-//        this.catogaries = catogaries;
-//    }
-//    //    public CategoryDto(String name, Integer id) {
-////
-////    }
-
-
-//    public CategoryDto getParentId() {
-//        return parentId;
-//    }
-
-//    public void setParentId(CategoryDto parentId) {
-//        this.parentId = parentId;
-//    }
-//
-//    public CategoryDto getParentName() {
-//        return parentName;
-//    }
-//
-//    public void setParentName(CategoryDto parentName) {
-//        this.parentName = parentName;
-//    }
-
-//    public Integer getParentId() {
-//        return parentId;
-//    }
-//
-//    public void setParentId(Integer parentId) {
-//        this.parentId = parentId;
-//    }
-//
-//    public String getParentName() {
-//        return parentName;
-//    }
-//
-//    public void setParentName(String parentName) {
-//        this.parentName = parentName;
-//    }
-
     public Integer getId() {
         return id;
     }

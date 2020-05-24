@@ -35,7 +35,7 @@ public class CategoryController {
     {
         Principal principal=httpServletRequest.getUserPrincipal();
         String username=principal.getName();
-        return categoryService.getCategoryByAdmin(username,categoryId,category);
+        return categoryService.getCategoryByAdmin(username,categoryId);
     }
 
     //.................TO LIST CATEGORY BY ADMIN.......................

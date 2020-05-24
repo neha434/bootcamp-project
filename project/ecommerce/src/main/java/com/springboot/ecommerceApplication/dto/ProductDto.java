@@ -1,5 +1,7 @@
 package com.springboot.ecommerceApplication.dto;
 
+import com.springboot.ecommerceApplication.domain.product.Category;
+
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
@@ -18,6 +20,9 @@ public class ProductDto implements Serializable {
     private boolean isDeleted;
     private Integer sellerId;
     private Integer categoryId;
+    private String categoryName;
+    private Category category;
+    private List<ProductVariationDto> productVariationDtoList;
 
 
 
@@ -33,12 +38,7 @@ public class ProductDto implements Serializable {
 
     }
 
-
-    public ProductDto(Integer id, String name, Integer id1, String name1, String description, boolean cancellable, boolean returnable, List<ProductVariationDto> productVariationDtoList) {
-    }
-
-
-    public ProductDto(Integer id, String name, String description, boolean cancellable, boolean returnable, String brand, boolean active) {
+    public ProductDto(Integer id, String name, String description, boolean cancellable, boolean returnable, String brand, boolean active, Category productCategory) {
         this.id=id;
         this.name=name;
         this.description=description;
@@ -46,7 +46,44 @@ public class ProductDto implements Serializable {
         this.isReturnable=returnable;
         this.brand=brand;
         this.isActive=active;
-           }
+        this.category=productCategory;
+
+
+    }
+
+    public ProductDto(Integer id, String name, String description, String brand, boolean cancellable, boolean returnable, List<ProductVariationDto> productVariationDtoList) {
+        this.id = id;
+        this.name = name;
+        this.description=description;
+        this.brand=brand;
+        this.isCancellable=cancellable;
+        this.isReturnable=returnable;
+        this.productVariationDtoList=productVariationDtoList;
+
+    }
+
+    public ProductDto(Integer id, String name, Integer id1, String name1, String description, boolean cancellable, String brand, boolean returnable, List<ProductVariationDto> productVariationDtoList) {
+        this.id = id;
+        this.name=name;
+        this.categoryId=id1;
+        this.categoryName=name1;
+        this.description=description;
+        this.isCancellable=cancellable;
+        this.brand=brand;
+        this.isReturnable=returnable;
+        this.productVariationDtoList=productVariationDtoList;
+
+    }
+
+
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public Integer getCategoryId() {
         return categoryId;

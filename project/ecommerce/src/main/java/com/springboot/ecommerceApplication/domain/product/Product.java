@@ -6,6 +6,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.awt.print.Pageable;
 import java.io.Serializable;
 import java.util.List;
 

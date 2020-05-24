@@ -2,24 +2,28 @@ package com.springboot.ecommerceApplication.services;
 
 import com.springboot.ecommerceApplication.domain.product.Category;
 import com.springboot.ecommerceApplication.domain.product.Product;
+import com.springboot.ecommerceApplication.domain.product.ProductVariation;
 import com.springboot.ecommerceApplication.domain.user.Seller;
 import com.springboot.ecommerceApplication.domain.user.User;
+import com.springboot.ecommerceApplication.dto.PagingAndSortingDto;
 import com.springboot.ecommerceApplication.dto.ProductDto;
+import com.springboot.ecommerceApplication.dto.ProductVariationDto;
 import com.springboot.ecommerceApplication.exception.InvalidDetails;
-import com.springboot.ecommerceApplication.repositories.CategoryRepo;
-import com.springboot.ecommerceApplication.repositories.ProductRepo;
-import com.springboot.ecommerceApplication.repositories.SellerRepo;
-import com.springboot.ecommerceApplication.repositories.UserRepo;
+import com.springboot.ecommerceApplication.repositories.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +42,8 @@ public class ProductService {
     UserRepo userRepository;
     @Autowired
     CategoryRepo categoryRepository;
+    @Autowired
+    ProductVariationRepo productVariationRepo;
 
 
     //.................TO ADD A PRODUCT BY SELLER.....................//working
@@ -52,22 +58,24 @@ public class ProductService {
         Category category = categoryRepository.findById(productDto.getCategoryId()).get();
         Seller sellerrId= sellerRepository.findById(productDto.getSellerId()).get();
         ResponseEntity<String> responseEntity;
+        if(!category.getSubCategoryList().isEmpty())
+        {
+            throw new InvalidDetails(" Category ID passed is not valid leaf node category");
+        }
         Product product = new Product(category,sellerrId,productDto.getName(), productDto.getBrand(),
-                productDto.getDescription(), true, productDto.isCancellable(), productDto.isReturnable(),productDto.isDeleted());
+                productDto.getDescription(), false, productDto.isCancellable(), productDto.isReturnable(),productDto.isDeleted());
         productRepository.save(product);
-        // mailService.sendAddedProductDetailsEmail(product,username);
+         mailService.sendAddedProductDetailsEmail(product);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                 ("message-product-added", null, LocaleContextHolder.getLocale()));
         return responseEntity;
-        //to change product status
-        //email to admin
 
     }
 
 
 
     //.....................TO VIEW A PRODUCT BY SELLER................................working
-    @Cacheable(value = "getProductCache", key = "#root.methodName")
+   // @Cacheable(value = "getProductCache", key = "#root.methodName")
     public ProductDto getProduct(Integer productId, String username) {
         Seller seller = sellerRepository.findByEmail(username);
           if(!productRepository.findById(productId).get().getSeller().getEmail().equals(username)){
@@ -78,6 +86,7 @@ public class ProductService {
         }
         Product product = productRepository.findById(productId).get();
         ProductDto productDto = new ProductDto();
+        productDto.setCategory(product.getProductCategory());
         productDto.setId(product.getId());
         productDto.setName(product.getName());
         productDto.setDescription(product.getDescription());
@@ -91,8 +100,8 @@ public class ProductService {
     }
 
 
-    //..................TO GET LIST OF PRODUCTS BY SELLER.....................
-    @Cacheable(value = "productCacheSeller", key = "#root.methodName")
+    //..................TO GET LIST OF PRODUCTS BY SELLER.....................//working
+   // @Cacheable(value = "productCacheSeller", key = "#root.methodName")
     public List<ProductDto> getProductListBySeller(String username) {
 
         Seller seller = sellerRepository.findByEmail(username);
@@ -100,7 +109,7 @@ public class ProductService {
         List<ProductDto> productDtoList = new ArrayList<>();
         productList.forEach(product -> productDtoList.add(new ProductDto(product.getId(), product.getName(),
                 product.getDescription(),
-                product.isCancellable(), product.isReturnable(), product.getBrand(), product.isActive())));
+                product.isCancellable(), product.isReturnable(), product.getBrand(), product.isActive(),product.getProductCategory())));
         return productDtoList;
     }
 
@@ -172,6 +181,7 @@ public class ProductService {
         return productDtoList;
     }
 
+    //............TO GET PRODUCT BY ADMIN......................
     @Cacheable(value = "productCacheAdmin", key = "#root.methodName")
     public ProductDto getProductByAdmin(String username, Integer productId) {
         User user = userRepository.findByEmail(username);
@@ -189,5 +199,65 @@ public class ProductService {
         productDto.setDeleted(product.isDeleted());
         return productDto;
     }
+
+
+    //............TO VIEW A PRODUCT BY CUSTOMER....................
+    public ProductDto getProductByCustomer(String username, Integer productId)
+    {
+        User user = userRepository.findByEmail(username);
+
+        if(!productRepository.findById(productId).isPresent()){
+            throw new InvalidDetails("Product does not exists");
+        }
+        Product valid = new  Product();
+        if(!valid.isActive()&&valid.isDeleted())
+        {
+            throw new InvalidDetails("Product is not available anymore");
+        }
+
+        Product product = productRepository.findById(productId).get();
+        List<ProductVariation> productVariationList = product.getProductVariationList();
+        List<ProductVariationDto> ProductVariationDtoList = new ArrayList<>();
+        productVariationList.forEach(productVariation -> ProductVariationDtoList.add(new
+                ProductVariationDto(productVariation.getId(),productVariation.getPrice(),
+                productVariation.getQuantityAvailable())));
+        ProductDto customerProductViewDto = new ProductDto(product.getId(),
+                product.getName(),product.getDescription(),product.getBrand(),
+                product.isCancellable(),product.isReturnable(),ProductVariationDtoList);
+        return customerProductViewDto;
+    }
+
+    //....................TO VIEW PRODUCT LIST BY CUSTOMER...........................
+    public List<ProductDto> getProductListByCustomer(String username, Integer categoryId){
+        User user = userRepository.findByEmail(username);
+        if (!categoryRepository.findById(categoryId).isPresent()){
+            throw new InvalidDetails("You Have Entered A Wrong Category id,Category Not Present");
+        }
+       // Pageable paging = PageRequest.of(0, 3, Sort.by("id").ascending());
+        Category category = categoryRepository.findById(categoryId).get();
+        List<Product> productsList =category.getProductList();
+        Iterator<Product> productIterator = productsList.iterator();
+        List<ProductDto> customerProductViewDtoList = new ArrayList<>();
+        while (productIterator.hasNext()){
+            Product product =productIterator.next();
+         //   List<ProductVariation> productVariationList = productVariationRepo.findAll(paging);
+            List<ProductVariation> productVariationList = product.getProductVariationList();
+            Iterator<ProductVariation> productVariationIterator = productVariationList.iterator();
+            List<ProductVariationDto> productVariationDtoList = new ArrayList<>();
+            while (productVariationIterator.hasNext()){
+                ProductVariation productVariation = productVariationIterator.next();
+                ProductVariationDto customerProductVariationViewDto = new ProductVariationDto(
+                        productVariation.getId(),productVariation.getPrice(),productVariation.getQuantityAvailable());
+                productVariationDtoList.add(customerProductVariationViewDto);
+            }
+            customerProductViewDtoList.add(new ProductDto(product.getId(),product.getName(),
+                    product.getProductCategory().getId(),product.getProductCategory().getName(),product.getDescription(),
+                    product.isCancellable(),product.getBrand(),product.isReturnable(),productVariationDtoList));
+        }
+        return customerProductViewDtoList;
+    }
+
+
+
 
 }

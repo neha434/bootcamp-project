@@ -15,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CategoryService {
@@ -38,12 +35,10 @@ public class CategoryService {
         Integer categoryId = null;
         ResponseEntity<SuccessDto> responseEntity;
         Category category = new Category();
-//       // category.setName(categoryDto.getName());//not required
         while (categoryDto != null) {//getId
             category.setName(categoryDto.getName());
             Category parent = categoryRepo.findById(categoryDto.getParentId()).get();
             category.setParentCategory(parent);
-            // category.setId(categoryDto.getParentCategory().getId());//wrong
             categoryDto = categoryDto.getParentCategory();
 //
 //        }
@@ -79,51 +74,41 @@ public class CategoryService {
     }
 
     //..............................TO VIEW A CATEGORY BY ADMIN........................
-    public CategoryDto getCategoryByAdmin(String username, Integer categoryId, Category category) {
+    public CategoryDto getCategoryByAdmin(String username, Integer categoryId) {
         User user = userRepo.findByEmail(username);
         Optional<Category> optional = categoryRepo.findById(categoryId);
         if (!optional.isPresent()) {
             throw new InvalidDetails("This category does not exist");
         }
         CategoryDto categoryDto = new CategoryDto();
-        category = categoryRepo.findById(categoryId).get();
-        HashMap<Integer, String> categories = new HashMap<>();
-        categories.put(category.getId(), category.getName());
-        while (category.getParentCategory() != null) {
-            category = category.getParentCategory();
-            categories.put(category.getId(), category.getName());
+        Category category = categoryRepo.findById(categoryId).get();
+        List<CategoryDto> list1= new ArrayList<>();
+        List<Category> categoryList = category.getSubCategoryList();
+        Iterator<Category> itr= categoryList.iterator();
+//        while (itr.hasNext()){
+//            list1.add(new CategoryDto(itr.next().getId(),itr.next().getName());
+//         categoryDto.setChildCategory(list1);
+//        }
+////        Optional<Category> child = categoryRepo.findById(categoryDto.getId());
+//
+//        while (child.getParentCategory()!=null){
+//           Category parent= category.getParentCategory();
+//           CategoryDto parentDto= new CategoryDto();
+//           parentDto.setId(parent.getId());
+//           parentDto.setName(parent.getName());
+//           parentDto.
+//    }
+
+//        HashMap<Integer, String> categories = new HashMap<>();
+//        categories.put(category.getId(), category.getName());
+//        while (category.getParentCategory() != null) {
+//            category = category.getParentCategory();
+//            categories.put(category.getId(), category.getName());
+//        }
+     return categoryDto;
+
+
         }
-     //   categoryDto.setCatogaries(categories);
-//        while (category.getSubCategoryList() != null) {
-//            categoryList = category.getSubCategoryList();
-////            categories.put(category.getId(), category.getName());
-////        }
-//            // categoryDto.setSubCategoryList(categories);
-
-        
-//        while(category.getParentCategory()!=null){
-//            Parent=child.getParent();
-//            CategoryDto parentDto = new CategoryDto();
-//        }
-
-            return categoryDto;
-
-
-//        if (category.getParentCategory()!= null) {
-//            Category parent = category.getParentCategory();
-//            String parentName=parent.getName();
-//            categoryDto.setParentId(parent.getId());
-//            categoryDto.setParentName(parentName);//Electronics
-//            categoryDto.setId(category.getId());
-//            categoryDto.setName(category.getName());//Mobile
-//        }
-//        else{
-//        categoryDto.setName(category.getName());
-//        categoryDto.setId(category.getId());}
-
-            // return categoryDto;
-
-    }
 
     //.........................TO GET LIST OF CATEGORY BY ADMIN..............................//edit
     public List<CategoryDto> getAllCategories(String username) {

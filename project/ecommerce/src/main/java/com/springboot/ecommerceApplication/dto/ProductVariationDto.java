@@ -4,6 +4,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Map;
 
 public class ProductVariationDto implements Serializable {
 
@@ -16,6 +17,7 @@ public class ProductVariationDto implements Serializable {
    private Integer price;
    private Integer productId;
    private String productName;
+    Map<String, String> metaData;
 
     public ProductVariationDto(Integer id, Integer price, Integer quantityAvailable, Integer id1, String name) {
         this.id=id;
@@ -23,6 +25,14 @@ public class ProductVariationDto implements Serializable {
         this.quantityAvailable=quantityAvailable;
         this.productId=id1;
         this.productName=name;
+    }
+
+    public Map<String, String> getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(Map<String, String> metaData) {
+        this.metaData = metaData;
     }
 
     public Integer getPrice() {

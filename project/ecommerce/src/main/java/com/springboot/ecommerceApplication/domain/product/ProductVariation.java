@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "PRODUCT_VARIATION")
@@ -16,7 +17,8 @@ public class ProductVariation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @ElementCollection(targetClass=String.class)
+    Map<String,String> metaData;
     private String image;
 //    @NotNull
     private Integer  quantityAvailable;
@@ -54,6 +56,15 @@ public class ProductVariation implements Serializable {
 //    }
 //    public ProductVariation(int i, int i1, String s, String s1) {  // You need to set values while using parameterised constructor
 //    }
+
+
+    public Map<String, String> getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(Map<String, String> metaData) {
+        this.metaData = metaData;
+    }
 
     public List<Cart> getCartsList() {
         return cartsList;

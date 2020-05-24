@@ -3,8 +3,10 @@ package com.springboot.ecommerceApplication.services;
 import com.springboot.ecommerceApplication.domain.product.Product;
 import com.springboot.ecommerceApplication.domain.product.ProductVariation;
 import com.springboot.ecommerceApplication.domain.user.Seller;
+import com.springboot.ecommerceApplication.dto.ProductDto;
 import com.springboot.ecommerceApplication.dto.ProductVariationDto;
 import com.springboot.ecommerceApplication.exception.InvalidDetails;
+import com.springboot.ecommerceApplication.exception.ProductAlreadyExistException;
 import com.springboot.ecommerceApplication.repositories.CategoryMetadataFieldRepo;
 import com.springboot.ecommerceApplication.repositories.ProductRepo;
 import com.springboot.ecommerceApplication.repositories.ProductVariationRepo;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -43,27 +46,40 @@ public class ProductVariationService {
         }
         Product product = productRepo.findById(productId).get();
         ResponseEntity<String> responseEntity;
-        if(!product.isActive())
-        {
-             throw new  InvalidDetails("Product is not active");
+        if (!product.isActive()) {
+            throw new InvalidDetails("Product is not active");
         }
-        if(product.isDeleted())
-        {
+        if (product.isDeleted()) {
             throw new InvalidDetails("Product is deleted");
         }
         Product productIde = productRepo.findById(productVariationDto.getProductId()).get();
-        ProductVariation productVariation = new ProductVariation(productVariationDto.getPrice(),productVariationDto.getQuantityAvailable(),productIde);
+        ProductVariation productVariation = new ProductVariation(productVariationDto.getPrice(), productVariationDto.getQuantityAvailable(), productIde);
         productVariation.setActive(true);
         productVariationRepo.save(productVariation);
+        List<ProductVariation> variationList = product.getProductVariationList();
+        Iterator<ProductVariation> iterator = variationList.iterator();
+        while (iterator.hasNext()) {
+            ProductVariation currentVariation = iterator.next();
+            if (productVariationDto.getMetaData().equals(currentVariation.getMetaData()))
+                throw new ProductAlreadyExistException("Product Variation Already exist.");
+            else {
+                productVariation.setMetaData(productVariationDto.getMetaData());
+                productVariationRepo.save(productVariation);
+                // log.info("Product variant is added successfully by seller");
+                //auditService.saveNewObject("ProductVariation",productVariation.getId(),principal.getName());
+
+            }
+        }
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                 ("message-productVariation-added", null, LocaleContextHolder.getLocale()));
         return responseEntity;
+
     }
 
     //...........................TO UPDATE PRODUCT VARIATION......................WORKING
-    public ResponseEntity<String> updateProductVariationBySeller( String username, Integer productVariationId, ProductVariationDto productVariationDto) {
+    public ResponseEntity<String> updateProductVariationBySeller(String username, Integer productVariationId, ProductVariationDto productVariationDto) {
         Seller seller = sellerRepository.findByEmail(username);
-        if(!productVariationRepo.findById(productVariationId).isPresent()){
+        if (!productVariationRepo.findById(productVariationId).isPresent()) {
             throw new InvalidDetails("No product with the given productVariationId exists ");
         }
 //        if(!productVariationRepo.findById(productVariationId).get().getProduct().getSeller().getEmail().equals(username)){
@@ -77,7 +93,7 @@ public class ProductVariationService {
 
         productVariationRepo.save(productVariation);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
-                ("message-productVariation-updated",  null, LocaleContextHolder.getLocale()));
+                ("message-productVariation-updated", null, LocaleContextHolder.getLocale()));
         return responseEntity;
     }
 
@@ -94,13 +110,13 @@ public class ProductVariationService {
 //          throw new InvalidDetails("Product cannot be updated as Logged-In seller is not a creator of product.");
 //     }
         ProductVariation productVariation = productVariationRepo.findById(productVariationId).get();
-       // Integer p =productVariation.getProduct().getId();
+        // Integer p =productVariation.getProduct().getId();
         ProductVariationDto productVariationDto = new ProductVariationDto();
         productVariationDto.setId(productVariation.getId());
         productVariationDto.setPrice(productVariation.getPrice());
         productVariationDto.setQuantityAvailable(productVariation.getQuantityAvailable());
         //productVariationDto.setProductId(productVariation.getProduct().getId());
-       // productVariationDto.setProductName(productVariation.getProduct().getName());
+        // productVariationDto.setProductName(productVariation.getProduct().getName());
         return productVariationDto;
     }
 
@@ -116,8 +132,7 @@ public class ProductVariationService {
 //          throw new InvalidDetails("Product cannot be updated as Logged-In seller is not a creator of product.");
 //     }
         Product product = productRepo.findById(productId).get();
-        if(product.isDeleted())
-        {
+        if (product.isDeleted()) {
             throw new InvalidDetails("Product is deleted");
         }
 
@@ -129,6 +144,9 @@ public class ProductVariationService {
         return productVariationDtos;
 
     }
+
+
+
 
 }
 

@@ -4,6 +4,7 @@ import com.springboot.ecommerceApplication.domain.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -94,8 +95,16 @@ public class MailService {
     public void sendPasswordChangedDetail(String username) {
         mail.setTo(username);
         mail.setSubject("Password updated");
-        mail.setSubject("Your password has been updated");
+        mail.setText("Your password has been updated");
         mailSender.send(mail);
+    }
+    @Async
+    public void sendAddedProductDetailsEmail(Product product) {
+        mail.setTo("neha.rai@tothenew.com");
+        mail.setSubject("Product Added");
+        mail.setText("Name of Product Added:  "+ product.getName() + "," + "   " + "Id of Product for activation:  " + product.getId());
+        mailSender.send(mail);
+
     }
 }
 

@@ -1,6 +1,7 @@
 package com.springboot.ecommerceApplication.controller;
 
 
+import com.springboot.ecommerceApplication.dto.PagingAndSortingDto;
 import com.springboot.ecommerceApplication.dto.ProductDto;
 import com.springboot.ecommerceApplication.repositories.ProductRepo;
 import com.springboot.ecommerceApplication.services.ProductService;
@@ -65,6 +66,22 @@ public class ProductController {
     }
 
 
+    //................................TO VIEW A PRODUCT BY CUSTOMER......................
+    @GetMapping("/view-myProduct/{productId}")
+    public ProductDto viewProduct(@PathVariable Integer productId, HttpServletRequest httpServletRequest) {
+        Principal principal = httpServletRequest.getUserPrincipal();
+        String username = principal.getName();
+        return productService.getProductByCustomer(username, productId);
+    }
+
+    //................TO GET PRODUCT LIST BY CUSTOMER...........................
+    @GetMapping("/get-product-list/{categoryId}")
+    public List<ProductDto> getProductListByCustomer(@PathVariable Integer categoryId, HttpServletRequest httpServletRequest) {
+        Principal principal = httpServletRequest.getUserPrincipal();
+        String username = principal.getName();
+        return productService.getProductListByCustomer(username, categoryId);
+
+    }
 
 
 }
