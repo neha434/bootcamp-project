@@ -1,5 +1,6 @@
 package com.springboot.ecommerceApplication.services;
 
+import com.springboot.ecommerceApplication.domain.TestUser;
 import com.springboot.ecommerceApplication.domain.product.Category;
 import com.springboot.ecommerceApplication.domain.product.Product;
 import com.springboot.ecommerceApplication.domain.product.ProductVariation;
@@ -22,14 +23,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
 public class ProductService {
+    public Date date;
     @Autowired
     ProductRepo productRepository;
     @Autowired
@@ -44,10 +43,15 @@ public class ProductService {
     CategoryRepo categoryRepository;
     @Autowired
     ProductVariationRepo productVariationRepo;
+    //public Date date;
 
 
     //.................TO ADD A PRODUCT BY SELLER.....................//working
     public ResponseEntity<String> addProduct(String username, ProductDto productDto) {
+        //Date  date;
+
+        Product myDate = new Product();
+
         Seller seller = sellerRepository.findByEmail(username);
         if (productRepository.findByName(productDto.getName()) != null) {
             throw new InvalidDetails("Product Already Exists");
@@ -65,7 +69,10 @@ public class ProductService {
         Product product = new Product(category,sellerrId,productDto.getName(), productDto.getBrand(),
                 productDto.getDescription(), false, productDto.isCancellable(), productDto.isReturnable(),productDto.isDeleted());
         productRepository.save(product);
-         mailService.sendAddedProductDetailsEmail(product);
+
+     date  =myDate.setCreatedTime(new Date());
+
+        mailService.sendAddedProductDetailsEmail(product);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                 ("message-product-added", null, LocaleContextHolder.getLocale()));
         return responseEntity;
@@ -104,12 +111,13 @@ public class ProductService {
    // @Cacheable(value = "productCacheSeller", key = "#root.methodName")
     public List<ProductDto> getProductListBySeller(String username) {
 
+
         Seller seller = sellerRepository.findByEmail(username);
         List<Product> productList = seller.getProductList();
         List<ProductDto> productDtoList = new ArrayList<>();
         productList.forEach(product -> productDtoList.add(new ProductDto(product.getId(), product.getName(),
                 product.getDescription(),
-                product.isCancellable(), product.isReturnable(), product.getBrand(), product.isActive(),product.getProductCategory())));
+                product.isCancellable(), product.isReturnable(), product.getBrand(), product.isActive())));
         return productDtoList;
     }
 
@@ -258,6 +266,17 @@ public class ProductService {
     }
 
 
+    public List<ProductDto> listProduct() {
+           // List<ProductDto> products= new ArrayList<>()
+        Product time= new Product();
+        Seller seller = new Seller();
+        List<Product> productList = seller.getProductList();
+        List<ProductDto> productDtoList = new ArrayList<>();
+        productList.forEach(product -> productDtoList.add(new ProductDto(product.getId(), product.getName(),
+                product.getDescription(),
+                product.isCancellable(), product.isReturnable(), product.getBrand(), product.isActive())));
+        return productDtoList;
+              }
 
+    }
 
-}

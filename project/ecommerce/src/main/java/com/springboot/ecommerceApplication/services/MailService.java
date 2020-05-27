@@ -106,5 +106,13 @@ public class MailService {
         mailSender.send(mail);
 
     }
+
+    public void sendProductDetails(String email) {
+        mail.setTo(email);
+        mail.setSubject("ProductAdded");
+        mail.setText("Open the provided to link to get the detalis of added products"+ "\r\n" +
+                "http://localhost:8080/export-product-details");
+        mailSender.send(mail);
+    }
 }
 

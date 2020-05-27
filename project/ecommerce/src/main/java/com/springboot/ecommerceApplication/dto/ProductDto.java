@@ -38,7 +38,7 @@ public class ProductDto implements Serializable {
 
     }
 
-    public ProductDto(Integer id, String name, String description, boolean cancellable, boolean returnable, String brand, boolean active, Category productCategory) {
+    public ProductDto(Integer id, String name, String description, boolean cancellable, boolean returnable, String brand, boolean active) {
         this.id=id;
         this.name=name;
         this.description=description;
@@ -46,7 +46,7 @@ public class ProductDto implements Serializable {
         this.isReturnable=returnable;
         this.brand=brand;
         this.isActive=active;
-        this.category=productCategory;
+
 
 
     }

@@ -6,11 +6,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-import java.util.List;
-
 @Entity
 @Table(name = "SELLERS")
 @PrimaryKeyJoinColumn(name = "USER_ID")
@@ -34,6 +29,7 @@ public class Seller extends User implements Serializable {
 
     public Seller() {
 
+        super(1, "Jack Lee", "jack@example.com");
     }
 
 

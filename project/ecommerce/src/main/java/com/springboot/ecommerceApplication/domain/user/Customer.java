@@ -25,6 +25,7 @@ public class Customer extends User implements Serializable {
 
     public Customer() {
 
+        super(1, "Jack Lee", "jack@example.com");
     }
 
     public List<ProductReview> getProductReviewsList() {

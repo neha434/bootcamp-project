@@ -4,17 +4,11 @@ import com.springboot.ecommerceApplication.auditing.AuditInformation;
 import com.springboot.ecommerceApplication.domain.Role;
 import org.hibernate.annotations.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +40,7 @@ public class User  extends AuditInformation implements Serializable{
         this.count = count;
     }
 
-    public User() {
+    public User(int i, String jack_lee, String s) {
 
     }
 

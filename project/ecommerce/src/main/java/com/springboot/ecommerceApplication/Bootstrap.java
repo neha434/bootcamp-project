@@ -66,7 +66,7 @@ AddressRepository addressRepository;
             Role roleCustomer = new Role(3,"ROLE_CUSTOMER");
             roleRepository.save(roleCustomer);
 
-            User appUser = new User();
+            User appUser = new User(1, "Jack Lee", "jack@example.com");
             appUser.setEmail("neha.rai@tothenew.com");
             appUser.setFirstName("Neha");
             appUser.setMiddleName("");

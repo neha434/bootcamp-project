@@ -1,13 +1,14 @@
 package com.springboot.ecommerceApplication.domain.product;
 
+import com.springboot.ecommerceApplication.auditing.AuditInformation;
 import com.springboot.ecommerceApplication.domain.user.Seller;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.awt.print.Pageable;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -15,12 +16,13 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE PRODUCT SET isDeleted=true WHERE id=?")
 @Where(clause = "isdeleted = false")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Product implements Serializable {
+public class Product extends AuditInformation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String image;
+    private Date createdTime;
 
     //    @NotNull
     @Size(max = 50)
@@ -86,6 +88,20 @@ public class Product implements Serializable {
     @ManyToOne
     @JoinColumn(name = "seller_user_id")
     private Seller seller;
+
+//    public Date getCreatedTime() {
+//        return createdTime;
+//    }
+
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public Date setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+        return createdTime;
+    }
 
     public boolean isDeleted() {
         return isDeleted;
