@@ -1,12 +1,10 @@
 package com.springboot.ecommerceApplication.services;
 
-import com.springboot.ecommerceApplication.domain.TestUser;
 import com.springboot.ecommerceApplication.domain.product.Category;
 import com.springboot.ecommerceApplication.domain.product.Product;
 import com.springboot.ecommerceApplication.domain.product.ProductVariation;
 import com.springboot.ecommerceApplication.domain.user.Seller;
 import com.springboot.ecommerceApplication.domain.user.User;
-import com.springboot.ecommerceApplication.dto.PagingAndSortingDto;
 import com.springboot.ecommerceApplication.dto.ProductDto;
 import com.springboot.ecommerceApplication.dto.ProductVariationDto;
 import com.springboot.ecommerceApplication.exception.InvalidDetails;
@@ -16,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -267,8 +262,6 @@ public class ProductService {
 
 
     public List<ProductDto> listProduct() {
-           // List<ProductDto> products= new ArrayList<>()
-        Product time= new Product();
         Seller seller = new Seller();
         List<Product> productList = seller.getProductList();
         List<ProductDto> productDtoList = new ArrayList<>();
@@ -276,7 +269,8 @@ public class ProductService {
                 product.getDescription(),
                 product.isCancellable(), product.isReturnable(), product.getBrand(), product.isActive())));
         return productDtoList;
-              }
+            //create dummy users
+                    }
 
     }
 
