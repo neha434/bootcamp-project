@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 @RestController
@@ -28,7 +31,7 @@ public class ProductCsvController {
 
 
     @GetMapping("/export-product-details")
-    public void exportCSV(@RequestParam("id") Integer id, @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, HttpServletResponse response) throws Exception {
+    public void exportCSV(@RequestParam("id") Integer id, @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, HttpServletResponse response) throws Exception {
         String filename = "product.csv";
 
         response.setContentType("text/csv");
@@ -40,10 +43,13 @@ public class ProductCsvController {
                 .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
                 .withOrderedResults(false)
                 .build();
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDate = simpleDateFormat.format(new Date());
-        logger.info("########################################******************" + currentDate);
-        writer.write(productRepo.sendProductDetailsCreated24Hours(id, currentDate));
+        String currentTime = simpleDateFormat.format(date);
+        LocalDate localDate = LocalDate.parse(currentTime);
+        LocalDateTime startTime= LocalDateTime.of(localDate, LocalTime.MIDNIGHT);
+        LocalDateTime endTime= LocalDateTime.of(localDate, LocalTime.MAX);
+        writer.write(productRepo.sendProductDetailsCreated24Hours(id, startTime,endTime));
         System.out.println("############################################..............done");
     }
 

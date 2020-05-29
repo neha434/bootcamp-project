@@ -7,7 +7,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class MailService {
@@ -109,11 +110,11 @@ public class MailService {
 
     }
 
-    public void sendProductDetails(String email, Integer id, String currentTime) {
+    public void sendProductDetails(String email, Integer id, String currentTime) throws Exception {
         mail.setTo(email);
         mail.setSubject("ProductAdded");
         mail.setText("Open the provided to link to get the details of added products"+ "  " +
-                "http://localhost:8080/export-product-details?id=" + id + " " + "  "+"Recieved Date:" + currentTime);
+                "http://localhost:8080/export-product-details?id=" +id +"&date=" + URLEncoder.encode(currentTime, StandardCharsets.UTF_8.toString()) );
         System.out.println("#################################################sending mail");
         mailSender.send(mail);
     }
