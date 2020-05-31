@@ -18,9 +18,8 @@ public class UserCO {
     @NotEmpty
     private String confirmPassword;
 
-    @NotEmpty
     private boolean isActive;
-    @NotEmpty
+
     private  boolean isDeleted;
 
     public Boolean getActive() {

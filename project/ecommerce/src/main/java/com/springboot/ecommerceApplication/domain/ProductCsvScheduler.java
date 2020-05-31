@@ -1,7 +1,5 @@
 package com.springboot.ecommerceApplication.domain;
 
-import com.springboot.ecommerceApplication.domain.product.Product;
-import com.springboot.ecommerceApplication.domain.user.Seller;
 import com.springboot.ecommerceApplication.repositories.ProductRepo;
 import com.springboot.ecommerceApplication.repositories.SellerRepo;
 import com.springboot.ecommerceApplication.services.MailService;
@@ -33,12 +31,11 @@ public class ProductCsvScheduler {
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentTime = simpleDateFormat.format(date);
-        String email = null;
-        Integer id = null;
-        for(Integer i :sellerIds)
+
+        for(Integer value :sellerIds)
         {
-            id= i.intValue();
-            email=  sellerRepo.findById(i).get().getEmail();
+            Integer id= value.intValue();
+           String email=  sellerRepo.findById(value).get().getEmail();
             logger.info("################################################################scheduler is running");
             mailService.sendProductDetails(email,id,currentTime);
 

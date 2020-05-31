@@ -1,27 +1,16 @@
 package com.springboot.ecommerceApplication.controller;
 
-import com.springboot.ecommerceApplication.co.CustomerCO;
-import com.springboot.ecommerceApplication.domain.user.Address;
-import com.springboot.ecommerceApplication.domain.user.Customer;
-import com.springboot.ecommerceApplication.dto.AddressDto;
 import com.springboot.ecommerceApplication.dto.CustomerDto;
 import com.springboot.ecommerceApplication.dto.PasswordDto;
 import com.springboot.ecommerceApplication.repositories.CustomerRepo;
 import com.springboot.ecommerceApplication.services.CustomerService;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/customer")

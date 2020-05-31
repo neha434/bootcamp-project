@@ -63,6 +63,14 @@ public class Product extends AuditInformation implements Serializable {
 
     }
 
+    public Product(Integer id, String name, String description, String brand) {
+        super();
+        this.id=id;
+        this.name=name;
+        this.description=description;
+        this.brand=brand;
+    }
+
     public Category getProductCategory() {
         return productCategory;
     }
