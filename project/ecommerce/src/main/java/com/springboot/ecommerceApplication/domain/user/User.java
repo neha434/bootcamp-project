@@ -32,6 +32,10 @@ public class User  extends AuditInformation implements Serializable{
 //    @Column(name = "enabled")
 //    private boolean enabled;
 
+    public User(){
+
+    }
+
     public Integer getCount() {
         return count;
     }
@@ -176,6 +180,17 @@ public class User  extends AuditInformation implements Serializable{
         this.image = image;
     }
 
+
+    public User(String email, String firstName, String middleName, String lastName, String password) {
+
+        this.email = email;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.password = password;
+
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -187,21 +202,13 @@ public class User  extends AuditInformation implements Serializable{
                 ", image='" + image + '\'' +
                 ", count=" + count +
                 ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
                 ", isDeleted=" + isDeleted +
                 ", isActive=" + isActive +
+                ", deactivatedTime=" + deactivatedTime +
                 ", roleList=" + roleList +
                 ", addressesList=" + addressesList +
                 '}';
-    }
-
-    public User(String email, String firstName, String middleName, String lastName, String password) {
-
-        this.email = email;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.password = password;
-
     }
 }
 

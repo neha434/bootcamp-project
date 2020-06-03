@@ -1,5 +1,7 @@
 package com.springboot.ecommerceApplication.dto;
 
+import com.springboot.ecommerceApplication.domain.user.User;
+
 import javax.persistence.criteria.CriteriaBuilder;
 
 public class SuccessDto {

@@ -33,6 +33,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.opencsv/opencsv
 	compile group: 'com.opencsv', name: 'opencsv', version: '5.2'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
+	compile 'org.hibernate:hibernate-core:5.4.17.Final'
 
 
 }

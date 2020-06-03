@@ -54,12 +54,5 @@ public class Role {
         this.authority = authority;
     }
 
-    @Override
-    public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", authority='" + authority + '\'' +
-                ", appUsersList=" + UsersList +
-                '}';
-    }
+
 }

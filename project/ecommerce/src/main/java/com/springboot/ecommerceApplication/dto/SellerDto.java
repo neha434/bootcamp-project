@@ -1,8 +1,11 @@
 package com.springboot.ecommerceApplication.dto;
 
+import com.springboot.ecommerceApplication.domain.product.Product;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.List;
 
 public class SellerDto extends UserDto implements Serializable {
     @NotEmpty
@@ -12,6 +15,7 @@ public class SellerDto extends UserDto implements Serializable {
     private String companyName;
     @NotEmpty
     private String companyContact;
+
 
     public SellerDto(){
 
@@ -27,7 +31,6 @@ public class SellerDto extends UserDto implements Serializable {
         this.companyContact=companyContact;
         this.companyName=companyName;
     }
-
 
     public String getGst() {
         return gst;

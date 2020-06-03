@@ -2,6 +2,7 @@ package com.springboot.ecommerceApplication.domain.product;
 
 import com.springboot.ecommerceApplication.auditing.AuditInformation;
 import com.springboot.ecommerceApplication.domain.user.Seller;
+import org.hibernate.Criteria;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 

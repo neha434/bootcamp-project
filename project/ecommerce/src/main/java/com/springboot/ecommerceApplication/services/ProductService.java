@@ -251,15 +251,20 @@ public class ProductService {
     }
 
 
-    public List<Product> listProduct(Integer id) {
+    public List<ProductDto> listProduct(Integer id) {
         Optional<Seller> seller = sellerRepository.findById(id);
-        List<Product> getProducts = null;
+        List<ProductDto> productDtoList = null;
         if (seller.isPresent()) {
-        getProducts=seller.get().getProductList();
-                }
-
-        return getProducts;
-
+            String username = seller.get().getEmail();
+            Seller productSeller = sellerRepository.findByEmail(username);
+            List<Product> productList = productSeller.getProductList();
+            productDtoList = new ArrayList<>();
+            for (Product product : productList) {
+                productDtoList.add(new ProductDto(product.getId(), product.getName(),
+                        product.getDescription(),
+                        product.isCancellable(), product.isReturnable(), product.getBrand(), product.isActive()));
+            }
+        }
+        return productDtoList;
     }
-
 }

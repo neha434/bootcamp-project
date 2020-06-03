@@ -23,6 +23,7 @@ public class ProductDto implements Serializable {
     private String categoryName;
     private Category category;
     private List<ProductVariationDto> productVariationDtoList;
+    private List<ProductDto> productDtoList;
 
 
 
@@ -76,6 +77,13 @@ public class ProductDto implements Serializable {
     }
 
 
+    public List<ProductDto> getProductDtoList() {
+        return productDtoList;
+    }
+
+    public void setProductDtoList(List<ProductDto> productDtoList) {
+        this.productDtoList = productDtoList;
+    }
 
     public Category getCategory() {
         return category;
