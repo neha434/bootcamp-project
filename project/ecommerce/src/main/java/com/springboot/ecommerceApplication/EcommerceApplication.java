@@ -1,12 +1,9 @@
 package com.springboot.ecommerceApplication;
 
 import com.springboot.ecommerceApplication.auditing.AuditorAwareImpl;
-import com.springboot.ecommerceApplication.domain.user.User;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.criterion.Restrictions;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -17,8 +14,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.util.List;
-
 @SpringBootApplication
 
 @EnableAsync
@@ -26,7 +21,10 @@ import java.util.List;
 @EnableJpaRepositories
 @EnableCaching
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
-public class EcommerceApplication {
+public class EcommerceApplication implements CommandLineRunner {
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
+
 
 	@Bean
 	public AuditorAware<String> auditorAware(){
@@ -40,5 +38,10 @@ public class EcommerceApplication {
 	}
 
 
+	@Override
+	public void run(String... args) throws Exception {
+		rabbitTemplate.convertAndSend("TestExchange","testRouting","hi from ecommerce");
+
 	}
+}
 

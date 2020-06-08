@@ -22,6 +22,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly 'mysql:mysql-connector-java'
 	implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.2.5.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
@@ -33,7 +34,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.opencsv/opencsv
 	compile group: 'com.opencsv', name: 'opencsv', version: '5.2'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
+	//criteria
 	compile 'org.hibernate:hibernate-core:5.4.17.Final'
+
+	//testImplementation 'org.springframework.amqp:spring-rabbit-test'
 
 
 }
